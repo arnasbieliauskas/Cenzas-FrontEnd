@@ -41,12 +41,24 @@
       "PackagePath": "staticwebassets\\assets\\images\\logo-cenzas-black.png"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\screenshot_2025-10-22_at_21.29.29-removebg-preview-A85M138z3GuaWEgb.png",
-      "PackagePath": "staticwebassets\\assets\\images\\screenshot_2025-10-22_at_21.29.29-removebg-preview-A85M138z3GuaWEgb.png"
+      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\logo-cenzas.png",
+      "PackagePath": "staticwebassets\\assets\\images\\logo-cenzas.png"
+    },
+    {
+      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\office-klaipeda.jpg",
+      "PackagePath": "staticwebassets\\assets\\images\\office-klaipeda.jpg"
     },
     {
       "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\cenzas_lt.html",
       "PackagePath": "staticwebassets\\cenzas_lt.html"
+    },
+    {
+      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\components\\footer.html",
+      "PackagePath": "staticwebassets\\components\\footer.html"
+    },
+    {
+      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\components\\header.html",
+      "PackagePath": "staticwebassets\\components\\header.html"
     },
     {
       "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\css\\styles.css",
@@ -71,6 +83,10 @@
     {
       "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\index.html",
       "PackagePath": "staticwebassets\\index.html"
+    },
+    {
+      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\FRONTEND_RULES.md",
+      "PackagePath": "staticwebassets\\js\\FRONTEND_RULES.md"
     },
     {
       "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\legal-disclaimer.js",

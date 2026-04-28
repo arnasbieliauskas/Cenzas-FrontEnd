@@ -174,5 +174,68 @@ window.CenzasAnalytics.Core = {
     }
 };
 
+// ====================================================================
+// 4. UTILS NAMESPACE: UI Helpers
+// ====================================================================
+window.CenzasAnalytics.UI = {
+    /**
+     * Unified component loader
+     */
+    loadComponents: async function() {
+        await Promise.all([
+            this.loadComponent('header-placeholder', 'components/header.html'),
+            this.loadComponent('footer-placeholder', 'components/footer.html')
+        ]);
+        
+        this.highlightActiveLink();
+        this.initNTAnalysisHandler();
+    },
+
+    loadComponent: async function(id, path) {
+        const placeholder = document.getElementById(id);
+        if (!placeholder) return;
+
+        try {
+            const response = await fetch(path);
+            if (!response.ok) throw new Error(`Nepavyko užkrauti komponento: ${path}`);
+            placeholder.innerHTML = await response.text();
+            console.log(`[Cenzas] ${id} injected.`);
+        } catch (err) {
+            console.error(`[Cenzas] Component load failed (${path}):`, err);
+        }
+    },
+
+    highlightActiveLink: function() {
+        const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+        const links = document.querySelectorAll('.nav__link');
+        links.forEach(link => {
+            if (link.getAttribute('href') === currentPath) {
+                link.classList.add('nav__link--active');
+            } else {
+                link.classList.remove('nav__link--active');
+            }
+        });
+    },
+
+    initNTAnalysisHandler: function() {
+        const btn = document.getElementById('btn-nav-analysis');
+        if (!btn) return;
+
+        btn.addEventListener('click', function(e) {
+            if (window.CenzasAnalytics?.UI?.LegalDisclaimer && !window.CenzasAnalytics.UI.LegalDisclaimer.accepted) {
+                e.preventDefault();
+                window.CenzasAnalytics.UI.LegalDisclaimer.init();
+                
+                window.addEventListener('cenzas:consent_given', function() {
+                    window.location.href = 'nt-statistika.html';
+                }, { once: true });
+            }
+        });
+    }
+};
+
 // Auto-boot
-document.addEventListener('DOMContentLoaded', () => window.CenzasAnalytics.Core.init());
+document.addEventListener('DOMContentLoaded', () => {
+    window.CenzasAnalytics.Core.init();
+    window.CenzasAnalytics.UI.loadComponents();
+});
