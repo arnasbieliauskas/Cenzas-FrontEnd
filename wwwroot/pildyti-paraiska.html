@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pildyti paraišką | cenzas</title>
+    <meta name="description" content="Užpildykite paskolos paraišką internetu – tai greita ir paprasta. UAB „Cenzas“ siūlo paskolas su nekilnojamo turto įkeitimu be pajamų vertinimo.">
+    <meta name="keywords" content="paskola, paraiška, paskolos be pajamų vertinimo">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Montserrat:wght@300;400;500;700&family=Open+Sans:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.css?v=1.2">
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header class="header">
+        <div class="container nav">
+            <a href="index.html" class="logo">
+                <img src="assets/images/logo-cenzas-black.png" alt="cenzas logo">
+            </a>
+            <div class="nav__links">
+                <a href="index.html" class="nav__link">PAGRINDINIS</a>
+                <div class="nav__dropdown">
+                    <a href="javascript:void(0)" class="nav__link">PASKOLA <svg width="10" height="7" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 6.5L0.669873 0.5L9.33013 0.500001L5 6.5Z" fill="currentColor"></path></svg></a>
+                    <div class="nav__dropdown-menu">
+                        <a href="greitos-paskolos.html">Kaip gauti paskolą</a>
+                        <a href="paskolos-be-pajamu-vertinimo.html">D.U.K</a>
+                    </div>
+                </div>
+                <a href="apie.html" class="nav__link">APIE</a>
+                <a href="pildyti-paraiska.html" class="nav__link nav__link--active">PILDYTI PARAIŠKĄ</a>
+                <a href="nt-statistika.html" class="nav__cta nav__cta--blue" id="btn-nav-analysis">NT ANALIZĖ</a>
+                <a href="kontaktai.html" class="nav__link">KONTAKTAI</a>
+                <a href="tel:+37068729934" class="nav__cta">+370 687 29934</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <section class="page-header">
+            <div class="container">
+                <h1 class="page-title">Pildyti paraišką</h1>
+                <p class="page-subtitle">Užpildykite greitą paraiškos formą</p>
+            </div>
+        </section>
+
+        <!-- Application Process Section -->
+        <section class="application">
+            <div class="container application__container">
+                <div class="application__info">
+                    <h3 class="application__title">Gaukite paskolos pasiūlymą</h3>
+                    <p>Kuo tiksliau ir išsamiau užpildysite formą, tuo greičiau galėsime įvertinti Jūsų situaciją ir pateikti tinkamą paskolos pasiūlymą.*</p>
+                    <p>Jeigu turite papildomos informacijos ar klausimų, juos galite įrašyti lauke <strong>„Kita“</strong>.</p>
+                    <p>Atsakymą pateikiame per <strong>3 valandas darbo dieną</strong>. Kai kuriais atvejais, jei paraiška neatitinka pagrindinių sąlygų, su Jumis susisieksime nurodytu tel. nr.</p>
+                    <p class="application__disclaimer"><em>*Prieš pildant užklausą, prašome įsivertinti finansinius įsipareigojimus, su paskolos grąžinimu susijusias rizikas ir asmenines galimybes užtikrinti laiku vykdomus mokėjimus.</em></p>
+                </div>
+                
+                <div class="application__form-wrapper">
+                    <form id="loan-application-form" class="form application-form" novalidate>
+                        <div class="form__group">
+                            <label for="amount" class="form__label">Norima paskolos suma</label>
+                            <input type="text" id="amount" name="amount" class="form__input" placeholder="Norima gauti paskolos sumą" required>
+                        </div>
+                        <div class="form__group">
+                            <label for="loan-term" class="form__label">Paskolos terminas</label>
+                            <input type="text" id="loan-term" name="term" class="form__input" placeholder="Iki 10 metų" required>
+                        </div>
+                        <div class="form__group">
+                            <label for="property-type" class="form__label">Turimas įkeisti NT turtas</label>
+                            <select id="property-type" name="property_type" class="form__input" required>
+                                <option value="Pasirinkite" disabled selected>Pasirinkite</option>
+                                <option value="Butas">Butas</option>
+                                <option value="Namas">Namas</option>
+                                <option value="Sodas">Sodas</option>
+                                <option value="Žemės sklypas">Žemės sklypas</option>
+                                <option value="Garažas">Garažas</option>
+                                <option value="Kt. patalpos">Kt. patalpos</option>
+                            </select>
+                        </div>
+                        <div class="form__group">
+                            <label for="property-address" class="form__label">NT turto adresas</label>
+                            <input type="text" id="property-address" name="property_address" class="form__input" placeholder="(Miestas, gatvė, vietovė)" required>
+                        </div>
+                        <div class="form__group">
+                            <label for="phone" class="form__label">Telefono numeris</label>
+                            <input type="tel" id="phone" name="phone" class="form__input" placeholder="Jūsų tel. nr." required>
+                        </div>
+                        <div class="form__group">
+                            <label for="email" class="form__label">El. paštas</label>
+                            <input type="email" id="email" name="email" class="form__input" placeholder="Jūsų el. paštas" required>
+                        </div>
+                        <div class="form__group">
+                            <label for="first-name" class="form__label">Vardas</label>
+                            <input type="text" id="first-name" name="first-name" class="form__input" placeholder="Jūsų vardas" required>
+                        </div>
+                        <div class="form__group">
+                            <label for="last-name" class="form__label">Pavardė</label>
+                            <input type="text" id="last-name" name="last-name" class="form__input" placeholder="Jūsų pavardė" required>
+                        </div>
+                        <div class="form__group">
+                            <label for="other" class="form__label">Kita</label>
+                            <textarea id="other" name="other" class="form__input form__textarea" placeholder="Papildoma informacija"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn--primary form__submit">Pateikti</button>
+                        <div id="form-success-msg" style="display: none; margin-top: 15px; color: var(--color-primary); font-weight: 500;">
+                            Ačiū, Jūsų paraiška gauta – susisieksime artimiausiu metu, bet ne vėliau kaip per vieną darbo dieną.
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer__container">
+            <div class="footer__column">
+                <h4 class="footer__title">Adresas</h4>
+                <p>S. Šimkaus g. 12 - 10, Klaipėda</p>
+            </div>
+            <div class="footer__column">
+                <h4 class="footer__title">Kontaktai</h4>
+                <p><strong>Telefonas:</strong> +370 687 29934; +370 46 314 478</p>
+                <p><strong>El. paštas:</strong> info@cenzas.lt</p>
+                <div class="footer__socials">
+                    <a href="https://www.facebook.com/cenzas.lt" aria-label="Facebook">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24" width="24">
+                            <path fill="currentColor" d="M24 12.0726C24 5.44354 18.629 0.0725708 12 0.0725708C5.37097 0.0725708 0 5.44354 0 12.0726C0 18.0619 4.38823 23.0264 10.125 23.9274V15.5414H7.07661V12.0726H10.125V9.4287C10.125 6.42144 11.9153 4.76031 14.6574 4.76031C15.9706 4.76031 17.3439 4.99451 17.3439 4.99451V7.94612H15.8303C14.34 7.94612 13.875 8.87128 13.875 9.82015V12.0726H17.2031L16.6708 15.5414H13.875V23.9274C19.6118 23.0264 24 18.0619 24 12.0726Z"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <div class="footer__column">
+                <h4 class="footer__title">Darbo laikas</h4>
+                <p>I-IV: 10:00 - 17:00<br>V: 10:00 - 15:00</p>
+            </div>
+            <div class="footer__column footer__column--legal">
+                <p>UAB Cenzas<br>Įmonės kodas 132772872</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-icon"><span class="checkmark">✓</span></div>
+            <h3>Paraiška gauta!</h3>
+            <p>Susisieksime su Jumis artimiausiu metu, bet ne vėliau kaip per vieną darbo dieną.</p>
+            <button id="close-modal-btn" class="btn btn--primary">Puiku!</button>
+        </div>
+    </div>
+
+    <script src="js/main.js?v=3"></script>
+</body>
+</html>

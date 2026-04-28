@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analizės Įrankis | Cenzas Analytics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container nav">
+            <a href="index.html" class="logo">
+                <img src="assets/images/logo-cenzas-black.png" alt="cenzas logo">
+            </a>
+            <div class="nav__links">
+                <a href="index.html" class="nav__link">PAGRINDINIS</a>
+                <div class="nav__dropdown">
+                    <a href="javascript:void(0)" class="nav__link">PASKOLA <svg width="10" height="7" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 6.5L0.669873 0.5L9.33013 0.500001L5 6.5Z" fill="currentColor"></path></svg></a>
+                    <div class="nav__dropdown-menu">
+                        <a href="greitos-paskolos.html">Kaip gauti paskolą</a>
+                        <a href="paskolos-be-pajamu-vertinimo.html">D.U.K</a>
+                    </div>
+                </div>
+                <a href="apie.html" class="nav__link">APIE</a>
+                <a href="pildyti-paraiska.html" class="nav__link">PILDYTI PARAIŠKĄ</a>
+                <a href="nt-statistika.html" class="nav__cta nav__cta--blue" id="btn-nav-analysis">NT ANALIZĖ</a>
+                <a href="kontaktai.html" class="nav__link">KONTAKTAI</a>
+                <a href="tel:+37068729934" class="nav__cta">+370 687 29934</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="dashboard-grid">
+            <!-- Sidebar Filters -->
+            <aside class="filters-panel">
+                <h3 style="margin-bottom: 24px; font-size: 18px;">Filtrai</h3>
+                
+                <!-- Hierarchical Point 1: City -->
+                <div class="filter-group">
+                    <label class="filter-label">Miestas</label>
+                    <select id="filter-city" class="form-input">
+                        <option value="">Pasirinkite miestą</option>
+                        <option value="Vilnius">Vilnius</option>
+                        <option value="Kaunas">Kaunas</option>
+                        <option value="Klaipėda">Klaipėda</option>
+                        <option value="Šiauliai">Šiauliai</option>
+                        <option value="Panevėžys">Panevėžys</option>
+                        <option value="Alytus">Alytus</option>
+                        <option value="Palanga">Palanga</option>
+                    </select>
+                </div>
+
+                <!-- Hierarchical Point 2: Districts -->
+                <div class="filter-group" id="district-group">
+                    <label class="filter-label">Rajonai</label>
+                    <button type="button" class="btn btn--outline" id="btn-select-districts" style="width: 100%; border: 1px solid var(--color-border);">
+                        Pasirinkti (<span id="selected-districts-count">0</span>)
+                    </button>
+                </div>
+
+                <!-- Hierarchical Point 4: Rooms -->
+                <div class="filter-group">
+                    <label class="filter-label">Kambarių skaičius</label>
+                    <button type="button" class="btn btn--outline" id="btn-select-rooms" style="width: 100%; border: 1px solid var(--color-border);">
+                        Pasirinkti (<span id="selected-rooms-count">0</span>)
+                    </button>
+                </div>
+
+                <!-- Hierarchical Point 5: Object Type -->
+                <div class="filter-group">
+                    <label class="filter-label">Objekto Tipas</label>
+                    <button type="button" class="btn btn--outline" id="btn-select-objects" style="width: 100%; border: 1px solid var(--color-border);">
+                        Pasirinkti (<span id="selected-objects-count">0</span>)
+                    </button>
+                </div>
+
+                <!-- Numeric Range Pattern (Rule #13) -->
+                <div class="filter-group">
+                    <label class="filter-label">Kaina (€)</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="number" id="price-min" class="form-input" placeholder="Nuo">
+                        <input type="number" id="price-max" class="form-input" placeholder="Iki">
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Plotas (m²)</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="number" id="area-min" class="form-input" placeholder="Nuo">
+                        <input type="number" id="area-max" class="form-input" placeholder="Iki">
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Statybos metai</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="number" id="year-min" class="form-input" placeholder="Nuo">
+                        <input type="number" id="year-max" class="form-input" placeholder="Iki">
+                    </div>
+                </div>
+
+                <!-- Advanced Spec Filters -->
+                <div class="filter-group">
+                    <label class="filter-label">Šildymas</label>
+                    <button type="button" class="btn btn--outline" id="btn-select-heating" style="width: 100%; border: 1px solid var(--color-border);">
+                        Pasirinkti (<span id="selected-heating-count">0</span>)
+                    </button>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Įrengimas</label>
+                    <button type="button" class="btn btn--outline" id="btn-select-equipped" style="width: 100%; border: 1px solid var(--color-border);">
+                        Pasirinkti (<span id="selected-equipped-count">0</span>)
+                    </button>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Energinė Klasė</label>
+                    <button type="button" class="btn btn--outline" id="btn-select-energy" style="width: 100%; border: 1px solid var(--color-border);">
+                        Pasirinkti (<span id="selected-energy-count">0</span>)
+                    </button>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Data</label>
+                    <input type="date" id="date-from" class="form-input" style="margin-bottom: 8px;">
+                    <input type="date" id="date-to" class="form-input">
+                </div>
+
+                <button id="btn-update-analytics" class="btn btn--primary" style="width: 100%; margin-top: 16px;">
+                    ATNAUJINTI ANALIZĘ
+                </button>
+            </aside>
+
+            <!-- Main Content Area -->
+            <section>
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-card__label">Vidutinė kaina</div>
+                        <div class="stat-card__value" id="avg-price">—</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card__label">Vid. kaina / m²</div>
+                        <div class="stat-card__value" id="avg-price-sqm">—</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card__label">Rinkos Stabilumas</div>
+                        <div class="stat-card__value" id="stability-score">—</div>
+                    </div>
+                </div>
+
+                <div id="chart-container" class="stat-card" style="margin-bottom: 40px; height: 400px; display: flex; align-items: center; justify-content: center; position: relative;">
+                    <canvas id="marketTrendChart"></canvas>
+                </div>
+
+                <div id="listings-wrapper">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                        <h2 style="font-size: 20px;">Skelbimų Sąrašas (<span id="total-count">0</span>)</h2>
+                    </div>
+                    <div id="listings-container" class="listings-grid"></div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modals (Placeholder for dynamic injection) -->
+    <div id="districts-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header"><h3>Rajonai</h3><button class="close-modal">&times;</button></div>
+            <div id="district-options" class="modal-options"></div>
+            <button id="confirm-districts" class="btn btn--primary" style="margin-top: 20px;">GERAI</button>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/nt-statistika.js"></script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paskolos be pajamų vertinimo su NT įkeitimu | Cenzas</title>
+    <meta name="description" content="UAB „Cenzas“ teikia paskolų tarpininkavimo paslaugas privatiems asmenims. Paskolos su NT įkeitimu be pajamų vertinimo.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Montserrat:wght@500;600;700;800&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container nav">
+            <a href="index.html" class="logo">
+                <img src="assets/images/logo-cenzas-black.png" alt="cenzas logo">
+            </a>
+            <div class="nav__links">
+                <a href="index.html" class="nav__link nav__link--active">PAGRINDINIS</a>
+                <div class="nav__dropdown">
+                    <a href="javascript:void(0)" class="nav__link">PASKOLA <svg width="10" height="7" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 6.5L0.669873 0.5L9.33013 0.500001L5 6.5Z" fill="currentColor"></path></svg></a>
+                    <div class="nav__dropdown-menu">
+                        <a href="greitos-paskolos.html">Kaip gauti paskolą</a>
+                        <a href="paskolos-be-pajamu-vertinimo.html">D.U.K</a>
+                    </div>
+                </div>
+                <a href="apie.html" class="nav__link">APIE</a>
+                <a href="pildyti-paraiska.html" class="nav__link">PILDYTI PARAIŠKĄ</a>
+                <a href="nt-statistika.html" class="nav__cta nav__cta--blue" id="btn-nav-analysis">NT ANALIZĖ</a>
+                <a href="kontaktai.html" class="nav__link">KONTAKTAI</a>
+                <a href="tel:+37068729934" class="nav__cta">+370 687 29934</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container hero__grid">
+                <div class="hero__content animate-fade-in">
+                    <h1 class="hero__title">Paskola su nekilnojamojo turto įkeitimu</h1>
+                    <div class="hero__subtitle" style="color: var(--color-primary);">BE PAJAMŲ VERTINIMO</div>
+                    <p class="hero__description">
+                        Teikiame paskolų tarpininkavimo paslaugas privatiems asmenims, siekiant padėti greitai ir patikimai pasiekti finansinius tikslus.
+                    </p>
+                    <div class="hero__btns">
+                        <a href="#paraiska" class="btn btn--primary">Gaukite paskolą →</a>
+                        <a href="kontaktai.html" class="btn btn--outline">Susisiekite</a>
+                    </div>
+                </div>
+                <div class="hero__image animate-fade-in" style="animation-delay: 0.2s;">
+                    <img src="assets/images/hero-home.jpg" alt="Modern residential building">
+                </div>
+            </div>
+        </section>
+
+        <!-- Info Blocks -->
+        <section class="info-blocks container">
+            <div class="info-blocks__grid">
+                <div class="info-card">
+                    <div class="info-card__icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    </div>
+                    <p class="info-card__text">Pajamos nevertinamos – įkeičiamas turimas NT: butas, namas, žemė ar kt.</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-card__icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    </div>
+                    <p class="info-card__text">Iki 65 % nuo įkeičiamo nekilnojamojo turto rinkos vertės.</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-card__icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    </div>
+                    <p class="info-card__text">Mėnesinė fiksuotų palūkanų norma nuo 1,3% iki 2% per mėnesį.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Application Form Section -->
+        <section id="paraiska" class="section-form">
+            <div class="container">
+                <div class="form-card animate-fade-in">
+                    <h2 class="form-title">Gaukite paskolos pasiūlymą</h2>
+                    <p class="form-note">
+                        Kuo tiksliau ir išsamiau užpildysite formą, tuo greičiau galėsime įvertinti Jūsų situaciją ir pateikti tinkamą paskolos pasiūlymą.*
+                    </p>
+                    <form id="loan-form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Norima paskolos suma*</label>
+                                <input type="number" name="amount" class="form-control" placeholder="€" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Paskolos terminas*</label>
+                                <select name="term" class="form-control" required>
+                                    <option value="">Pasirinkite</option>
+                                    <option value="12">12 mėn.</option>
+                                    <option value="24">24 mėn.</option>
+                                    <option value="36">36 mėn.</option>
+                                    <option value="60">60 mėn.</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Turimas įkeisti NT turtas*</label>
+                                <select name="asset_type" class="form-control" required>
+                                    <option value="">Pasirinkite</option>
+                                    <option value="butas">Butas</option>
+                                    <option value="namas">Namas</option>
+                                    <option value="sklypas">Sklypas / Žemė</option>
+                                    <option value="komercinis">Komercinis turtas</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">NT turto adresas*</label>
+                                <input type="text" name="address" class="form-control" placeholder="Miestas, gatvė" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Telefono numeris*</label>
+                                <input type="tel" name="phone" class="form-control" placeholder="+370" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">El. paštas*</label>
+                                <input type="email" name="email" class="form-control" required>
+                            </div>
+                            <div class="form-group form-group--full">
+                                <label class="form-label">Vardas pavardė*</label>
+                                <input type="text" name="name" class="form-control" required>
+                            </div>
+                            <div class="form-group form-group--full">
+                                <label class="form-label">Kita (Papildoma informacija)</label>
+                                <textarea name="message" class="form-control" style="height: 120px; resize: none;"></textarea>
+                            </div>
+                        </div>
+                        <p style="font-size: 12px; color: #999; margin-top: 20px;">
+                            *Prieš pildant užklausą, prašome įsivertinti finansinius įsipareigojimus, su paskolos grąžinimu susijusias rizikas ir asmenines galimybes.
+                        </p>
+                        <button type="submit" class="btn btn--primary form-submit">Pateikti užklausą</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer__grid">
+            <div>
+                <h4 class="footer__title">Adresas</h4>
+                <p class="footer__text">S. Šimkaus g. 12 - 10, Klaipėda</p>
+            </div>
+            <div>
+                <h4 class="footer__title">Kontaktai</h4>
+                <p class="footer__text">Telefonas: +370 687 29934; +370 46 314 478</p>
+                <p class="footer__text">El. paštas: info@cenzas.lt</p>
+            </div>
+            <div>
+                <h4 class="footer__title">Darbo laikas</h4>
+                <p class="footer__text">I-IV: 10:00 - 17:00</p>
+                <p class="footer__text">V: 10:00 - 15:00</p>
+            </div>
+            <div>
+                <div class="footer__socials">
+                    <a href="https://www.facebook.com/cenzas.lt" target="_blank" rel="noopener" aria-label="Facebook">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M24 12.0726C24 5.44354 18.629 0.0725708 12 0.0725708C5.37097 0.0725708 0 5.44354 0 12.0726C0 18.0619 4.38823 23.0264 10.125 23.9274V15.5414H7.07661V12.0726H10.125V9.4287C10.125 6.42144 11.9153 4.76031 14.6574 4.76031C15.9706 4.76031 17.3439 4.99451 17.3439 4.99451V7.94612H15.8303C14.34 7.94612 13.875 8.87128 13.875 9.82015V12.0726H17.2031L16.6708 15.5414H13.875V23.9274C19.6118 23.0264 24 18.0619 24 12.0726Z" fill="currentColor"></path>
+                        </svg>
+                    </a>
+                </div>
+                <p class="footer__text" style="margin-top: 16px;">UAB Cenzas</p>
+                <p class="footer__text">Įmonės kodas 132772872</p>
+            </div>
+        </div>
+        <div class="container footer__copy">
+            &copy; 2026 UAB Cenzas. Visos teisės saugomos.
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/legal-disclaimer.js"></script>
+    <script>
+        // Modal Flow for NT Analizė
+        document.getElementById('btn-nav-analysis').addEventListener('click', function(e) {
+            if (!window.CenzasAnalytics.UI.LegalDisclaimer.accepted) {
+                e.preventDefault();
+                window.CenzasAnalytics.UI.LegalDisclaimer.init();
+                
+                // Override the accept button to navigate
+                window.addEventListener('cenzas:consent_given', function() {
+                    window.location.href = 'nt-statistika.html';
+                }, { once: true });
+            }
+        });
+
+        // Form Submit Handler
+        document.getElementById('loan-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Ačiū! Jūsų užklausa gauta. Atsakysime per 3 valandas darbo metu.');
+            this.reset();
+        });
+    </script>
+</body>
+</html>
