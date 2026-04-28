@@ -70,3 +70,4 @@ C:\Users\arnas\Desktop\Cenzas FrontEnd\CenzasBackend\obj\Debug\net8.0\refint\Cen
 C:\Users\arnas\Desktop\Cenzas FrontEnd\CenzasBackend\obj\Debug\net8.0\CenzasBackend.pdb
 C:\Users\arnas\Desktop\Cenzas FrontEnd\CenzasBackend\obj\Debug\net8.0\CenzasBackend.genruntimeconfig.cache
 C:\Users\arnas\Desktop\Cenzas FrontEnd\CenzasBackend\obj\Debug\net8.0\ref\CenzasBackend.dll
+C:\Users\arnas\Desktop\Cenzas FrontEnd\CenzasBackend\obj\Debug\net8.0\CenzasBackend.sourcelink.json
