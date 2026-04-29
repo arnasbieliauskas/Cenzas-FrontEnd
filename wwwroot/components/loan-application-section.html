@@ -21,19 +21,39 @@
         <form id="loan-form" class="form-grid" novalidate>
             <div class="form-group">
                 <label class="form-label">Norima paskolos suma*</label>
-                <input type="number" name="Amount" class="form-control"
-                    placeholder="Norima gauti paskolos sumą" required>
+                <input type="text" name="Amount" class="form-control"
+                    placeholder="Norima gauti paskolos sumą" inputmode="numeric" required>
                 <span class="error-message">Šis laukas privalomas</span>
             </div>
             <div class="form-group">
                 <label class="form-label">Paskolos terminas*</label>
-                <input type="text" name="LoanTerm" class="form-control" placeholder="Iki 10 metų" required>
+                <select name="LoanTerm" class="form-control" required>
+                    <option value="">Pasirinkite terminą</option>
+                    <option value="Iki 1 metų">Iki 1 metų</option>
+                    <option value="1 metams">1 metams</option>
+                    <option value="2 metams">2 metams</option>
+                    <option value="3 metams">3 metams</option>
+                    <option value="4 metams">4 metams</option>
+                    <option value="5 metams">5 metams</option>
+                    <option value="6 metams">6 metams</option>
+                    <option value="7 metams">7 metams</option>
+                    <option value="8 metams">8 metams</option>
+                    <option value="9 metams">9 metams</option>
+                    <option value="10 metų">10 metų</option>
+                </select>
                 <span class="error-message">Šis laukas privalomas</span>
             </div>
             <div class="form-group">
                 <label class="form-label">Turimas įkeisti NT turtas*</label>
-                <input type="text" name="PropertyType" class="form-control"
-                    placeholder="Butas, namas, sodas, žemės sklypas, garažas, kt. patalpos" required>
+                <select name="PropertyType" class="form-control" required>
+                    <option value="">Pasirinkite turtą</option>
+                    <option value="Butas">Butas</option>
+                    <option value="Namas">Namas</option>
+                    <option value="Sodas">Sodas</option>
+                    <option value="Žemės sklypas">Žemės sklypas</option>
+                    <option value="Garažas">Garažas</option>
+                    <option value="Kt. patalpos">Kt. patalpos</option>
+                </select>
                 <span class="error-message">Šis laukas privalomas</span>
             </div>
             <div class="form-group">

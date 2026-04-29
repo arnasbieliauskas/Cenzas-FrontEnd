@@ -58,6 +58,8 @@
 ## 11. Unified Loan Application Component
 *   **Standard:** All loan application forms across the site (Home, Pildyti paraišką, etc.) MUST use the global component `loan-application-section.html`.
 *   **Injection:** Use `<div id="loan-application-placeholder"></div>` in the target HTML and ensure `main.js` handles the injection.
+*   **LoanTerm Selection:** MUST use a <select> dropdown with a "Pasirinkite terminą" placeholder and options ranging from "Iki 1 metų" to "10 metų".
+*   **PropertyType Selection:** MUST use a <select> dropdown with a "Pasirinkite turtą" placeholder and options: "Butas", "Namas", "Sodas", "Žemės sklypas", "Garažas", "Kt. patalpos".
 *   **Initialization:** JavaScript logic for the form must be wrapped in `window.initLoanForm()` and called explicitly after component injection.
 *   **Mandatory Fields:** The form MUST always include these 8 fields:
     1. Paskolos suma (Amount) - `type="number"`
@@ -81,7 +83,17 @@
 * **Strict Rule:** All form field `name` attributes, JavaScript data keys, and API payloads MUST use **PascalCase** (e.g., `PropertyAddress`, `LoanTerm`, `Amount`).
 * **Rationale:** Ensures direct compatibility with C# Backend models and prevents data loss during transmission without manual re-mapping.
 
-## 14. Form Validation UI
+## 14. Form Validation UI & Currency Mask
 * **Trigger:** Validation MUST occur on the `submit` event before any API calls.
 * **Visuals:** Invalid fields MUST have a pastel red border (#ff8a8a) and display the message "Šis laukas privalomas" in red (#e57373) directly below the input.
 * **Behavior:** Error indicators (border and text) MUST disappear immediately when the user starts typing in the field (`input` event).
+* **Amount Field:** MUST use a Currency Mask.
+    *   **Input:** Allow only digits (prevent text input).
+    *   **Blur:** Display thousand separators (e.g., "10 000") and append " €" suffix.
+    *   **Focus:** Remove " €" suffix and all thousand separators (spaces) for easy editing.
+    *   **Sanitization:** The " €" suffix and all separators MUST be removed before sending data to the API.
+* PropertyType Selection: MUST use a <select> dropdown with a "Pasirinkite turtą" placeholder and options: "Butas", "Namas", "Sodas", "Žemės sklypas", "Garažas", "Kt. patalpos".
+* LoanTerm Selection: MUST use a <select> dropdown with a "Pasirinkite terminą" placeholder and options ranging from "Iki 1 metų" to "10 metų".
+* Phone Field: MUST allow only digits, with a "+" symbol permitted ONLY as the first character of the input string.
+* Email Field: MUST be validated using a standard email regex pattern during the submit event to ensure a valid format (e.g., name@domain.com).
+* Name Field: MUST allow only letters (including Lithuanian alphabetical characters) and spaces. Input of numbers or symbols MUST be prevented.

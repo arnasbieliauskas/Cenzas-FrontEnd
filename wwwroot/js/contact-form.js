@@ -2,11 +2,59 @@ window.initLoanForm = function () {
     const form = document.getElementById('loan-form');
     if (!form) return;
 
-    // Rule #14: Clear error state on input event
+    // Rule #14: Currency Mask for Amount field
+    const amountInput = form.querySelector('input[name="Amount"]');
+    if (amountInput) {
+        amountInput.addEventListener('input', (e) => {
+            // Allow only digits
+            e.target.value = e.target.value.replace(/\D/g, '');
+        });
+
+        amountInput.addEventListener('blur', (e) => {
+            if (e.target.value) {
+                // Append " €" suffix and thousand separators on blur
+                const val = e.target.value.replace(/\D/g, '');
+                if (val) {
+                    const formatted = Number(val).toLocaleString('lt-LT');
+                    e.target.value = formatted + ' €';
+                }
+            }
+        });
+
+        amountInput.addEventListener('focus', (e) => {
+            // Remove " €" and all spaces/separators for clean editing
+            e.target.value = e.target.value.replace(' €', '').replace(/\s/g, '');
+        });
+    }
+
+    // Rule #14: Phone field validation (Digits only, '+' allowed at start)
+    const phoneInput = form.querySelector('input[name="Phone"]');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', (e) => {
+            let val = e.target.value;
+            const startsWithPlus = val.startsWith('+');
+            // Remove everything that isn't a digit
+            val = val.replace(/\D/g, '');
+            // Add back the plus if it was at the start
+            e.target.value = (startsWithPlus ? '+' : '') + val;
+        });
+    }
+
+    // Rule #14: Name field validation (Letters and spaces only, including LT characters)
+    const nameInput = form.querySelector('input[name="Name"]');
+    if (nameInput) {
+        nameInput.addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/[^a-zA-ZąčęėįšųūžĄČĘĖĮŠŲŪŽ\s]/g, '');
+        });
+    }
+
+    // Rule #14: Clear error state on input/change event
     form.querySelectorAll('.form-control').forEach(input => {
-        input.addEventListener('input', () => {
-            input.classList.remove('is-invalid');
-            input.parentElement.classList.remove('has-error');
+        ['input', 'change'].forEach(eventType => {
+            input.addEventListener(eventType, () => {
+                input.classList.remove('is-invalid');
+                input.parentElement.classList.remove('has-error');
+            });
         });
     });
 
@@ -16,10 +64,21 @@ window.initLoanForm = function () {
         // Rule #14: Validate required fields on submit
         let isValid = true;
         form.querySelectorAll('[required]').forEach(input => {
+            const errorMsg = input.parentElement.querySelector('.error-message');
+            
             if (!input.value.trim()) {
+                if (errorMsg) errorMsg.innerText = "Šis laukas privalomas";
                 input.classList.add('is-invalid');
                 input.parentElement.classList.add('has-error');
                 isValid = false;
+            } else if (input.type === 'email' || input.name === 'Email') {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(input.value)) {
+                    if (errorMsg) errorMsg.innerText = "Neteisingas el. pašto formatas";
+                    input.classList.add('is-invalid');
+                    input.parentElement.classList.add('has-error');
+                    isValid = false;
+                }
             }
         });
 
@@ -32,9 +91,13 @@ window.initLoanForm = function () {
 
         const formData = new FormData(form);
 
+        // Rule #14: Sanitize Amount value (remove " €" and spaces) before sending
+        const rawAmount = formData.get('Amount') || "";
+        const sanitizedAmount = rawAmount.replace(' €', '').replace(/\s/g, '');
+
         // Collect data using PascalCase keys matching the form name attributes (Rule #13)
         const data = {
-            Amount: formData.get('Amount'),
+            Amount: sanitizedAmount,
             LoanTerm: formData.get('LoanTerm'),
             PropertyType: formData.get('PropertyType'),
             PropertyAddress: formData.get('PropertyAddress'),
