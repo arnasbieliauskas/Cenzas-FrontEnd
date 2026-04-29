@@ -40,38 +40,38 @@
                 </div>
                 
                 <div class="form-fields-col">
-                    <form id="loan-application-form" class="form-grid" novalidate>
+                    <form id="loan-form" class="form-grid" novalidate>
                         <div class="form-group">
                             <label class="form-label">Norima paskolos suma*</label>
-                            <input type="text" name="amount" class="form-control" placeholder="Norima gauti paskolos sumą" required>
+                            <input type="text" name="Amount" class="form-control" placeholder="Norima gauti paskolos sumą" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Paskolos terminas*</label>
-                            <input type="text" name="term" class="form-control" placeholder="Iki 10 metų" required>
+                            <input type="text" name="LoanTerm" class="form-control" placeholder="Iki 10 metų" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Turimas įkeisti NT turtas*</label>
-                            <input type="text" name="property_type" class="form-control" placeholder="Butas, namas, sodas, žemės sklypas, garažas, kt. patalpos" required>
+                            <input type="text" name="PropertyType" class="form-control" placeholder="Butas, namas, sodas, žemės sklypas, garažas, kt. patalpos" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label">NT turto adresas*</label>
-                            <input type="text" name="property_address" class="form-control" placeholder="(Miestas, gatvė, vietovė)" required>
+                            <input type="text" name="PropertyAddress" class="form-control" placeholder="(Miestas, gatvė, vietovė)" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Telefono numeris*</label>
-                            <input type="tel" name="phone" class="form-control" placeholder="Jūsų tel. nr." required>
+                            <input type="tel" name="Phone" class="form-control" placeholder="Jūsų tel. nr." required>
                         </div>
                         <div class="form-group">
                             <label class="form-label">El. paštas*</label>
-                            <input type="email" name="email" class="form-control" placeholder="Jūsų el. paštas" required>
+                            <input type="email" name="Email" class="form-control" placeholder="Jūsų el. paštas" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Vardas pavardė*</label>
-                            <input type="text" name="name" class="form-control" placeholder="Jūsų vardas ir pavardė" required>
+                            <input type="text" name="Name" class="form-control" placeholder="Jūsų vardas ir pavardė" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Kita</label>
-                            <textarea name="message" class="form-control" style="height: 100px; resize: none;" placeholder="Papildoma informacija"></textarea>
+                            <textarea name="Other" class="form-control" style="height: 100px; resize: none;" placeholder="Papildoma informacija"></textarea>
                         </div>
                         <button type="submit" class="btn btn--primary" style="width: auto; padding: 14px 48px; border-radius: 12px; margin-top: 20px;">Pateikti</button>
                     </form>
@@ -99,5 +99,7 @@
     </div>
 
     <script src="js/main.js" defer></script>
+    <script src="js/legal-disclaimer.js" defer></script>
+    <script src="js/contact-form.js" defer></script>
 </body>
 </html>

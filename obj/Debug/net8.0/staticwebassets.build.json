@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "rXPHPhvyvFpji2MrrNkpG0MfYhtvTeO5ZDyHRVibkIg=",
+  "Hash": "7gipjmhWA7bvs5faI+URVpOJDs0aTtqwoLs+DDQztnA=",
   "Source": "CenzasBackend",
   "BasePath": "_content/CenzasBackend",
   "Mode": "Default",
@@ -302,6 +302,25 @@
       "OriginalItemSpec": "wwwroot\\DB_SCHEMA.md"
     },
     {
+      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\FRONTEND_RULES.md",
+      "SourceId": "CenzasBackend",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "BasePath": "_content/CenzasBackend",
+      "RelativePath": "FRONTEND_RULES.md",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\FRONTEND_RULES.md"
+    },
+    {
       "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\greitos-paskolos.html",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
@@ -378,12 +397,12 @@
       "OriginalItemSpec": "wwwroot\\index.html"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\FRONTEND_RULES.md",
+      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\contact-form.js",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
-      "RelativePath": "js/FRONTEND_RULES.md",
+      "RelativePath": "js/contact-form.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -394,7 +413,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\js\\FRONTEND_RULES.md"
+      "OriginalItemSpec": "wwwroot\\js\\contact-form.js"
     },
     {
       "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\legal-disclaimer.js",

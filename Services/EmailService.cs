@@ -22,22 +22,22 @@ public class EmailService : IEmailService
     {
         // 1. Data Preparation (Email Body Formatting)
         var body = $@"
-Gauta nauja paskolos paraiška:
-
-Vardas: {application.FirstName}
-Pavardė: {application.LastName}
-El. paštas: {application.Email}
-Tel. numeris: {application.Phone}
-
-Norima suma: {application.Amount}
-Paskolos terminas: {application.LoanTerm}
-
-Turimas NT: {application.PropertyType}
-NT Adresas: {application.PropertyAddress}
-
-Kita informacija:
-{application.Other}
-        ";
+            <html>
+            <body style='font-family: Arial, sans-serif; line-height: 1.6; color: #333;'>
+                <h2 style='color: #176be0;'>Gauta nauja paskolos paraiška</h2>
+                <p><strong>Vardas ir Pavardė:</strong> {application.Name}</p>
+                <p><strong>El. paštas:</strong> {application.Email}</p>
+                <p><strong>Tel. numeris:</strong> {application.Phone}</p>
+                <hr style='border: none; border-top: 1px solid #eee; margin: 20px 0;' />
+                <p><strong>Norima suma:</strong> {application.Amount} €</p>
+                <p><strong>Paskolos terminas:</strong> {application.LoanTerm}</p>
+                <p><strong>Turimas NT:</strong> {application.PropertyType}</p>
+                <p><strong>NT Adresas:</strong> {application.PropertyAddress}</p>
+                <hr style='border: none; border-top: 1px solid #eee; margin: 20px 0;' />
+                <p><strong>Kita informacija:</strong></p>
+                <p style='background: #f9f9f9; padding: 15px; border-radius: 5px;'>{application.Other}</p>
+            </body>
+            </html>";
 
         // 2. Email Messaging
         using (var mailMessage = new MailMessage())
@@ -46,7 +46,7 @@ Kita informacija:
             mailMessage.To.Add(_settings.RecipientEmail);
             mailMessage.Subject = _settings.SubjectLine;
             mailMessage.Body = body;
-            mailMessage.IsBodyHtml = false;
+            mailMessage.IsBodyHtml = true;
 
             // 3. SMTP Dispatch
             var credentials = new NetworkCredential(_settings.SenderEmail, _settings.SenderPassword);

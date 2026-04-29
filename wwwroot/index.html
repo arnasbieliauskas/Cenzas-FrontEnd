@@ -85,11 +85,11 @@
                             <div class="form-grid">
                                 <div class="form-group">
                                     <label class="form-label">Norima paskolos suma*</label>
-                                    <input type="number" name="amount" class="form-control" placeholder="€" required>
+                                    <input type="number" name="Amount" class="form-control" placeholder="€" required>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Paskolos terminas*</label>
-                                    <select name="term" class="form-control" required>
+                                    <select name="LoanTerm" class="form-control" required>
                                         <option value="">Pasirinkite</option>
                                         <option value="12">12 mėn.</option>
                                         <option value="24">24 mėn.</option>
@@ -99,7 +99,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Turimas įkeisti NT turtas*</label>
-                                    <select name="asset_type" class="form-control" required>
+                                    <select name="PropertyType" class="form-control" required>
                                         <option value="">Pasirinkite</option>
                                         <option value="butas">Butas</option>
                                         <option value="namas">Namas</option>
@@ -109,23 +109,23 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">NT turto adresas*</label>
-                                    <input type="text" name="address" class="form-control" placeholder="Miestas, gatvė" required>
+                                    <input type="text" name="PropertyAddress" class="form-control" placeholder="Miestas, gatvė" required>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Telefono numeris*</label>
-                                    <input type="tel" name="phone" class="form-control" placeholder="+370" required>
+                                    <input type="tel" name="Phone" class="form-control" placeholder="+370" required>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">El. paštas*</label>
-                                    <input type="email" name="email" class="form-control" required>
+                                    <input type="email" name="Email" class="form-control" required>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Vardas pavardė*</label>
-                                    <input type="text" name="name" class="form-control" required>
+                                    <input type="text" name="Name" class="form-control" required>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Kita (Papildoma informacija)</label>
-                                    <textarea name="message" class="form-control" style="height: 100px; resize: none;"></textarea>
+                                    <textarea name="Other" class="form-control" style="height: 100px; resize: none;"></textarea>
                                 </div>
                             </div>
                             <button type="submit" class="btn btn--primary form-submit">Pateikti užklausą</button>
@@ -141,18 +141,6 @@
     <!-- Scripts -->
     <script src="js/main.js" defer></script>
     <script src="js/legal-disclaimer.js" defer></script>
-    <script>
-        // Form Submit Handler
-        document.addEventListener('DOMContentLoaded', () => {
-            const form = document.getElementById('loan-form');
-            if (form) {
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    alert('Ačiū! Jūsų užklausa gauta. Atsakysime per 3 valandas darbo metu.');
-                    this.reset();
-                });
-            }
-        });
-    </script>
+    <script src="js/contact-form.js" defer></script>
 </body>
 </html>

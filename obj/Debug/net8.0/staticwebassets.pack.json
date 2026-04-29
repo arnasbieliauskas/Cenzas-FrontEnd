@@ -9,6 +9,10 @@
       "PackagePath": "staticwebassets\\DB_SCHEMA.md"
     },
     {
+      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\FRONTEND_RULES.md",
+      "PackagePath": "staticwebassets\\FRONTEND_RULES.md"
+    },
+    {
       "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\SITE_MAP.md",
       "PackagePath": "staticwebassets\\SITE_MAP.md"
     },
@@ -85,8 +89,8 @@
       "PackagePath": "staticwebassets\\index.html"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\FRONTEND_RULES.md",
-      "PackagePath": "staticwebassets\\js\\FRONTEND_RULES.md"
+      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\contact-form.js",
+      "PackagePath": "staticwebassets\\js\\contact-form.js"
     },
     {
       "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\legal-disclaimer.js",
