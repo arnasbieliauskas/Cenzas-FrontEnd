@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "dC5OmpRKNujR91h5hJBQQtVjFv2QvUGF0pp9kJHqZbA=",
+  "Hash": "g3toNtMbqnlObQyGCXeu8oif3ZWvwVAD6HaKumzS1cc=",
   "Source": "CenzasBackend",
   "BasePath": "_content/CenzasBackend",
   "Mode": "Default",
@@ -281,6 +281,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\styles.css"
+    },
+    {
+      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\data\\clean_json.js",
+      "SourceId": "CenzasBackend",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "BasePath": "_content/CenzasBackend",
+      "RelativePath": "data/clean_json.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\data\\clean_json.js"
     },
     {
       "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\data\\filters-metadata.json",

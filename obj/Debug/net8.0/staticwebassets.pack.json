@@ -73,6 +73,10 @@
       "PackagePath": "staticwebassets\\css\\styles.css"
     },
     {
+      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\data\\clean_json.js",
+      "PackagePath": "staticwebassets\\data\\clean_json.js"
+    },
+    {
       "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\data\\filters-metadata.json",
       "PackagePath": "staticwebassets\\data\\filters-metadata.json"
     },

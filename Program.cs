@@ -45,6 +45,7 @@ builder.Services.AddScoped<DatabaseMaintenanceService>();
 builder.Services.AddScoped<DiagnosticService>();
 builder.Services.AddScoped<IMarketAnalyticsService, MarketAnalyticsService>();
 builder.Services.AddScoped<IStatisticsService, StatisticsService>();
+builder.Services.AddScoped<IMetadataGeneratorService, MetadataGeneratorService>();
 
 var app = builder.Build();
 
