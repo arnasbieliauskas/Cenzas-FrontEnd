@@ -1,0 +1,71 @@
+<div class="form-layout" style="gap: 100px;">
+    <div class="form-text-col">
+        <h2 class="about__title" style="font-size: 42px; margin-bottom: 32px; color: var(--color-primary);">
+            Gaukite paskolos pasiūlymą</h2>
+        <div class="about__text" style="font-size: 16px;">
+            <p style="margin-bottom: 24px;">Kuo tiksliau ir išsamiau užpildysite formą, tuo greičiau
+                galėsime įvertinti Jūsų situaciją ir pateikti tinkamą paskolos pasiūlymą.*</p>
+            <p style="margin-bottom: 24px;">Jeigu turite papildomos informacijos ar klausimų, juos galite
+                įrašyti lauke <strong>„Kita“</strong>.</p>
+            <p style="margin-bottom: 24px;">Atsakymą pateikiame per <strong>3 valandas darbo dieną</strong>.
+                Kai kuriais atvejais, jei paraiška neatitinka pagrindinių sąlygų, su Jumis susisieksime
+                nurodytu tel. nr.</p>
+        </div>
+        <p style="font-size: 12px; color: var(--color-text-light); margin-top: 100px; line-height: 1.4;">
+            *Prieš pildant užklausą, prašome įsivertinti finansinius įsipareigojimus, su paskolos grąžinimu
+            susijusias rizikas ir asmenines galimybes užtikrinti laiku vykdomus mokėjimus.
+        </p>
+    </div>
+
+    <div class="form-fields-col">
+        <form id="loan-form" class="form-grid" novalidate>
+            <div class="form-group">
+                <label class="form-label">Norima paskolos suma*</label>
+                <input type="number" name="Amount" class="form-control"
+                    placeholder="Norima gauti paskolos sumą" required>
+                <span class="error-message">Šis laukas privalomas</span>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Paskolos terminas*</label>
+                <input type="text" name="LoanTerm" class="form-control" placeholder="Iki 10 metų" required>
+                <span class="error-message">Šis laukas privalomas</span>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Turimas įkeisti NT turtas*</label>
+                <input type="text" name="PropertyType" class="form-control"
+                    placeholder="Butas, namas, sodas, žemės sklypas, garažas, kt. patalpos" required>
+                <span class="error-message">Šis laukas privalomas</span>
+            </div>
+            <div class="form-group">
+                <label class="form-label">NT turto adresas*</label>
+                <input type="text" name="PropertyAddress" class="form-control"
+                    placeholder="(Miestas, gatvė, vietovė)" required>
+                <span class="error-message">Šis laukas privalomas</span>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Telefono numeris*</label>
+                <input type="tel" name="Phone" class="form-control" placeholder="Jūsų tel. nr." required>
+                <span class="error-message">Šis laukas privalomas</span>
+            </div>
+            <div class="form-group">
+                <label class="form-label">El. paštas*</label>
+                <input type="email" name="Email" class="form-control" placeholder="Jūsų el. paštas"
+                    required>
+                <span class="error-message">Šis laukas privalomas</span>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Vardas pavardė*</label>
+                <input type="text" name="Name" class="form-control" placeholder="Jūsų vardas ir pavardė"
+                    required>
+                <span class="error-message">Šis laukas privalomas</span>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Kita</label>
+                <textarea name="Other" class="form-control" style="height: 100px; resize: none;"
+                    placeholder="Papildoma informacija"></textarea>
+            </div>
+            <button type="submit" class="btn btn--primary"
+                style="width: auto; padding: 14px 48px; border-radius: 12px; margin-top: 20px;">Pateikti</button>
+        </form>
+    </div>
+</div>

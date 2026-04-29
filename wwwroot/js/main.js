@@ -184,9 +184,11 @@ window.CenzasAnalytics.UI = {
     loadComponents: async function() {
         await Promise.all([
             this.loadComponent('header-placeholder', 'components/header.html'),
-            this.loadComponent('footer-placeholder', 'components/footer.html')
+            this.loadComponent('footer-placeholder', 'components/footer.html'),
+            this.loadComponent('loan-application-placeholder', 'components/loan-application-section.html')
         ]);
         
+        if (window.initLoanForm) window.initLoanForm();
         this.highlightActiveLink();
         this.initNTAnalysisHandler();
     },

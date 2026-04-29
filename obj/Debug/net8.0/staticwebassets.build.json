@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "7gipjmhWA7bvs5faI+URVpOJDs0aTtqwoLs+DDQztnA=",
+  "Hash": "dC5OmpRKNujR91h5hJBQQtVjFv2QvUGF0pp9kJHqZbA=",
   "Source": "CenzasBackend",
   "BasePath": "_content/CenzasBackend",
   "Mode": "Default",
@@ -243,6 +243,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\components\\header.html"
+    },
+    {
+      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\components\\loan-application-section.html",
+      "SourceId": "CenzasBackend",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "BasePath": "_content/CenzasBackend",
+      "RelativePath": "components/loan-application-section.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\components\\loan-application-section.html"
     },
     {
       "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\css\\styles.css",

@@ -55,16 +55,33 @@
     * **Background:** Use a subtle hover effect (e.g., `transform: translateY(-5px)`) to enhance interactivity.
 * **Consistency:** The spacing (padding/margin) between the Hero section and the Advantages section must be consistent across all subpages.
 
-## 11. Full Application Page (pildyti-paraiska.html)
-* **Layout:** Use a centered, single-column container (`.form-container`) with a maximum width of 800px for optimal readability.
-* **Mandatory Fields:** The form MUST always include these 8 fields:
-    1. Paskolos suma (Amount)
+## 11. Unified Loan Application Component
+*   **Standard:** All loan application forms across the site (Home, Pildyti paraišką, etc.) MUST use the global component `loan-application-section.html`.
+*   **Injection:** Use `<div id="loan-application-placeholder"></div>` in the target HTML and ensure `main.js` handles the injection.
+*   **Initialization:** JavaScript logic for the form must be wrapped in `window.initLoanForm()` and called explicitly after component injection.
+*   **Mandatory Fields:** The form MUST always include these 8 fields:
+    1. Paskolos suma (Amount) - `type="number"`
     2. Paskolos terminas (Term)
-    3. Įkeičiamas turtas (Asset type - Select)
+    3. Įkeičiamas turtas (Asset type)
     4. Turto adresas (Address)
     5. Telefono numeris (Phone)
     6. El. paštas (Email)
     7. Vardas, Pavardė (Full Name)
-    8. Papildoma informacija (Additional Info - Textarea)
-* **Visual Hierarchy:** Group fields logically and ensure the "Siųsti paraišką" button is prominent (`.btn--primary`, full-width on mobile).
+    8. Papildoma informacija (Additional Info)
+*   **Visual Hierarchy:** Group fields logically and ensure the submission button is prominent (`.btn--primary`).
 * **Validation:** Form labels must be clearly visible above inputs, and all required fields must have the `required` attribute.
+
+## 12. Global UI Animations & Modals
+* **Standard:** All notification modals (Success, Error), legal disclaimers, and popups MUST be stored in the global `footer.html` component.
+* **Animation:** Must use the `.animate-fade-scale` utility class. Elements must smoothly fade in (`opacity`) and scale up from 0.9 to 1.0.
+* **Technical:** Transition duration `0.3s - 0.4s` using `cubic-bezier(0.34, 1.56, 0.64, 1)` for a modern, elastic feel.
+* **Visibility Logic:** DO NOT use `display: none`. Hide modals using `visibility: hidden` and `opacity: 0`. Trigger visibility by adding the `.active` class to the `.modal-overlay`.
+
+## 13. PascalCase Naming Convention
+* **Strict Rule:** All form field `name` attributes, JavaScript data keys, and API payloads MUST use **PascalCase** (e.g., `PropertyAddress`, `LoanTerm`, `Amount`).
+* **Rationale:** Ensures direct compatibility with C# Backend models and prevents data loss during transmission without manual re-mapping.
+
+## 14. Form Validation UI
+* **Trigger:** Validation MUST occur on the `submit` event before any API calls.
+* **Visuals:** Invalid fields MUST have a pastel red border (#ff8a8a) and display the message "Šis laukas privalomas" in red (#e57373) directly below the input.
+* **Behavior:** Error indicators (border and text) MUST disappear immediately when the user starts typing in the field (`input` event).

@@ -62,76 +62,7 @@
         <!-- Application Form Section -->
         <section id="paraiska" class="section-form">
             <div class="container">
-                <div class="form-layout animate-fade-in">
-                    <div class="form-text-col">
-                        <h2 class="form-title">Gaukite paskolos pasiūlymą</h2>
-                        <div class="form-descriptions">
-                            <p class="form-note">
-                                Kuo tiksliau ir išsamiau užpildysite formą, tuo greičiau galėsime įvertinti Jūsų situaciją ir pateikti tinkamą paskolos pasiūlymą.*
-                            </p>
-                            <p class="form-note">
-                                Jeigu turite papildomos informacijos ar klausimų, juos galite įrašyti lauke „Kita“.
-                            </p>
-                            <p class="form-note">
-                                Atsakymą pateikiame per <strong>3 valandas darbo dieną</strong>. Kai kuriais atvejais, jei paraiška neatitinka pagrindinių sąlygų, su Jumis susisieksime nurodytu tel. nr.
-                            </p>
-                        </div>
-                        <p class="form-disclaimer">
-                            *Prieš pildant užklausą, prašome įsivertinti finansinius įsipareigojimus, su paskolos grąžinimu susijusias rizikas ir asmenines galimybes.
-                        </p>
-                    </div>
-                    <div class="form-fields-col">
-                        <form id="loan-form">
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label class="form-label">Norima paskolos suma*</label>
-                                    <input type="number" name="Amount" class="form-control" placeholder="€" required>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Paskolos terminas*</label>
-                                    <select name="LoanTerm" class="form-control" required>
-                                        <option value="">Pasirinkite</option>
-                                        <option value="12">12 mėn.</option>
-                                        <option value="24">24 mėn.</option>
-                                        <option value="36">36 mėn.</option>
-                                        <option value="60">60 mėn.</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Turimas įkeisti NT turtas*</label>
-                                    <select name="PropertyType" class="form-control" required>
-                                        <option value="">Pasirinkite</option>
-                                        <option value="butas">Butas</option>
-                                        <option value="namas">Namas</option>
-                                        <option value="sklypas">Sklypas / Žemė</option>
-                                        <option value="komercinis">Komercinis turtas</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">NT turto adresas*</label>
-                                    <input type="text" name="PropertyAddress" class="form-control" placeholder="Miestas, gatvė" required>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Telefono numeris*</label>
-                                    <input type="tel" name="Phone" class="form-control" placeholder="+370" required>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">El. paštas*</label>
-                                    <input type="email" name="Email" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Vardas pavardė*</label>
-                                    <input type="text" name="Name" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Kita (Papildoma informacija)</label>
-                                    <textarea name="Other" class="form-control" style="height: 100px; resize: none;"></textarea>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn--primary form-submit">Pateikti užklausą</button>
-                        </form>
-                    </div>
-                </div>
+                <div id="loan-application-placeholder"></div>
             </div>
         </section>
     </main>

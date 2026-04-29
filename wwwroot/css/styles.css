@@ -548,6 +548,21 @@ h1, h2, h3, h4 {
     background-color: #ffffff;
 }
 
+.form-control.is-invalid {
+    border-color: #ff8a8a !important;
+}
+
+.error-message {
+    color: #e57373;
+    font-size: 12px;
+    margin-top: -4px; /* Reduced gap since form-group has 8px gap */
+    display: none;
+}
+
+.form-group.has-error .error-message {
+    display: block;
+}
+
 .form-submit {
     margin-top: 32px;
     width: auto;
@@ -624,24 +639,84 @@ h1, h2, h3, h4 {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
     z-index: 2000;
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-.modal-overlay.modal--open {
-    display: flex;
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
 }
 
 .modal-content {
     background: var(--color-white);
-    padding: 40px;
-    border-radius: var(--radius-lg);
-    max-width: 600px;
-    width: 90%;
+    padding: 48px;
+    border-radius: 24px;
+    max-width: 500px;
+    width: 95%;
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.modal-close-x {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    background: none;
+    border: none;
+    font-size: 32px;
+    color: var(--color-text-light);
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+    padding: 4px;
+}
+
+.modal-close-x:hover {
+    color: var(--color-primary);
+}
+
+.modal-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+}
+
+.modal-icon svg {
+    width: 40px;
+    height: 40px;
+}
+
+/* SVG Checkmark Animation */
+.active .modal-icon svg polyline {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: checkmark 0.6s ease-in-out forwards 0.4s;
+}
+
+@keyframes checkmark {
+    to { stroke-dashoffset: 0; }
+}
+
+.modal-title {
+    font-family: var(--font-heading);
+    color: var(--color-primary);
+    font-size: 32px;
+    margin-bottom: 16px;
+    font-weight: 800;
 }
 
 /* Utility */
@@ -652,6 +727,27 @@ h1, h2, h3, h4 {
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+.modal--error .modal-icon {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+.modal--error .modal-title {
+    color: #ef4444;
+}
+
+.animate-fade-scale {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.animate-fade-scale.active,
+.active .animate-fade-scale {
+    opacity: 1 !important;
+    transform: scale(1) !important;
 }
 
 /* Greitos Paskolos Page */

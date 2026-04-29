@@ -65,6 +65,10 @@
       "PackagePath": "staticwebassets\\components\\header.html"
     },
     {
+      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\components\\loan-application-section.html",
+      "PackagePath": "staticwebassets\\components\\loan-application-section.html"
+    },
+    {
       "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\css\\styles.css",
       "PackagePath": "staticwebassets\\css\\styles.css"
     },
