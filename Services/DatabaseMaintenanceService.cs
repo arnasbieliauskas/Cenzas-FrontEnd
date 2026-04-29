@@ -17,7 +17,41 @@ namespace CenzasBackend.Services
             _logger = logger;
         }
 
-        public async Task EnsureDatabaseSchemaAsync()
+        public virtual async Task PerformMaintenanceAsync()
+        {
+            _logger.LogInformation("Database Maintenance: Starting comprehensive maintenance sequence...");
+            try
+            {
+                await EnsureDatabaseSchemaAsync();
+                await CleanupOldRecordsAsync();
+                _logger.LogInformation("Database Maintenance: All maintenance tasks completed successfully.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Database Maintenance: Maintenance sequence failed.");
+            }
+        }
+
+        public virtual async Task CleanupOldRecordsAsync()
+        {
+            _logger.LogInformation("Database Maintenance: Cleaning up expired records...");
+            try
+            {
+                using (var connection = await _connectionFactory.OpenConnectionAsync())
+                {
+                    // Cleanup rpa_job records older than 30 days
+                    string sql = "DELETE FROM rpa_job WHERE created_at < DATE_SUB(NOW(), INTERVAL 30 DAY);";
+                    await ExecuteAsync(connection, sql);
+                }
+                _logger.LogInformation("Database Maintenance: Cleanup completed successfully.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Database Maintenance: Cleanup failed.");
+            }
+        }
+
+        public virtual async Task EnsureDatabaseSchemaAsync()
         {
             _logger.LogInformation("Database Maintenance Guard: Starting schema validation...");
 

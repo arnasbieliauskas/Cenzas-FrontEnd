@@ -97,3 +97,9 @@
 * Phone Field: MUST allow only digits, with a "+" symbol permitted ONLY as the first character of the input string.
 * Email Field: MUST be validated using a standard email regex pattern during the submit event to ensure a valid format (e.g., name@domain.com).
 * Name Field: MUST allow only letters (including Lithuanian alphabetical characters) and spaces. Input of numbers or symbols MUST be prevented.
+
+## 15. Testing Standards & Scaffold
+* **Isolation:** Each test MUST be independent and not rely on the state or results of previous tests.
+* **Naming:** Test methods MUST follow the UnitOfWork_StateUnderTest_ExpectedBehavior convention (e.g., Submit_InvalidEmail_ReturnsValidationError).
+* **Mocing:** All external dependencies (Database, API, File System) MUST be mocked to ensure test stability and speed.
+* **Integrity:** Any logic changes in Rule #14 MUST be covered by corresponding unit tests before merging.

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CenzasBackend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6d8b8594f4bf67db7073d90e4a0c6f165eb93878")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+43daa0463e1445b2dca6f3d5efa0b6382835655b")]
 [assembly: System.Reflection.AssemblyProductAttribute("CenzasBackend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CenzasBackend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
