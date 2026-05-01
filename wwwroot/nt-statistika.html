@@ -18,108 +18,130 @@
         <div class="dashboard-grid">
             <!-- Sidebar Filters -->
             <aside class="filters-panel">
-                <h3 style="margin-bottom: 24px; font-size: 18px; font-family: 'Outfit', sans-serif;">Filtrai</h3>
+                <h3 class="filters-title">Filtrai</h3>
                 
                 <!-- Group 1: Location -->
-                <div class="filter-section" style="margin-bottom: 20px;">
-                    <div class="filter-group" style="margin-bottom: 12px;">
+                <div class="filter-section">
+                    <div class="filter-group">
                         <label class="filter-label">Miestas</label>
-                        <select id="filter-city" class="form-input">
-                            <option value="">Pasirinkite miestą</option>
-                            <option value="Vilnius">Vilnius</option>
-                            <option value="Kaunas">Kaunas</option>
-                            <option value="Klaipėda">Klaipėda</option>
-                            <option value="Šiauliai">Šiauliai</option>
-                            <option value="Panevėžys">Panevėžys</option>
-                            <option value="Alytus">Alytus</option>
-                            <option value="Palanga">Palanga</option>
-                        </select>
+                        <div class="select-field">
+                            <select id="filter-city" class="form-input">
+                                <option value="">Pasirinkite miestą</option>
+                            </select>
+                            <i class="chevron-icon"></i>
+                        </div>
                     </div>
-                    <div class="filter-group" id="district-group" style="margin-bottom: 12px;">
+                    <div class="filter-group" id="district-group">
                         <label class="filter-label">Rajonai</label>
-                        <button type="button" class="btn btn--outline" id="btn-select-districts" style="width: 100%;">
-                            Pasirinkti (<span id="selected-districts-count">0</span>)
+                        <button type="button" class="btn-select-field" id="btn-select-districts">
+                            <div class="chip-container" id="districts-chips">Pasirinkti</div>
+                            <i class="chevron-icon"></i>
                         </button>
                     </div>
                     <div class="filter-group" id="street-group">
                         <label class="filter-label">Gatvės</label>
-                        <button type="button" class="btn btn--outline" id="btn-select-streets" style="width: 100%;">
-                            Pasirinkti (<span id="selected-streets-count">0</span>)
+                        <button type="button" class="btn-select-field" id="btn-select-streets">
+                            <div class="chip-container" id="streets-chips">Pasirinkti</div>
+                            <i class="chevron-icon"></i>
                         </button>
                     </div>
                 </div>
 
                 <!-- Group 2: Property -->
-                <div class="filter-section" style="margin-bottom: 20px;">
-                    <div class="filter-group" style="margin-bottom: 12px;">
+                <div class="filter-section">
+                    <div class="filter-group">
                         <label class="filter-label">Objekto Tipas</label>
-                        <button type="button" class="btn btn--outline" id="btn-select-objects" style="width: 100%;">
-                            Pasirinkti (<span id="selected-objects-count">0</span>)
+                        <button type="button" class="btn-select-field" id="btn-select-objects">
+                            <div class="chip-container" id="objects-chips">Pasirinkti</div>
+                            <i class="chevron-icon"></i>
                         </button>
                     </div>
                     <div class="filter-group">
                         <label class="filter-label">Kambarių skaičius</label>
-                        <button type="button" class="btn btn--outline" id="btn-select-rooms" style="width: 100%;">
-                            Pasirinkti (<span id="selected-rooms-count">0</span>)
+                        <button type="button" class="btn-select-field" id="btn-select-rooms">
+                            <div class="chip-container" id="rooms-chips">Pasirinkti</div>
+                            <i class="chevron-icon"></i>
                         </button>
                     </div>
                 </div>
 
                 <!-- Group 3: Metrics (Grid Layout) -->
-                <div class="filter-section" style="margin-bottom: 20px;">
-                    <label class="filter-label">Kaina (€)</label>
-                    <div class="filter-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
-                        <div class="filter-group"><input type="number" id="price-min" class="form-input" placeholder="Nuo"></div>
-                        <div class="filter-group"><input type="number" id="price-max" class="form-input" placeholder="Iki"></div>
+                <div class="filter-section">
+                    <div class="filter-row-grid">
+                        <div class="filter-group">
+                            <label class="filter-label">Kaina (€) Nuo</label>
+                            <input type="number" id="price-min" class="form-input" placeholder="0">
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Iki</label>
+                            <input type="number" id="price-max" class="form-input" placeholder="∞">
+                        </div>
                     </div>
 
-                    <label class="filter-label">Plotas (m²)</label>
-                    <div class="filter-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
-                        <div class="filter-group"><input type="number" id="area-min" class="form-input" placeholder="Nuo"></div>
-                        <div class="filter-group"><input type="number" id="area-max" class="form-input" placeholder="Iki"></div>
+                    <div class="filter-row-grid">
+                        <div class="filter-group">
+                            <label class="filter-label">Plotas (m²) Nuo</label>
+                            <input type="number" id="area-min" class="form-input" placeholder="0">
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Iki</label>
+                            <input type="number" id="area-max" class="form-input" placeholder="∞">
+                        </div>
                     </div>
 
-                    <label class="filter-label">Statybos metai</label>
-                    <div class="filter-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                        <div class="filter-group"><input type="number" id="year-min" class="form-input" placeholder="Nuo"></div>
-                        <div class="filter-group"><input type="number" id="year-max" class="form-input" placeholder="Iki"></div>
+                    <div class="filter-row-grid">
+                        <div class="filter-group">
+                            <label class="filter-label">Metai Nuo</label>
+                            <input type="number" id="year-min" class="form-input" placeholder="Nuo">
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Iki</label>
+                            <input type="number" id="year-max" class="form-input" placeholder="Iki">
+                        </div>
                     </div>
                 </div>
 
                 <!-- Group 4: Technical -->
-                <div class="filter-section" style="margin-bottom: 20px;">
-                    <div class="filter-group" style="margin-bottom: 12px;">
+                <div class="filter-section">
+                    <div class="filter-group">
                         <label class="filter-label">Šildymas</label>
-                        <button type="button" class="btn btn--outline" id="btn-select-heating" style="width: 100%;">
-                            Pasirinkti (<span id="selected-heating-count">0</span>)
+                        <button type="button" class="btn-select-field" id="btn-select-heating">
+                            <div class="chip-container" id="heating-chips">Pasirinkti</div>
+                            <i class="chevron-icon"></i>
                         </button>
                     </div>
-                    <div class="filter-group" style="margin-bottom: 12px;">
+                    <div class="filter-group">
                         <label class="filter-label">Įrengimas</label>
-                        <button type="button" class="btn btn--outline" id="btn-select-equipped" style="width: 100%;">
-                            Pasirinkti (<span id="selected-equipped-count">0</span>)
+                        <button type="button" class="btn-select-field" id="btn-select-equipped">
+                            <div class="chip-container" id="equipped-chips">Pasirinkti</div>
+                            <i class="chevron-icon"></i>
                         </button>
                     </div>
                     <div class="filter-group">
                         <label class="filter-label">Energinė Klasė</label>
-                        <button type="button" class="btn btn--outline" id="btn-select-energy" style="width: 100%;">
-                            Pasirinkti (<span id="selected-energy-count">0</span>)
+                        <button type="button" class="btn-select-field" id="btn-select-energy">
+                            <div class="chip-container" id="energy-chips">Pasirinkti</div>
+                            <i class="chevron-icon"></i>
                         </button>
                     </div>
                 </div>
 
                 <!-- Group 5: Timeframe -->
-                <div class="filter-section" style="margin-bottom: 20px;">
-                    <label class="filter-label">Data</label>
-                    <div class="filter-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div class="filter-section">
+                    <div class="filter-group">
+                        <label class="filter-label">Data Nuo</label>
                         <input type="date" id="date-from" class="form-input">
+                    </div>
+                    <div class="filter-group" style="margin-top: 12px;">
+                        <label class="filter-label">Iki</label>
                         <input type="date" id="date-to" class="form-input">
                     </div>
                 </div>
 
-                <button id="btn-update-analytics" class="btn btn--primary" style="width: 100%; margin-top: 16px;">
+                <button id="btn-update-analytics" class="btn btn--primary btn--full">
                     ATNAUJINTI ANALIZĘ
                 </button>
+            </aside>
             </aside>
 
             <!-- Main Content Area -->
@@ -155,60 +177,88 @@
 
     <div id="footer-placeholder"></div>
 
-    <!-- Modals (Placeholder for dynamic injection) -->
+    <!-- Modals -->
     <div id="districts-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header"><h3>Rajonai</h3><button class="close-modal">&times;</button></div>
+            <div class="modal-chip-header">
+                <div id="districts-modal-chips" class="modal-chip-area"></div>
+                <button type="button" class="btn--text" id="clear-districts">Išvalyti pasirinkimus</button>
+            </div>
             <div id="district-options" class="modal-options"></div>
-            <button id="confirm-districts" class="btn btn--primary" style="margin-top: 20px; width: 100%;">GERAI</button>
+            <button id="confirm-districts" class="btn btn--primary" style="margin-top: 20px; width: 100%;">IŠSAUGOTI</button>
         </div>
     </div>
 
     <div id="streets-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header"><h3>Gatvės</h3><button class="close-modal">&times;</button></div>
+            <div class="modal-chip-header">
+                <div id="streets-modal-chips" class="modal-chip-area"></div>
+                <button type="button" class="btn--text" id="clear-streets">Išvalyti pasirinkimus</button>
+            </div>
             <div id="street-options" class="modal-options"></div>
-            <button id="confirm-streets" class="btn btn--primary" style="margin-top: 20px; width: 100%;">GERAI</button>
+            <button id="confirm-streets" class="btn btn--primary" style="margin-top: 20px; width: 100%;">IŠSAUGOTI</button>
         </div>
     </div>
 
     <div id="rooms-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header"><h3>Kambarių skaičius</h3><button class="close-modal">&times;</button></div>
+            <div class="modal-chip-header">
+                <div id="rooms-modal-chips" class="modal-chip-area"></div>
+                <button type="button" class="btn--text" id="clear-rooms">Išvalyti pasirinkimus</button>
+            </div>
             <div id="rooms-options" class="modal-options"></div>
-            <button id="confirm-rooms" class="btn btn--primary" style="margin-top: 20px; width: 100%;">GERAI</button>
+            <button id="confirm-rooms" class="btn btn--primary" style="margin-top: 20px; width: 100%;">IŠSAUGOTI</button>
         </div>
     </div>
 
     <div id="objects-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header"><h3>Objekto Tipas</h3><button class="close-modal">&times;</button></div>
+            <div class="modal-chip-header">
+                <div id="objects-modal-chips" class="modal-chip-area"></div>
+                <button type="button" class="btn--text" id="clear-objects">Išvalyti pasirinkimus</button>
+            </div>
             <div id="objects-options" class="modal-options"></div>
-            <button id="confirm-objects" class="btn btn--primary" style="margin-top: 20px; width: 100%;">GERAI</button>
+            <button id="confirm-objects" class="btn btn--primary" style="margin-top: 20px; width: 100%;">IŠSAUGOTI</button>
         </div>
     </div>
 
     <div id="heating-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header"><h3>Šildymas</h3><button class="close-modal">&times;</button></div>
+            <div class="modal-chip-header">
+                <div id="heating-modal-chips" class="modal-chip-area"></div>
+                <button type="button" class="btn--text" id="clear-heating">Išvalyti pasirinkimus</button>
+            </div>
             <div id="heating-options" class="modal-options"></div>
-            <button id="confirm-heating" class="btn btn--primary" style="margin-top: 20px; width: 100%;">GERAI</button>
+            <button id="confirm-heating" class="btn btn--primary" style="margin-top: 20px; width: 100%;">IŠSAUGOTI</button>
         </div>
     </div>
 
     <div id="equipped-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header"><h3>Įrengimas</h3><button class="close-modal">&times;</button></div>
+            <div class="modal-chip-header">
+                <div id="equipped-modal-chips" class="modal-chip-area"></div>
+                <button type="button" class="btn--text" id="clear-equipped">Išvalyti pasirinkimus</button>
+            </div>
             <div id="equipped-options" class="modal-options"></div>
-            <button id="confirm-equipped" class="btn btn--primary" style="margin-top: 20px; width: 100%;">GERAI</button>
+            <button id="confirm-equipped" class="btn btn--primary" style="margin-top: 20px; width: 100%;">IŠSAUGOTI</button>
         </div>
     </div>
 
     <div id="energy-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header"><h3>Energinė Klasė</h3><button class="close-modal">&times;</button></div>
+            <div class="modal-chip-header">
+                <div id="energy-modal-chips" class="modal-chip-area"></div>
+                <button type="button" class="btn--text" id="clear-energy">Išvalyti pasirinkimus</button>
+            </div>
             <div id="energy-options" class="modal-options"></div>
-            <button id="confirm-energy" class="btn btn--primary" style="margin-top: 20px; width: 100%;">GERAI</button>
+            <button id="confirm-energy" class="btn btn--primary" style="margin-top: 20px; width: 100%;">IŠSAUGOTI</button>
         </div>
     </div>
 

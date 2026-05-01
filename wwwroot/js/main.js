@@ -18,6 +18,12 @@ window.CenzasAnalytics.Data = {
             return await response.json();
         },
 
+        fetchMapping: async function() {
+            const response = await fetch('/data/mapping.json');
+            if (!response.ok) throw new Error("Nepavyko užkrauti atvaizdavimo duomenų.");
+            return await response.json();
+        },
+
         /**
          * Enhanced POST with Storm Suppression
          * Aborts previous identical requestId to prevent race conditions
@@ -156,21 +162,34 @@ window.CenzasAnalytics.Logic = {
 window.CenzasAnalytics.Core = {
     state: {
         metadata: null,
+        mapping: null,
         isMetadataLoading: false
     },
+    _initPromise: null,
 
     init: async function() {
-        if (this.state.isMetadataLoading) return;
-        this.state.isMetadataLoading = true;
+        if (this._initPromise) return this._initPromise;
         
-        try {
-            this.state.metadata = await window.CenzasAnalytics.Data.Service.fetchMetadata();
-            console.log("[Cenzas] Metadata loaded.");
-        } catch (err) {
-            console.error("[Cenzas] Core init failed:", err);
-        } finally {
-            this.state.isMetadataLoading = false;
-        }
+        this._initPromise = (async () => {
+            this.state.isMetadataLoading = true;
+            try {
+                const [metadata, mapping] = await Promise.all([
+                    window.CenzasAnalytics.Data.Service.fetchMetadata(),
+                    window.CenzasAnalytics.Data.Service.fetchMapping()
+                ]);
+                this.state.metadata = metadata;
+                this.state.mapping = mapping;
+                console.log("[Cenzas] Metadata and Mapping loaded.");
+            } catch (err) {
+                console.error("[Cenzas] Core init failed:", err);
+                this._initPromise = null; // Allow retry on failure
+                throw err;
+            } finally {
+                this.state.isMetadataLoading = false;
+            }
+        })();
+
+        return this._initPromise;
     }
 };
 
@@ -233,6 +252,91 @@ window.CenzasAnalytics.UI = {
                 }, { once: true });
             }
         });
+    },
+
+    /**
+     * Reusable SelectionBox Component
+     */
+    SelectionBox: {
+        init: function(config) {
+            const { modalId, containerId, chipAreaId, clearBtnId, checkboxClass, onSync } = config;
+            const modal = document.getElementById(modalId);
+            const container = document.getElementById(containerId);
+            const chipArea = document.getElementById(chipAreaId);
+            const clearBtn = document.getElementById(clearBtnId);
+
+            if (!modal || !container) return;
+
+            // Clear All Handler
+            clearBtn?.addEventListener('click', () => {
+                const cbs = container.querySelectorAll(`.${checkboxClass}`);
+                cbs.forEach(cb => cb.checked = false);
+                this.updateChips(config);
+            });
+
+            // Container Click Handler (Delegation)
+            container.addEventListener('change', (e) => {
+                if (e.target.classList.contains(checkboxClass)) {
+                    this.updateChips(config);
+                }
+            });
+
+            // Chip Removal Handler (Unified Click)
+            chipArea?.addEventListener('click', (e) => {
+                const chip = e.target.closest('.chip');
+                if (chip) {
+                    const val = chip.dataset.value;
+                    const cb = container.querySelector(`input[value="${val}"]`);
+                    if (cb) {
+                        cb.checked = false;
+                        this.updateChips(config);
+                    }
+                }
+            });
+        },
+
+        renderOptions: function(config, options, currentSelected) {
+            const container = document.getElementById(config.containerId);
+            if (!container) return;
+
+            container.innerHTML = options.map(opt => {
+                const isChecked = currentSelected.includes(opt.toString());
+                return `
+                    <label class="selection-item ${isChecked ? 'is-selected' : ''}">
+                        <input type="checkbox" class="${config.checkboxClass}" value="${opt}" ${isChecked ? 'checked' : ''}>
+                        <span title="${opt}">${opt}</span>
+                    </label>
+                `;
+            }).join('');
+
+            this.updateChips(config);
+        },
+
+        updateChips: function(config) {
+            const container = document.getElementById(config.containerId);
+            const chipArea = document.getElementById(config.chipAreaId);
+            if (!container || !chipArea) return;
+
+            const selected = Array.from(container.querySelectorAll(`.${config.checkboxClass}:checked`)).map(cb => cb.value);
+            
+            // Highlight selected rows
+            container.querySelectorAll('.selection-item').forEach(item => {
+                const cb = item.querySelector('input');
+                item.classList.toggle('is-selected', cb.checked);
+            });
+
+            if (selected.length === 0) {
+                chipArea.innerHTML = '<span class="no-selection">Nieko nepasirinkta</span>';
+                return;
+            }
+
+            chipArea.innerHTML = selected.map(val => `
+                <span class="chip" data-value="${val}">
+                    ${val}
+                    <i class="chip__remove">&times;</i>
+                </span>
+            `).join('');
+        }
     }
 };
 
