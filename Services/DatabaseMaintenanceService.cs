@@ -74,6 +74,7 @@ namespace CenzasBackend.Services
                     await EnsureIndexExistsAsync(connection, "addlist", "idx_addlist_city_energy", "(City, energyclass)");
                     await EnsureIndexExistsAsync(connection, "addlist", "idx_addlist_heating", "(heating)");
                     await EnsureIndexExistsAsync(connection, "addlist", "idx_addlist_equipped", "(equipped)");
+                    await EnsureIndexExistsAsync(connection, "addlist", "idx_addlist_lookup_v2", "(City(50), District(50), Address(100), Rooms, Title(50))");
 
                     // Table: secaddcollection
                     await EnsureIndexExistsAsync(connection, "secaddcollection", "idx_secadd_external_date", "(ExternalId, secdata DESC)");

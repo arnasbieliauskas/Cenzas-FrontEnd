@@ -185,3 +185,17 @@ A loading skeleton MUST only be shown if data is missing from both the LocalStor
 Market Trend fetches (heavy aggregation) MUST use a 200ms debounce.
 
 Analysis fetches (standard metrics) MUST use a 300ms debounce.
+
+## Rule #22: 
+* **Metadata Synchronization & Startup StabilizationData Source:** 
+    Metadata MUST be extracted directly from the addlist table using an optimized SELECT DISTINCT query to populate the 9-point dependency map.  
+* **Required Attributes:**
+     Every record in the combinations array MUST include: City, District, Address (mapped to frontend as Street), Rooms, Object, Heating, Equipped, EnergyClass, BuildYear, and Renovation.  
+* **Startup Execution:**
+     The system MUST force a metadata refresh during the application startup sequence in Program.cs. This ensures the filters-metadata.json is valid and present before any frontend requests are served.  
+* **Data Integrity & Type Safety:**
+     Varchar-to-Int Mapping: Database fields BuildYear and Renovation are stored as VARCHAR(16/64) and MUST be safely parsed to int in C# (defaulting to 0 on NULL or failure).  
+* **Atomic Persistence:**
+     The JSON output MUST be minified (WriteIndented = false) and saved using atomic byte-level writing (File.WriteAllBytesAsync) to prevent null-byte corruption or whitespace filling.  
+* **Capacity:**
+     The generator is verified to handle and export at least 28,000+ unique combinations within sub-second execution time.  

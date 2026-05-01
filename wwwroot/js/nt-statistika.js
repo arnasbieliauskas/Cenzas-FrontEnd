@@ -9,8 +9,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // UI Elements - Filters
     const citySelect = document.getElementById('filter-city');
     const districtBtn = document.getElementById('btn-select-districts');
-    const roomsBtn = document.getElementById('btn-select-rooms');
+    const streetsBtn = document.getElementById('btn-select-streets');
     const objectsBtn = document.getElementById('btn-select-objects');
+    const roomsBtn = document.getElementById('btn-select-rooms');
     const heatingBtn = document.getElementById('btn-select-heating');
     const equippedBtn = document.getElementById('btn-select-equipped');
     const energyBtn = document.getElementById('btn-select-energy');
@@ -29,17 +30,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Wait for metadata
     await Core.init();
 
-    // 1. Dependency Map Synchronization
+    // 1. Dependency Map Synchronization (Rule #20: 9-point dependency)
     function syncFilters() {
         const current = getActiveFilters();
         const available = Logic.FilterEngine.getAvailableOptions(Core.state.metadata, current);
         
         if (!available) return;
 
-        // Toggle visibility and update counts
+        // Toggle visibility and update counts in hierarchical order
         updateFilterButton(districtBtn, 'Districts', available.Districts);
-        updateFilterButton(roomsBtn, 'Rooms', available.Rooms);
+        updateFilterButton(streetsBtn, 'Streets', available.Streets);
         updateFilterButton(objectsBtn, 'Objects', available.Objects);
+        updateFilterButton(roomsBtn, 'Rooms', available.Rooms);
         updateFilterButton(heatingBtn, 'Heating', available.Heating);
         updateFilterButton(equippedBtn, 'Equipped', available.Equipped);
         updateFilterButton(energyBtn, 'EnergyClass', available.EnergyClass);
@@ -52,20 +54,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (countSpan) countSpan.textContent = selected.length;
         
         // Show/Hide based on availability
-        btn.closest('.filter-group').style.display = options.length > 0 ? 'block' : 'none';
+        const section = btn.closest('.filter-group');
+        if (section) section.style.display = options.length > 0 ? 'block' : 'none';
     }
 
     function getActiveFilters() {
         return {
             City: citySelect.value,
             Districts: getSelectedValues('.checkbox-districts'),
-            Rooms: getSelectedValues('.checkbox-rooms'),
+            Streets: getSelectedValues('.checkbox-streets'),
             Objects: getSelectedValues('.checkbox-objects'),
+            Rooms: getSelectedValues('.checkbox-rooms'),
             Heating: getSelectedValues('.checkbox-heating'),
             Equipped: getSelectedValues('.checkbox-equipped'),
             EnergyClass: getSelectedValues('.checkbox-energyclass'),
             PriceMin: document.getElementById('price-min').value || null,
             PriceMax: document.getElementById('price-max').value || null,
+            AreaMin: document.getElementById('area-min').value || null,
+            AreaMax: document.getElementById('area-max').value || null,
+            YearMin: document.getElementById('year-min').value || null,
+            YearMax: document.getElementById('year-max').value || null,
             DateFrom: document.getElementById('date-from').value || null,
             DateTo: document.getElementById('date-to').value || null
         };
@@ -152,13 +160,63 @@ document.addEventListener('DOMContentLoaded', async () => {
         `).join('');
     }
 
+    // 3. Modal Management
+    const modals = {
+        districts: { btn: districtBtn, modal: document.getElementById('districts-modal'), container: document.getElementById('district-options'), key: 'Districts' },
+        streets: { btn: streetsBtn, modal: document.getElementById('streets-modal'), container: document.getElementById('street-options'), key: 'Streets' },
+        objects: { btn: objectsBtn, modal: document.getElementById('objects-modal'), container: document.getElementById('objects-options'), key: 'Objects' },
+        rooms: { btn: roomsBtn, modal: document.getElementById('rooms-modal'), container: document.getElementById('rooms-options'), key: 'Rooms' },
+        heating: { btn: heatingBtn, modal: document.getElementById('heating-modal'), container: document.getElementById('heating-options'), key: 'Heating' },
+        equipped: { btn: equippedBtn, modal: document.getElementById('equipped-modal'), container: document.getElementById('equipped-options'), key: 'Equipped' },
+        energy: { btn: energyBtn, modal: document.getElementById('energy-modal'), container: document.getElementById('energy-options'), key: 'EnergyClass' }
+    };
+
+    Object.keys(modals).forEach(id => {
+        const m = modals[id];
+        if (!m.btn) return;
+
+        m.btn.addEventListener('click', () => {
+            renderModalOptions(m);
+            m.modal.classList.add('active');
+        });
+
+        const closeBtn = m.modal.querySelector('.close-modal');
+        const confirmBtn = m.modal.querySelector('.btn--primary');
+
+        [closeBtn, confirmBtn].forEach(b => b?.addEventListener('click', () => {
+            m.modal.classList.remove('active');
+            syncFilters();
+        }));
+    });
+
+    function renderModalOptions(m) {
+        const current = getActiveFilters();
+        const available = Logic.FilterEngine.getAvailableOptions(Core.state.metadata, current);
+        const options = available[m.key] || [];
+        
+        m.container.innerHTML = options.map(opt => {
+            const isChecked = current[m.key]?.includes(opt.toString());
+            return `
+                <label class="checkbox-group">
+                    <input type="checkbox" class="checkbox-${m.key.toLowerCase()}" value="${opt}" ${isChecked ? 'checked' : ''}>
+                    <span>${opt}</span>
+                </label>
+            `;
+        }).join('');
+    }
+
     function setLoading(isLoading) {
         const els = [avgPriceEl, avgPriceSqmEl, stabilityScoreEl];
         els.forEach(el => el.classList.toggle('skeleton-text', isLoading));
     }
 
     // Event Listeners
-    citySelect.addEventListener('change', syncFilters);
+    citySelect.addEventListener('change', () => {
+        // Clear all filters when city changes (Rule #20: top-down reset)
+        document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+        syncFilters();
+    });
+    
     updateBtn.addEventListener('click', updateAnalytics);
 
     // Initial Sync

@@ -18,98 +18,103 @@
         <div class="dashboard-grid">
             <!-- Sidebar Filters -->
             <aside class="filters-panel">
-                <h3 style="margin-bottom: 24px; font-size: 18px;">Filtrai</h3>
+                <h3 style="margin-bottom: 24px; font-size: 18px; font-family: 'Outfit', sans-serif;">Filtrai</h3>
                 
-                <!-- Hierarchical Point 1: City -->
-                <div class="filter-group">
-                    <label class="filter-label">Miestas</label>
-                    <select id="filter-city" class="form-input">
-                        <option value="">Pasirinkite miestą</option>
-                        <option value="Vilnius">Vilnius</option>
-                        <option value="Kaunas">Kaunas</option>
-                        <option value="Klaipėda">Klaipėda</option>
-                        <option value="Šiauliai">Šiauliai</option>
-                        <option value="Panevėžys">Panevėžys</option>
-                        <option value="Alytus">Alytus</option>
-                        <option value="Palanga">Palanga</option>
-                    </select>
+                <!-- Group 1: Location -->
+                <div class="filter-section" style="margin-bottom: 20px;">
+                    <div class="filter-group" style="margin-bottom: 12px;">
+                        <label class="filter-label">Miestas</label>
+                        <select id="filter-city" class="form-input">
+                            <option value="">Pasirinkite miestą</option>
+                            <option value="Vilnius">Vilnius</option>
+                            <option value="Kaunas">Kaunas</option>
+                            <option value="Klaipėda">Klaipėda</option>
+                            <option value="Šiauliai">Šiauliai</option>
+                            <option value="Panevėžys">Panevėžys</option>
+                            <option value="Alytus">Alytus</option>
+                            <option value="Palanga">Palanga</option>
+                        </select>
+                    </div>
+                    <div class="filter-group" id="district-group" style="margin-bottom: 12px;">
+                        <label class="filter-label">Rajonai</label>
+                        <button type="button" class="btn btn--outline" id="btn-select-districts" style="width: 100%;">
+                            Pasirinkti (<span id="selected-districts-count">0</span>)
+                        </button>
+                    </div>
+                    <div class="filter-group" id="street-group">
+                        <label class="filter-label">Gatvės</label>
+                        <button type="button" class="btn btn--outline" id="btn-select-streets" style="width: 100%;">
+                            Pasirinkti (<span id="selected-streets-count">0</span>)
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Hierarchical Point 2: Districts -->
-                <div class="filter-group" id="district-group">
-                    <label class="filter-label">Rajonai</label>
-                    <button type="button" class="btn btn--outline" id="btn-select-districts" style="width: 100%; border: 1px solid var(--color-border);">
-                        Pasirinkti (<span id="selected-districts-count">0</span>)
-                    </button>
+                <!-- Group 2: Property -->
+                <div class="filter-section" style="margin-bottom: 20px;">
+                    <div class="filter-group" style="margin-bottom: 12px;">
+                        <label class="filter-label">Objekto Tipas</label>
+                        <button type="button" class="btn btn--outline" id="btn-select-objects" style="width: 100%;">
+                            Pasirinkti (<span id="selected-objects-count">0</span>)
+                        </button>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Kambarių skaičius</label>
+                        <button type="button" class="btn btn--outline" id="btn-select-rooms" style="width: 100%;">
+                            Pasirinkti (<span id="selected-rooms-count">0</span>)
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Hierarchical Point 4: Rooms -->
-                <div class="filter-group">
-                    <label class="filter-label">Kambarių skaičius</label>
-                    <button type="button" class="btn btn--outline" id="btn-select-rooms" style="width: 100%; border: 1px solid var(--color-border);">
-                        Pasirinkti (<span id="selected-rooms-count">0</span>)
-                    </button>
-                </div>
-
-                <!-- Hierarchical Point 5: Object Type -->
-                <div class="filter-group">
-                    <label class="filter-label">Objekto Tipas</label>
-                    <button type="button" class="btn btn--outline" id="btn-select-objects" style="width: 100%; border: 1px solid var(--color-border);">
-                        Pasirinkti (<span id="selected-objects-count">0</span>)
-                    </button>
-                </div>
-
-                <!-- Numeric Range Pattern (Rule #13) -->
-                <div class="filter-group">
+                <!-- Group 3: Metrics (Grid Layout) -->
+                <div class="filter-section" style="margin-bottom: 20px;">
                     <label class="filter-label">Kaina (€)</label>
-                    <div style="display: flex; gap: 8px;">
-                        <input type="number" id="price-min" class="form-input" placeholder="Nuo">
-                        <input type="number" id="price-max" class="form-input" placeholder="Iki">
+                    <div class="filter-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                        <div class="filter-group"><input type="number" id="price-min" class="form-input" placeholder="Nuo"></div>
+                        <div class="filter-group"><input type="number" id="price-max" class="form-input" placeholder="Iki"></div>
                     </div>
-                </div>
 
-                <div class="filter-group">
                     <label class="filter-label">Plotas (m²)</label>
-                    <div style="display: flex; gap: 8px;">
-                        <input type="number" id="area-min" class="form-input" placeholder="Nuo">
-                        <input type="number" id="area-max" class="form-input" placeholder="Iki">
+                    <div class="filter-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                        <div class="filter-group"><input type="number" id="area-min" class="form-input" placeholder="Nuo"></div>
+                        <div class="filter-group"><input type="number" id="area-max" class="form-input" placeholder="Iki"></div>
                     </div>
-                </div>
 
-                <div class="filter-group">
                     <label class="filter-label">Statybos metai</label>
-                    <div style="display: flex; gap: 8px;">
-                        <input type="number" id="year-min" class="form-input" placeholder="Nuo">
-                        <input type="number" id="year-max" class="form-input" placeholder="Iki">
+                    <div class="filter-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div class="filter-group"><input type="number" id="year-min" class="form-input" placeholder="Nuo"></div>
+                        <div class="filter-group"><input type="number" id="year-max" class="form-input" placeholder="Iki"></div>
                     </div>
                 </div>
 
-                <!-- Advanced Spec Filters -->
-                <div class="filter-group">
-                    <label class="filter-label">Šildymas</label>
-                    <button type="button" class="btn btn--outline" id="btn-select-heating" style="width: 100%; border: 1px solid var(--color-border);">
-                        Pasirinkti (<span id="selected-heating-count">0</span>)
-                    </button>
+                <!-- Group 4: Technical -->
+                <div class="filter-section" style="margin-bottom: 20px;">
+                    <div class="filter-group" style="margin-bottom: 12px;">
+                        <label class="filter-label">Šildymas</label>
+                        <button type="button" class="btn btn--outline" id="btn-select-heating" style="width: 100%;">
+                            Pasirinkti (<span id="selected-heating-count">0</span>)
+                        </button>
+                    </div>
+                    <div class="filter-group" style="margin-bottom: 12px;">
+                        <label class="filter-label">Įrengimas</label>
+                        <button type="button" class="btn btn--outline" id="btn-select-equipped" style="width: 100%;">
+                            Pasirinkti (<span id="selected-equipped-count">0</span>)
+                        </button>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Energinė Klasė</label>
+                        <button type="button" class="btn btn--outline" id="btn-select-energy" style="width: 100%;">
+                            Pasirinkti (<span id="selected-energy-count">0</span>)
+                        </button>
+                    </div>
                 </div>
 
-                <div class="filter-group">
-                    <label class="filter-label">Įrengimas</label>
-                    <button type="button" class="btn btn--outline" id="btn-select-equipped" style="width: 100%; border: 1px solid var(--color-border);">
-                        Pasirinkti (<span id="selected-equipped-count">0</span>)
-                    </button>
-                </div>
-
-                <div class="filter-group">
-                    <label class="filter-label">Energinė Klasė</label>
-                    <button type="button" class="btn btn--outline" id="btn-select-energy" style="width: 100%; border: 1px solid var(--color-border);">
-                        Pasirinkti (<span id="selected-energy-count">0</span>)
-                    </button>
-                </div>
-
-                <div class="filter-group">
+                <!-- Group 5: Timeframe -->
+                <div class="filter-section" style="margin-bottom: 20px;">
                     <label class="filter-label">Data</label>
-                    <input type="date" id="date-from" class="form-input" style="margin-bottom: 8px;">
-                    <input type="date" id="date-to" class="form-input">
+                    <div class="filter-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <input type="date" id="date-from" class="form-input">
+                        <input type="date" id="date-to" class="form-input">
+                    </div>
                 </div>
 
                 <button id="btn-update-analytics" class="btn btn--primary" style="width: 100%; margin-top: 16px;">
@@ -155,7 +160,55 @@
         <div class="modal-content">
             <div class="modal-header"><h3>Rajonai</h3><button class="close-modal">&times;</button></div>
             <div id="district-options" class="modal-options"></div>
-            <button id="confirm-districts" class="btn btn--primary" style="margin-top: 20px;">GERAI</button>
+            <button id="confirm-districts" class="btn btn--primary" style="margin-top: 20px; width: 100%;">GERAI</button>
+        </div>
+    </div>
+
+    <div id="streets-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header"><h3>Gatvės</h3><button class="close-modal">&times;</button></div>
+            <div id="street-options" class="modal-options"></div>
+            <button id="confirm-streets" class="btn btn--primary" style="margin-top: 20px; width: 100%;">GERAI</button>
+        </div>
+    </div>
+
+    <div id="rooms-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header"><h3>Kambarių skaičius</h3><button class="close-modal">&times;</button></div>
+            <div id="rooms-options" class="modal-options"></div>
+            <button id="confirm-rooms" class="btn btn--primary" style="margin-top: 20px; width: 100%;">GERAI</button>
+        </div>
+    </div>
+
+    <div id="objects-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header"><h3>Objekto Tipas</h3><button class="close-modal">&times;</button></div>
+            <div id="objects-options" class="modal-options"></div>
+            <button id="confirm-objects" class="btn btn--primary" style="margin-top: 20px; width: 100%;">GERAI</button>
+        </div>
+    </div>
+
+    <div id="heating-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header"><h3>Šildymas</h3><button class="close-modal">&times;</button></div>
+            <div id="heating-options" class="modal-options"></div>
+            <button id="confirm-heating" class="btn btn--primary" style="margin-top: 20px; width: 100%;">GERAI</button>
+        </div>
+    </div>
+
+    <div id="equipped-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header"><h3>Įrengimas</h3><button class="close-modal">&times;</button></div>
+            <div id="equipped-options" class="modal-options"></div>
+            <button id="confirm-equipped" class="btn btn--primary" style="margin-top: 20px; width: 100%;">GERAI</button>
+        </div>
+    </div>
+
+    <div id="energy-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header"><h3>Energinė Klasė</h3><button class="close-modal">&times;</button></div>
+            <div id="energy-options" class="modal-options"></div>
+            <button id="confirm-energy" class="btn btn--primary" style="margin-top: 20px; width: 100%;">GERAI</button>
         </div>
     </div>
 
