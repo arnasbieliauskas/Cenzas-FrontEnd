@@ -89,6 +89,9 @@ namespace CenzasBackend.Services
 
                     // 4. Data Synchronization
                     await SynchronizeLastCollectedDatesAsync(connection);
+
+                    // 5. Analytics Snapshot (Rule #2)
+                    await EnsureAnalyticsSnapshotAsync(connection);
                 }
                 _logger.LogInformation("Database Maintenance Guard: Maintenance sequence completed successfully.");
             }
@@ -96,6 +99,48 @@ namespace CenzasBackend.Services
             {
                 _logger.LogError(ex, "Database Maintenance Guard: Critical error during schema maintenance.");
             }
+        }
+
+        private async Task EnsureAnalyticsSnapshotAsync(IDbConnectionWrapper connection)
+        {
+            _logger.LogInformation("Database Maintenance Guard: Ensuring analytics_snapshot table...");
+            await ExecuteAsync(connection, "DROP TABLE IF EXISTS analytics_snapshot;");
+            string createSql = @"
+                CREATE TABLE IF NOT EXISTS analytics_snapshot (
+                    id INT PRIMARY KEY AUTO_INCREMENT,
+                    City VARCHAR(100),
+                    District VARCHAR(100),
+                    Address VARCHAR(255),
+                    Rooms INT,
+                    Object VARCHAR(255),
+                    Price DECIMAL(15,2),
+                    Area DECIMAL(10,2),
+                    BuildYear INT,
+                    Renovation INT,
+                    Heating VARCHAR(255),
+                    Equipped VARCHAR(255),
+                    EnergyClass VARCHAR(50),
+                    INDEX idx_snapshot_lookup (City, District, Rooms, Object)
+                ) ENGINE=InnoDB;";
+            
+            await ExecuteAsync(connection, createSql);
+
+            _logger.LogInformation("Database Maintenance Guard: Refreshing analytics_snapshot data...");
+            await ExecuteAsync(connection, "TRUNCATE TABLE analytics_snapshot;");
+            
+            // Population logic (Rule #2 & Rule #22)
+            // Note: Safely handling the varchar-to-int conversion during the snapshot insert
+            string populateSql = @"
+                INSERT INTO analytics_snapshot (City, District, Address, Rooms, Object, Price, Area, BuildYear, Renovation, Heating, Equipped, EnergyClass)
+                SELECT 
+                    City, District, Address, Rooms, Title, Price, Area, 
+                    CASE WHEN BuildYear REGEXP '^[0-9]+$' THEN CAST(BuildYear AS UNSIGNED) ELSE 0 END,
+                    CASE WHEN Renovation REGEXP '^[0-9]+$' THEN CAST(Renovation AS UNSIGNED) ELSE 0 END,
+                    Heating, Equipped, EnergyClass
+                FROM addlist
+                WHERE Price > 0 AND Area > 0;";
+            
+            await ExecuteAsync(connection, populateSql);
         }
 
         private async Task EnsureColumnExistsAsync(IDbConnectionWrapper connection, string tableName, string columnName, string typeDefinition)

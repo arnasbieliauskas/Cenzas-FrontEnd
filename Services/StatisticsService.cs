@@ -35,18 +35,18 @@ namespace CenzasBackend.Services
             using (var connection = await _connectionFactory.OpenConnectionAsync(ct))
             using (var command = connection.CreateCommand())
             {
-                var (whereClause, parameters) = BuildWhereClause(request, command);
+                var (whereClause, parameters) = BuildWhereClause(request, command, "s");
                 
                 command.CommandText = $@"
                     SELECT 
-                        AVG(Price) as AvgPrice,
-                        AVG(Price / Area) as AvgPricePerM2,
+                        AVG(s.Price) as AvgPrice,
+                        AVG(s.Price / s.Area) as AvgPricePerM2,
                         COUNT(*) as TotalOffers,
-                        MIN(Price) as MinPrice,
-                        MAX(Price) as MaxPrice,
-                        MIN(Area) as MinArea,
-                        MAX(Area) as MaxArea
-                    FROM addlist a
+                        MIN(s.Price) as MinPrice,
+                        MAX(s.Price) as MaxPrice,
+                        MIN(s.Area) as MinArea,
+                        MAX(s.Area) as MaxArea
+                    FROM analytics_snapshot s
                     {whereClause}";
                 
                 command.CommandTimeout = 120; // Rule #10
@@ -88,7 +88,7 @@ namespace CenzasBackend.Services
             using (var connection = await _connectionFactory.OpenConnectionAsync(ct))
             using (var command = connection.CreateCommand())
             {
-                var (whereClause, parameters) = BuildWhereClause(request, command);
+                var (whereClause, parameters) = BuildWhereClause(request, command, "a");
 
                 // Discovery of min/max dates for adaptive grouping
                 DateTime? minDate = null;
@@ -149,16 +149,17 @@ namespace CenzasBackend.Services
             using (var connection = await _connectionFactory.OpenConnectionAsync(ct))
             using (var command = connection.CreateCommand())
             {
-                var (whereClause, parameters) = BuildWhereClause(request, command);
+                var (whereClause, parameters) = BuildWhereClause(request, command, "a");
 
-                // Count total for pagination
+                // Count total for pagination - Rule #15 Spacing & Rule #21.4 CancellationToken
                 command.CommandText = $"SELECT COUNT(*) FROM addlist a {whereClause}";
                 var totalCount = (long)await command.ExecuteScalarAsync(ct);
 
                 // Fetch page 1 (as requested in JS: { ...filters, Page: 1 })
+                // Rule #16: Use Address instead of non-existent Street
                 command.CommandText = $@"
                     SELECT 
-                        a.Title, a.Price, a.District, a.Area, a.Rooms
+                        a.Title, a.Price, a.Address, a.Area, a.Rooms
                     FROM addlist a
                     {whereClause}
                     ORDER BY a.LastCollectedDate DESC
@@ -171,11 +172,11 @@ namespace CenzasBackend.Services
                     {
                         listings.Add(new
                         {
-                            Title = reader.GetString(0),
-                            Price = reader.GetDecimal(1),
-                            District = reader.GetString(2),
-                            Area = reader.GetDouble(3),
-                            Rooms = reader.GetInt32(4)
+                            Title = reader.IsDBNull(0) ? "" : reader.GetString(0),
+                            Price = reader.IsDBNull(1) ? 0m : reader.GetDecimal(1), // Rule #16 Decimal precision
+                            Street = reader.IsDBNull(2) ? "" : reader.GetString(2), // Maps from Address
+                            Area = reader.IsDBNull(3) ? 0.0 : reader.GetDouble(3),  // Rule #16 Double precision
+                            Rooms = reader.IsDBNull(4) ? 0 : reader.GetInt32(4)
                         });
                     }
                 }
@@ -194,15 +195,16 @@ namespace CenzasBackend.Services
             await Task.CompletedTask;
         }
 
-        private (string WhereClause, List<DbParameter> Parameters) BuildWhereClause(AnalysisRequest request, IDbCommandWrapper command)
+        private (string WhereClause, List<DbParameter> Parameters) BuildWhereClause(AnalysisRequest request, IDbCommandWrapper command, string tableAlias = "a")
         {
-            var sb = new StringBuilder("WHERE 1=1");
+            // Rule #15: Mandatory leading space to prevent aWHERE syntax errors
+            var sb = new StringBuilder(" WHERE 1=1");
             var parameters = new List<DbParameter>();
 
             // City (Priority handling)
             if (!string.IsNullOrEmpty(request.City))
             {
-                sb.Append(" AND a.City = @City");
+                sb.Append($" AND {tableAlias}.City = @City");
                 AddParameter(command, "@City", request.City);
             }
 
@@ -216,13 +218,13 @@ namespace CenzasBackend.Services
                     districtParams.Add(paramName);
                     AddParameter(command, paramName, request.Districts[i]);
                 }
-                sb.Append($" AND a.District IN ({string.Join(",", districtParams)})");
+                sb.Append($" AND {tableAlias}.District IN ({string.Join(",", districtParams)})");
             }
 
             // Rooms
             if (request.Rooms != null && request.Rooms.Any())
             {
-                sb.Append($" AND a.Rooms IN ({string.Join(",", request.Rooms)})");
+                sb.Append($" AND {tableAlias}.Rooms IN ({string.Join(",", request.Rooms)})");
             }
 
             // Objects
@@ -235,42 +237,42 @@ namespace CenzasBackend.Services
                     objectParams.Add(paramName);
                     AddParameter(command, paramName, request.Objects[i]);
                 }
-                sb.Append($" AND a.Object IN ({string.Join(",", objectParams)})");
+                sb.Append($" AND {tableAlias}.Object IN ({string.Join(",", objectParams)})");
             }
 
             // Year Ranges (Rule #12)
             if (request.BuildYearFrom.HasValue)
             {
-                sb.Append(" AND a.BuildYear >= @BuildYearFrom");
+                sb.Append($" AND {tableAlias}.BuildYear >= @BuildYearFrom");
                 AddParameter(command, "@BuildYearFrom", request.BuildYearFrom.Value);
             }
             if (request.BuildYearTo.HasValue)
             {
-                sb.Append(" AND a.BuildYear <= @BuildYearTo");
+                sb.Append($" AND {tableAlias}.BuildYear <= @BuildYearTo");
                 AddParameter(command, "@BuildYearTo", request.BuildYearTo.Value);
             }
 
             // Price Ranges
             if (request.PriceFrom.HasValue)
             {
-                sb.Append(" AND a.Price >= @PriceFrom");
+                sb.Append($" AND {tableAlias}.Price >= @PriceFrom");
                 AddParameter(command, "@PriceFrom", request.PriceFrom.Value);
             }
             if (request.PriceTo.HasValue)
             {
-                sb.Append(" AND a.Price <= @PriceTo");
+                sb.Append($" AND {tableAlias}.Price <= @PriceTo");
                 AddParameter(command, "@PriceTo", request.PriceTo.Value);
             }
 
             // Area Ranges
             if (request.AreaFrom.HasValue)
             {
-                sb.Append(" AND a.Area >= @AreaFrom");
+                sb.Append($" AND {tableAlias}.Area >= @AreaFrom");
                 AddParameter(command, "@AreaFrom", (double)request.AreaFrom.Value);
             }
             if (request.AreaTo.HasValue)
             {
-                sb.Append(" AND a.Area <= @AreaTo");
+                sb.Append($" AND {tableAlias}.Area <= @AreaTo");
                 AddParameter(command, "@AreaTo", (double)request.AreaTo.Value);
             }
 

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "g3toNtMbqnlObQyGCXeu8oif3ZWvwVAD6HaKumzS1cc=",
+  "Hash": "8llTrFfIHum/OwooU8orp9vXrdDr0cRnEj4dS34jJpA=",
   "Source": "CenzasBackend",
   "BasePath": "_content/CenzasBackend",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "CenzasBackend\\wwwroot",
       "Source": "CenzasBackend",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\apie.html",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\apie.html",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "apie.html",
       "AssetKind": "All",
@@ -36,10 +36,10 @@
       "OriginalItemSpec": "wwwroot\\apie.html"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\APP_LOGIC.md",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\APP_LOGIC.md",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "APP_LOGIC.md",
       "AssetKind": "All",
@@ -55,10 +55,10 @@
       "OriginalItemSpec": "wwwroot\\APP_LOGIC.md"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\icons\\ai-logo-mv0PPQboj3uKo4ap.svg",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\icons\\ai-logo-mv0PPQboj3uKo4ap.svg",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "assets/icons/ai-logo-mv0PPQboj3uKo4ap.svg",
       "AssetKind": "All",
@@ -74,10 +74,10 @@
       "OriginalItemSpec": "wwwroot\\assets\\icons\\ai-logo-mv0PPQboj3uKo4ap.svg"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\favicon.png",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\favicon.png",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "assets/images/favicon.png",
       "AssetKind": "All",
@@ -93,10 +93,10 @@
       "OriginalItemSpec": "wwwroot\\assets\\images\\favicon.png"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\hero-home.jpg",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\hero-home.jpg",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "assets/images/hero-home.jpg",
       "AssetKind": "All",
@@ -112,10 +112,10 @@
       "OriginalItemSpec": "wwwroot\\assets\\images\\hero-home.jpg"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\img_9042-yOfwG8rJYFiROf1r.jpg",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\img_9042-yOfwG8rJYFiROf1r.jpg",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "assets/images/img_9042-yOfwG8rJYFiROf1r.jpg",
       "AssetKind": "All",
@@ -131,10 +131,10 @@
       "OriginalItemSpec": "wwwroot\\assets\\images\\img_9042-yOfwG8rJYFiROf1r.jpg"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\logo-cenzas-black.png",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\logo-cenzas-black.png",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "assets/images/logo-cenzas-black.png",
       "AssetKind": "All",
@@ -150,10 +150,10 @@
       "OriginalItemSpec": "wwwroot\\assets\\images\\logo-cenzas-black.png"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\logo-cenzas.png",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\logo-cenzas.png",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "assets/images/logo-cenzas.png",
       "AssetKind": "All",
@@ -169,10 +169,10 @@
       "OriginalItemSpec": "wwwroot\\assets\\images\\logo-cenzas.png"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\office-klaipeda.jpg",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\office-klaipeda.jpg",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "assets/images/office-klaipeda.jpg",
       "AssetKind": "All",
@@ -188,10 +188,10 @@
       "OriginalItemSpec": "wwwroot\\assets\\images\\office-klaipeda.jpg"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\cenzas_lt.html",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\cenzas_lt.html",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "cenzas_lt.html",
       "AssetKind": "All",
@@ -207,10 +207,10 @@
       "OriginalItemSpec": "wwwroot\\cenzas_lt.html"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\components\\footer.html",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\components\\footer.html",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "components/footer.html",
       "AssetKind": "All",
@@ -226,10 +226,10 @@
       "OriginalItemSpec": "wwwroot\\components\\footer.html"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\components\\header.html",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\components\\header.html",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "components/header.html",
       "AssetKind": "All",
@@ -245,10 +245,10 @@
       "OriginalItemSpec": "wwwroot\\components\\header.html"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\components\\loan-application-section.html",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\components\\loan-application-section.html",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "components/loan-application-section.html",
       "AssetKind": "All",
@@ -264,10 +264,10 @@
       "OriginalItemSpec": "wwwroot\\components\\loan-application-section.html"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\css\\styles.css",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\css\\styles.css",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "css/styles.css",
       "AssetKind": "All",
@@ -283,10 +283,10 @@
       "OriginalItemSpec": "wwwroot\\css\\styles.css"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\data\\clean_json.js",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\data\\clean_json.js",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "data/clean_json.js",
       "AssetKind": "All",
@@ -302,10 +302,10 @@
       "OriginalItemSpec": "wwwroot\\data\\clean_json.js"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\data\\filters-metadata.json",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\data\\filters-metadata.json",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "data/filters-metadata.json",
       "AssetKind": "All",
@@ -321,10 +321,10 @@
       "OriginalItemSpec": "wwwroot\\data\\filters-metadata.json"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\DB_SCHEMA.md",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\DB_SCHEMA.md",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "DB_SCHEMA.md",
       "AssetKind": "All",
@@ -340,10 +340,10 @@
       "OriginalItemSpec": "wwwroot\\DB_SCHEMA.md"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\FRONTEND_RULES.md",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\FRONTEND_RULES.md",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "FRONTEND_RULES.md",
       "AssetKind": "All",
@@ -359,10 +359,10 @@
       "OriginalItemSpec": "wwwroot\\FRONTEND_RULES.md"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\greitos-paskolos.html",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\greitos-paskolos.html",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "greitos-paskolos.html",
       "AssetKind": "All",
@@ -378,10 +378,10 @@
       "OriginalItemSpec": "wwwroot\\greitos-paskolos.html"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\header_utf8.txt",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\header_utf8.txt",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "header_utf8.txt",
       "AssetKind": "All",
@@ -397,10 +397,10 @@
       "OriginalItemSpec": "wwwroot\\header_utf8.txt"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\header.txt",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\header.txt",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "header.txt",
       "AssetKind": "All",
@@ -416,10 +416,10 @@
       "OriginalItemSpec": "wwwroot\\header.txt"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\index.html",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\index.html",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "index.html",
       "AssetKind": "All",
@@ -435,10 +435,10 @@
       "OriginalItemSpec": "wwwroot\\index.html"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\contact-form.js",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\contact-form.js",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "js/contact-form.js",
       "AssetKind": "All",
@@ -454,10 +454,10 @@
       "OriginalItemSpec": "wwwroot\\js\\contact-form.js"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\legal-disclaimer.js",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\legal-disclaimer.js",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "js/legal-disclaimer.js",
       "AssetKind": "All",
@@ -473,10 +473,10 @@
       "OriginalItemSpec": "wwwroot\\js\\legal-disclaimer.js"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\main.js",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\main.js",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "js/main.js",
       "AssetKind": "All",
@@ -492,10 +492,10 @@
       "OriginalItemSpec": "wwwroot\\js\\main.js"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\nt-duomenu-valymas.js",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\nt-duomenu-valymas.js",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "js/nt-duomenu-valymas.js",
       "AssetKind": "All",
@@ -511,10 +511,10 @@
       "OriginalItemSpec": "wwwroot\\js\\nt-duomenu-valymas.js"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\nt-palyginimas-grafikas.js",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\nt-palyginimas-grafikas.js",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "js/nt-palyginimas-grafikas.js",
       "AssetKind": "All",
@@ -530,10 +530,10 @@
       "OriginalItemSpec": "wwwroot\\js\\nt-palyginimas-grafikas.js"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\nt-palyginimas.js",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\nt-palyginimas.js",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "js/nt-palyginimas.js",
       "AssetKind": "All",
@@ -549,10 +549,10 @@
       "OriginalItemSpec": "wwwroot\\js\\nt-palyginimas.js"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\nt-statistika.js",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\nt-statistika.js",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "js/nt-statistika.js",
       "AssetKind": "All",
@@ -568,10 +568,10 @@
       "OriginalItemSpec": "wwwroot\\js\\nt-statistika.js"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\kontaktai.html",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\kontaktai.html",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "kontaktai.html",
       "AssetKind": "All",
@@ -587,10 +587,10 @@
       "OriginalItemSpec": "wwwroot\\kontaktai.html"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\nt-palyginimas.html",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\nt-palyginimas.html",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "nt-palyginimas.html",
       "AssetKind": "All",
@@ -606,10 +606,10 @@
       "OriginalItemSpec": "wwwroot\\nt-palyginimas.html"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\nt-statistika.html",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\nt-statistika.html",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "nt-statistika.html",
       "AssetKind": "All",
@@ -625,10 +625,10 @@
       "OriginalItemSpec": "wwwroot\\nt-statistika.html"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\original_duk.html",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\original_duk.html",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "original_duk.html",
       "AssetKind": "All",
@@ -644,10 +644,10 @@
       "OriginalItemSpec": "wwwroot\\original_duk.html"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\original_greitos.html",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\original_greitos.html",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "original_greitos.html",
       "AssetKind": "All",
@@ -663,10 +663,10 @@
       "OriginalItemSpec": "wwwroot\\original_greitos.html"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\original_homepage.html",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\original_homepage.html",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "original_homepage.html",
       "AssetKind": "All",
@@ -682,10 +682,10 @@
       "OriginalItemSpec": "wwwroot\\original_homepage.html"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\paskolos-be-pajamu-vertinimo.html",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\paskolos-be-pajamu-vertinimo.html",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "paskolos-be-pajamu-vertinimo.html",
       "AssetKind": "All",
@@ -701,10 +701,10 @@
       "OriginalItemSpec": "wwwroot\\paskolos-be-pajamu-vertinimo.html"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\pildyti-paraiska.html",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\pildyti-paraiska.html",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "pildyti-paraiska.html",
       "AssetKind": "All",
@@ -720,10 +720,10 @@
       "OriginalItemSpec": "wwwroot\\pildyti-paraiska.html"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\SITE_MAP.md",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\SITE_MAP.md",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "SITE_MAP.md",
       "AssetKind": "All",
@@ -739,10 +739,10 @@
       "OriginalItemSpec": "wwwroot\\SITE_MAP.md"
     },
     {
-      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\WALKTHROUGH_SCREENSHOT.md",
+      "Identity": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\WALKTHROUGH_SCREENSHOT.md",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
       "BasePath": "_content/CenzasBackend",
       "RelativePath": "WALKTHROUGH_SCREENSHOT.md",
       "AssetKind": "All",

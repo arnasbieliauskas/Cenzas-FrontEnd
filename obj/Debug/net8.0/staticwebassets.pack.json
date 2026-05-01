@@ -1,159 +1,159 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\APP_LOGIC.md",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\APP_LOGIC.md",
       "PackagePath": "staticwebassets\\APP_LOGIC.md"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\DB_SCHEMA.md",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\DB_SCHEMA.md",
       "PackagePath": "staticwebassets\\DB_SCHEMA.md"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\FRONTEND_RULES.md",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\FRONTEND_RULES.md",
       "PackagePath": "staticwebassets\\FRONTEND_RULES.md"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\SITE_MAP.md",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\SITE_MAP.md",
       "PackagePath": "staticwebassets\\SITE_MAP.md"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\WALKTHROUGH_SCREENSHOT.md",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\WALKTHROUGH_SCREENSHOT.md",
       "PackagePath": "staticwebassets\\WALKTHROUGH_SCREENSHOT.md"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\apie.html",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\apie.html",
       "PackagePath": "staticwebassets\\apie.html"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\icons\\ai-logo-mv0PPQboj3uKo4ap.svg",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\icons\\ai-logo-mv0PPQboj3uKo4ap.svg",
       "PackagePath": "staticwebassets\\assets\\icons\\ai-logo-mv0PPQboj3uKo4ap.svg"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\favicon.png",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\favicon.png",
       "PackagePath": "staticwebassets\\assets\\images\\favicon.png"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\hero-home.jpg",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\hero-home.jpg",
       "PackagePath": "staticwebassets\\assets\\images\\hero-home.jpg"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\img_9042-yOfwG8rJYFiROf1r.jpg",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\img_9042-yOfwG8rJYFiROf1r.jpg",
       "PackagePath": "staticwebassets\\assets\\images\\img_9042-yOfwG8rJYFiROf1r.jpg"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\logo-cenzas-black.png",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\logo-cenzas-black.png",
       "PackagePath": "staticwebassets\\assets\\images\\logo-cenzas-black.png"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\logo-cenzas.png",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\logo-cenzas.png",
       "PackagePath": "staticwebassets\\assets\\images\\logo-cenzas.png"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\office-klaipeda.jpg",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\assets\\images\\office-klaipeda.jpg",
       "PackagePath": "staticwebassets\\assets\\images\\office-klaipeda.jpg"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\cenzas_lt.html",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\cenzas_lt.html",
       "PackagePath": "staticwebassets\\cenzas_lt.html"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\components\\footer.html",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\components\\footer.html",
       "PackagePath": "staticwebassets\\components\\footer.html"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\components\\header.html",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\components\\header.html",
       "PackagePath": "staticwebassets\\components\\header.html"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\components\\loan-application-section.html",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\components\\loan-application-section.html",
       "PackagePath": "staticwebassets\\components\\loan-application-section.html"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\css\\styles.css",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\css\\styles.css",
       "PackagePath": "staticwebassets\\css\\styles.css"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\data\\clean_json.js",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\data\\clean_json.js",
       "PackagePath": "staticwebassets\\data\\clean_json.js"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\data\\filters-metadata.json",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\data\\filters-metadata.json",
       "PackagePath": "staticwebassets\\data\\filters-metadata.json"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\greitos-paskolos.html",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\greitos-paskolos.html",
       "PackagePath": "staticwebassets\\greitos-paskolos.html"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\header.txt",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\header.txt",
       "PackagePath": "staticwebassets\\header.txt"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\header_utf8.txt",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\header_utf8.txt",
       "PackagePath": "staticwebassets\\header_utf8.txt"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\index.html",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\index.html",
       "PackagePath": "staticwebassets\\index.html"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\contact-form.js",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\contact-form.js",
       "PackagePath": "staticwebassets\\js\\contact-form.js"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\legal-disclaimer.js",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\legal-disclaimer.js",
       "PackagePath": "staticwebassets\\js\\legal-disclaimer.js"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\main.js",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\main.js",
       "PackagePath": "staticwebassets\\js\\main.js"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\nt-duomenu-valymas.js",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\nt-duomenu-valymas.js",
       "PackagePath": "staticwebassets\\js\\nt-duomenu-valymas.js"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\nt-palyginimas-grafikas.js",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\nt-palyginimas-grafikas.js",
       "PackagePath": "staticwebassets\\js\\nt-palyginimas-grafikas.js"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\nt-palyginimas.js",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\nt-palyginimas.js",
       "PackagePath": "staticwebassets\\js\\nt-palyginimas.js"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\nt-statistika.js",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\js\\nt-statistika.js",
       "PackagePath": "staticwebassets\\js\\nt-statistika.js"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\kontaktai.html",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\kontaktai.html",
       "PackagePath": "staticwebassets\\kontaktai.html"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\nt-palyginimas.html",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\nt-palyginimas.html",
       "PackagePath": "staticwebassets\\nt-palyginimas.html"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\nt-statistika.html",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\nt-statistika.html",
       "PackagePath": "staticwebassets\\nt-statistika.html"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\original_duk.html",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\original_duk.html",
       "PackagePath": "staticwebassets\\original_duk.html"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\original_greitos.html",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\original_greitos.html",
       "PackagePath": "staticwebassets\\original_greitos.html"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\original_homepage.html",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\original_homepage.html",
       "PackagePath": "staticwebassets\\original_homepage.html"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\paskolos-be-pajamu-vertinimo.html",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\paskolos-be-pajamu-vertinimo.html",
       "PackagePath": "staticwebassets\\paskolos-be-pajamu-vertinimo.html"
     },
     {
-      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\pildyti-paraiska.html",
+      "Id": "c:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\pildyti-paraiska.html",
       "PackagePath": "staticwebassets\\pildyti-paraiska.html"
     },
     {
