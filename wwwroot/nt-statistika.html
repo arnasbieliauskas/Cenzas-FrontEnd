@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="lt">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Analizės Įrankis | Cenzas Analytics</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
     <div id="header-placeholder"></div>
 
@@ -19,7 +23,7 @@
             <!-- Sidebar Filters -->
             <aside class="filters-panel">
                 <h3 class="filters-title">Filtrai</h3>
-                
+
                 <!-- Group 1: Location -->
                 <div class="filter-section">
                     <div class="filter-group">
@@ -138,10 +142,7 @@
                     </div>
                 </div>
 
-                <button id="btn-update-analytics" class="btn btn--primary btn--full">
-                    ATNAUJINTI ANALIZĘ
-                </button>
-            </aside>
+
             </aside>
 
             <!-- Main Content Area -->
@@ -161,13 +162,20 @@
                     </div>
                 </div>
 
-                <div id="chart-container" class="stat-card" style="margin-bottom: 40px; height: 400px; display: flex; align-items: center; justify-content: center; position: relative;">
+                <div id="chart-container" class="stat-card"
+                    style="margin-bottom: 40px; height: 400px; display: flex; align-items: center; justify-content: center; position: relative;">
                     <canvas id="marketTrendChart"></canvas>
                 </div>
 
                 <div id="listings-wrapper">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
                         <h2 style="font-size: 20px;">Skelbimų Sąrašas (<span id="total-count">0</span>)</h2>
+                        <div class="price-filter-tabs">
+                            <button class="filter-tab active" data-type="all">Visi</button>
+                            <button class="filter-tab" data-type="down">Tik atpigę</button>
+                            <button class="filter-tab" data-type="up">Tik pabrangę</button>
+                        </div>
                     </div>
                     <div id="listings-container" class="listings-grid"></div>
                 </div>
@@ -180,89 +188,126 @@
     <!-- Modals -->
     <div id="districts-modal" class="modal-overlay">
         <div class="modal-content">
-            <div class="modal-header"><h3>Rajonai</h3><button class="close-modal">&times;</button></div>
+            <div class="modal-header">
+                <h3>Rajonai</h3><button class="close-modal">&times;</button>
+            </div>
             <div class="modal-chip-header">
                 <div id="districts-modal-chips" class="modal-chip-area"></div>
                 <button type="button" class="btn--text" id="clear-districts">Išvalyti pasirinkimus</button>
             </div>
-            <div id="district-options" class="modal-options"></div>
-            <button id="confirm-districts" class="btn btn--primary" style="margin-top: 20px; width: 100%;">IŠSAUGOTI</button>
+            <div class="modal-body">
+                <div id="district-options" class="modal-options"></div>
+            </div>
+            <button id="confirm-districts" class="btn btn--primary"
+                style="margin-top: 20px; width: 100%;">IŠSAUGOTI</button>
         </div>
     </div>
 
     <div id="streets-modal" class="modal-overlay">
         <div class="modal-content">
-            <div class="modal-header"><h3>Gatvės</h3><button class="close-modal">&times;</button></div>
+            <div class="modal-header">
+                <h3>Gatvės</h3><button class="close-modal">&times;</button>
+            </div>
             <div class="modal-chip-header">
                 <div id="streets-modal-chips" class="modal-chip-area"></div>
                 <button type="button" class="btn--text" id="clear-streets">Išvalyti pasirinkimus</button>
             </div>
-            <div id="street-options" class="modal-options"></div>
-            <button id="confirm-streets" class="btn btn--primary" style="margin-top: 20px; width: 100%;">IŠSAUGOTI</button>
+            <div class="modal-body">
+                <div id="street-options" class="modal-options"></div>
+            </div>
+            <button id="confirm-streets" class="btn btn--primary"
+                style="margin-top: 20px; width: 100%;">IŠSAUGOTI</button>
         </div>
     </div>
 
     <div id="rooms-modal" class="modal-overlay">
         <div class="modal-content">
-            <div class="modal-header"><h3>Kambarių skaičius</h3><button class="close-modal">&times;</button></div>
+            <div class="modal-header">
+                <h3>Kambarių skaičius</h3><button class="close-modal">&times;</button>
+            </div>
             <div class="modal-chip-header">
                 <div id="rooms-modal-chips" class="modal-chip-area"></div>
                 <button type="button" class="btn--text" id="clear-rooms">Išvalyti pasirinkimus</button>
             </div>
-            <div id="rooms-options" class="modal-options"></div>
-            <button id="confirm-rooms" class="btn btn--primary" style="margin-top: 20px; width: 100%;">IŠSAUGOTI</button>
+            <div class="modal-body">
+                <div id="rooms-options" class="modal-options"></div>
+            </div>
+            <button id="confirm-rooms" class="btn btn--primary"
+                style="margin-top: 20px; width: 100%;">IŠSAUGOTI</button>
         </div>
     </div>
 
     <div id="objects-modal" class="modal-overlay">
         <div class="modal-content">
-            <div class="modal-header"><h3>Objekto Tipas</h3><button class="close-modal">&times;</button></div>
+            <div class="modal-header">
+                <h3>Objekto Tipas</h3><button class="close-modal">&times;</button>
+            </div>
             <div class="modal-chip-header">
                 <div id="objects-modal-chips" class="modal-chip-area"></div>
                 <button type="button" class="btn--text" id="clear-objects">Išvalyti pasirinkimus</button>
             </div>
-            <div id="objects-options" class="modal-options"></div>
-            <button id="confirm-objects" class="btn btn--primary" style="margin-top: 20px; width: 100%;">IŠSAUGOTI</button>
+            <div class="modal-body">
+                <div id="objects-options" class="modal-options"></div>
+            </div>
+            <button id="confirm-objects" class="btn btn--primary"
+                style="margin-top: 20px; width: 100%;">IŠSAUGOTI</button>
         </div>
     </div>
 
     <div id="heating-modal" class="modal-overlay">
         <div class="modal-content">
-            <div class="modal-header"><h3>Šildymas</h3><button class="close-modal">&times;</button></div>
+            <div class="modal-header">
+                <h3>Šildymas</h3><button class="close-modal">&times;</button>
+            </div>
             <div class="modal-chip-header">
                 <div id="heating-modal-chips" class="modal-chip-area"></div>
                 <button type="button" class="btn--text" id="clear-heating">Išvalyti pasirinkimus</button>
             </div>
-            <div id="heating-options" class="modal-options"></div>
-            <button id="confirm-heating" class="btn btn--primary" style="margin-top: 20px; width: 100%;">IŠSAUGOTI</button>
+            <div class="modal-body">
+                <div id="heating-options" class="modal-options"></div>
+            </div>
+            <button id="confirm-heating" class="btn btn--primary"
+                style="margin-top: 20px; width: 100%;">IŠSAUGOTI</button>
         </div>
     </div>
 
     <div id="equipped-modal" class="modal-overlay">
         <div class="modal-content">
-            <div class="modal-header"><h3>Įrengimas</h3><button class="close-modal">&times;</button></div>
+            <div class="modal-header">
+                <h3>Įrengimas</h3><button class="close-modal">&times;</button>
+            </div>
             <div class="modal-chip-header">
                 <div id="equipped-modal-chips" class="modal-chip-area"></div>
                 <button type="button" class="btn--text" id="clear-equipped">Išvalyti pasirinkimus</button>
             </div>
-            <div id="equipped-options" class="modal-options"></div>
-            <button id="confirm-equipped" class="btn btn--primary" style="margin-top: 20px; width: 100%;">IŠSAUGOTI</button>
+            <div class="modal-body">
+                <div id="equipped-options" class="modal-options"></div>
+            </div>
+            <button id="confirm-equipped" class="btn btn--primary"
+                style="margin-top: 20px; width: 100%;">IŠSAUGOTI</button>
         </div>
     </div>
 
     <div id="energy-modal" class="modal-overlay">
         <div class="modal-content">
-            <div class="modal-header"><h3>Energinė Klasė</h3><button class="close-modal">&times;</button></div>
+            <div class="modal-header">
+                <h3>Energetinė Klasė</h3><button class="close-modal">&times;</button>
+            </div>
             <div class="modal-chip-header">
                 <div id="energy-modal-chips" class="modal-chip-area"></div>
                 <button type="button" class="btn--text" id="clear-energy">Išvalyti pasirinkimus</button>
             </div>
-            <div id="energy-options" class="modal-options"></div>
-            <button id="confirm-energy" class="btn btn--primary" style="margin-top: 20px; width: 100%;">IŠSAUGOTI</button>
+            <div class="modal-body">
+                <div id="energy-options" class="modal-options"></div>
+            </div>
+            <button id="confirm-energy" class="btn btn--primary"
+                style="margin-top: 20px; width: 100%;">IŠSAUGOTI</button>
         </div>
     </div>
 
     <script src="js/main.js" defer></script>
+    <script src="js/nt-duomenu-valymas.js" defer></script>
     <script src="js/nt-statistika.js" defer></script>
 </body>
+
 </html>

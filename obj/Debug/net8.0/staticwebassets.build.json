@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "78EEGU3bLA0FnDC5/EHaDyFtGOzJlIREXbFyLcJTpxM=",
+  "Hash": "uPPkEkqH8HerbOFKzxbvzmxYQzy4X8VlpTlHzaYx6Uk=",
   "Source": "CenzasBackend",
   "BasePath": "_content/CenzasBackend",
   "Mode": "Default",
@@ -739,6 +739,25 @@
       "OriginalItemSpec": "wwwroot\\pildyti-paraiska.html"
     },
     {
+      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\program_map.md",
+      "SourceId": "CenzasBackend",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "BasePath": "_content/CenzasBackend",
+      "RelativePath": "program_map.md",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\program_map.md"
+    },
+    {
       "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\SITE_MAP.md",
       "SourceId": "CenzasBackend",
       "SourceType": "Discovered",
@@ -756,6 +775,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\SITE_MAP.md"
+    },
+    {
+      "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\tests\\js\\nt-statistika.test.js",
+      "SourceId": "CenzasBackend",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\",
+      "BasePath": "_content/CenzasBackend",
+      "RelativePath": "tests/js/nt-statistika.test.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\tests\\js\\nt-statistika.test.js"
     },
     {
       "Identity": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\WALKTHROUGH_SCREENSHOT.md",

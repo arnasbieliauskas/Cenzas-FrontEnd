@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const equippedBtn = document.getElementById('btn-select-equipped');
     const energyBtn = document.getElementById('btn-select-energy');
 
-    const updateBtn = document.getElementById('btn-update-analytics');
+    // const updateBtn = document.getElementById('btn-update-analytics'); // Rule #23: Removed manual trigger
 
     // UI Elements - Displays
     const avgPriceEl = document.getElementById('avg-price');
@@ -24,38 +24,34 @@ document.addEventListener('DOMContentLoaded', async () => {
     const stabilityScoreEl = document.getElementById('stability-score');
     const totalCountEl = document.getElementById('total-count');
     const listingsContainer = document.getElementById('listings-container');
+    const listingsWrapper = document.getElementById('listings-wrapper');
 
     let chart = null;
 
     // Wait for metadata
     await Core.init();
 
-    // Helper to get formatted label from mapping
-    function getLabel(key, category = 'cities') {
-        const mapping = Core.state.mapping?.[category];
-        if (mapping && mapping[key]) {
-            return mapping[key];
-        }
-        // Fallback: Title Case
-        return key.charAt(0).toUpperCase() + key.slice(1);
-    }
+    const { Cleaner } = window.CenzasAnalytics.Utils;
+    let currentFilteredData = []; // Local cache for pagination
+    let currentPriceFilter = 'all'; // State for Up/Down/All filter
 
     // Dynamically populate city selection from metadata
     if (Core.state.metadata?.combinations) {
         const PRIORITY_CITIES = ['vilniuje', 'kaune', 'klaipedoje', 'siauliuose', 'panevezyje', 'alytuje', 'palangoje'];
         
         const rawCities = [...new Set(Core.state.metadata.combinations.map(c => c.City))];
+        const cleanedCities = Cleaner.sanitizeList(rawCities);
         
         // Group cities
-        const priority = rawCities.filter(c => PRIORITY_CITIES.includes(c));
-        const others = rawCities.filter(c => !PRIORITY_CITIES.includes(c));
+        const priority = cleanedCities.filter(c => PRIORITY_CITIES.includes(c));
+        const others = cleanedCities.filter(c => !PRIORITY_CITIES.includes(c));
 
         // Sort both groups by their mapped label
-        const sortByLabel = (a, b) => getLabel(a, 'cities').localeCompare(getLabel(b, 'cities'), 'lt');
+        const sortByLabel = (a, b) => Cleaner.getLabel(a, 'cities').localeCompare(Cleaner.getLabel(b, 'cities'), 'lt');
         priority.sort(sortByLabel);
         others.sort(sortByLabel);
 
-        console.log('[Recovery] Dropdown Populated with Priority and Others groups');
+        console.log('[Cleaner] Dropdown Populated with Sanitized Groups');
 
         // Clear except placeholder
         while (citySelect.options.length > 1) {
@@ -66,7 +62,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         priority.forEach(city => {
             const option = document.createElement('option');
             option.value = city;
-            option.textContent = getLabel(city, 'cities'); 
+            option.textContent = Cleaner.getLabel(city, 'cities'); 
             citySelect.appendChild(option);
         });
 
@@ -82,30 +78,94 @@ document.addEventListener('DOMContentLoaded', async () => {
         others.forEach(city => {
             const option = document.createElement('option');
             option.value = city;
-            option.textContent = getLabel(city, 'cities'); 
+            option.textContent = Cleaner.getLabel(city, 'cities'); 
             citySelect.appendChild(option);
         });
     }
 
     // 1. Dependency Map Synchronization (Rule #20: 9-point dependency)
     function syncFilters() {
-        const current = getActiveFilters();
-        const available = Logic.FilterEngine.getAvailableOptions(Core.state.metadata, current);
+        try {
+            const current = getActiveFilters();
 
-        if (!available) return;
+            // Rule: Empty Initial State Guard
+            if (!current.City) {
+                avgPriceEl.textContent = '—';
+                avgPriceSqmEl.textContent = '—';
+                stabilityScoreEl.textContent = '—';
+                totalCountEl.textContent = '0';
+                if (listingsContainer) listingsContainer.innerHTML = '';
+                if (chart) {
+                    chart.destroy();
+                    chart = null;
+                }
+                const pc = document.getElementById('pagination-container');
+                if (pc) pc.style.display = 'none';
+                return;
+            }
 
-        // Update all filter selections
-        syncFilterButton('districts', current.Districts);
-        syncFilterButton('streets', current.Streets);
-        syncFilterButton('objects', current.Objects);
-        syncFilterButton('rooms', current.Rooms);
-        syncFilterButton('heating', current.Heating);
-        syncFilterButton('equipped', current.Equipped);
-        syncFilterButton('energy', current.EnergyClass);
+            // Rule #23: Calculate visibility based on City context ONLY to prevent vanishing sections
+            const cityOnlyContext = { City: current.City };
+            const visibility = Logic.FilterEngine.getAvailableOptions(Core.state.metadata, cityOnlyContext);
+            
+            // Calculate available options and stats based on FULL filter set
+            const available = Logic.FilterEngine.getAvailableOptions(Core.state.metadata, current);
 
-        // Hide/Show sections based on availability
-        toggleSectionVisibility('district-group', available.Districts);
-        toggleSectionVisibility('street-group', available.Streets);
+            if (!available || !visibility) return;
+
+            // Update all filter selections (Chips)
+            syncFilterButton('districts', current.Districts);
+            syncFilterButton('streets', current.Streets);
+            syncFilterButton('objects', current.Objects);
+            syncFilterButton('rooms', current.Rooms);
+            syncFilterButton('heating', current.Heating);
+            syncFilterButton('equipped', current.Equipped);
+            syncFilterButton('energy', current.EnergyClass);
+
+            // Hide/Show sections based on CITY context only (Prevents UI jumpiness)
+            toggleSectionVisibility('district-group', visibility.Districts || []);
+            toggleSectionVisibility('street-group', visibility.Streets || []);
+
+            // Rule #24: Metadata-Driven Authority
+            let combinations = available.combinations || [];
+
+            // Apply Price Change Filter
+            if (currentPriceFilter === 'up') {
+                combinations = combinations.filter(c => {
+                    const initial = parseFloat(c.InitialPrice || c.initialPrice || 0);
+                    const latest = parseFloat(c.LatestPrice || c.latestPrice || c.Price || c.price || 0);
+                    return latest > initial && latest !== 0;
+                });
+            } else if (currentPriceFilter === 'down') {
+                combinations = combinations.filter(c => {
+                    const initial = parseFloat(c.InitialPrice || c.initialPrice || 0);
+                    const latest = parseFloat(c.LatestPrice || c.latestPrice || c.Price || c.price || 0);
+                    return latest < initial && latest !== 0;
+                });
+            }
+
+            currentFilteredData = combinations;
+            Core.state.currentPage = 1;
+
+            // Rule #23.2: Local Calculation Engine (Instant KPIs)
+            const stats = Logic.calculateStats(currentFilteredData);
+            renderStats(stats);
+            
+            // Rule #23.4: Background Fetches (Debounced Trend Only)
+            debouncedUpdateAnalytics();
+            
+            // Rule #24: Instant List Rendering
+            refreshListings();
+        } catch (err) {
+            console.error('[Cenzas] syncFilters failed:', err);
+        }
+    }
+
+    // Rule #21.6: Throttling Standards
+    let updateTimeout = null;
+    function debouncedUpdateAnalytics() {
+        if (updateTimeout) clearTimeout(updateTimeout);
+        updateTimeout = setTimeout(() => updateAnalytics(), 300);
     }
 
     function syncFilterButton(id, selectedItems) {
@@ -118,11 +178,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // Render chips
-        container.innerHTML = selectedItems.map(item => `
-            <span class="chip">
-                ${item}
-            </span>
-        `).join('');
+        container.innerHTML = selectedItems.map(item => {
+            const label = id === 'objects' ? Cleaner.getLabel(item, 'objects') : item;
+            return `<span class="chip">${label}</span>`;
+        }).join('');
     }
 
     function toggleSectionVisibility(id, options) {
@@ -142,12 +201,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             Heating: getSelectedValues('.checkbox-heating'),
             Equipped: getSelectedValues('.checkbox-equipped'),
             EnergyClass: getSelectedValues('.checkbox-energyclass'),
-            PriceMin: document.getElementById('price-min').value || null,
-            PriceMax: document.getElementById('price-max').value || null,
-            AreaMin: document.getElementById('area-min').value || null,
-            AreaMax: document.getElementById('area-max').value || null,
-            YearMin: document.getElementById('year-min').value || null,
-            YearMax: document.getElementById('year-max').value || null,
+            PriceFrom: document.getElementById('price-min').value || null,
+            PriceTo: document.getElementById('price-max').value || null,
+            AreaFrom: document.getElementById('area-min').value || null,
+            AreaTo: document.getElementById('area-max').value || null,
+            BuildYearFrom: document.getElementById('year-min').value || null,
+            BuildYearTo: document.getElementById('year-max').value || null,
             DateFrom: document.getElementById('date-from').value || null,
             DateTo: document.getElementById('date-to').value || null
         };
@@ -157,53 +216,172 @@ document.addEventListener('DOMContentLoaded', async () => {
         return Array.from(document.querySelectorAll(`${selector}:checked`)).map(cb => cb.value);
     }
 
-    // 2. Parallel API Requests
+    // 2. Parallel API Requests (Background Data)
     async function updateAnalytics() {
         const filters = getActiveFilters();
         if (!filters.City) {
-            alert('Prašome pasirinkti miestą.');
             return;
         }
 
-        setLoading(true);
-
         try {
-            // FIRE PARALLEL REQUESTS (Rule #2 from request)
-            const [stats, trend, listings] = await Promise.all([
-                Data.Service.post('/api/statistics/analyze', filters, 'stats'),
-                Data.Service.post('/api/statistics/market-trend', filters, 'trend'),
-                Data.Service.post('/api/statistics/listings', { ...filters, Page: 1 }, 'listings')
-            ]);
+            // Rule #10: Check LocalStore Cache for Trend
+            const cachedTrend = Data.LocalStore.get('trend', filters);
+            let trend;
 
-            renderStats(stats);
+            if (cachedTrend) {
+                trend = cachedTrend;
+            } else {
+                // Rule #23.4: Trend Fetch Only (Listings are now local)
+                trend = await Data.Service.post('/api/statistics/market-trend', filters, 'trend-load');
+                Data.LocalStore.set('trend', filters, trend);
+            }
+
             renderChart(trend);
-            renderListings(listings.Listings);
-            totalCountEl.textContent = listings.TotalCount;
-
         } catch (err) {
-            if (err.name !== 'AbortError') console.error('Update failed:', err);
-        } finally {
-            setLoading(false);
+            if (err.name !== 'AbortError') console.error('Background update failed:', err);
         }
     }
 
+    // Rule #24: Local Pagination & Rendering
+    function refreshListings() {
+        if (!listingsContainer) return;
+
+        const total = currentFilteredData.length;
+        if (totalCountEl) totalCountEl.textContent = total.toLocaleString('lt-LT');
+
+        if (total === 0) {
+            listingsContainer.innerHTML = `
+                <div class="empty-state" style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--color-text-light);">
+                    <p>Skelbimų pagal jūsų kriterijus nerasta.</p>
+                </div>
+            `;
+            const pc = document.getElementById('pagination-container');
+            if (pc) pc.style.display = 'none';
+            return;
+        }
+
+        const pageSize = 25;
+        const start = (Core.state.currentPage - 1) * pageSize;
+        const pageData = currentFilteredData.slice(start, start + pageSize);
+
+        renderListings(pageData);
+        renderPagination(total);
+
+        // Ensure pagination is visible if multiple pages
+        const pc = document.getElementById('pagination-container');
+        if (pc) pc.style.display = total > pageSize ? 'block' : 'none';
+    }
+
+    function renderPagination(totalItems) {
+        if (!listingsContainer) return;
+        
+        const pageSize = 25;
+        const totalPages = Math.ceil(totalItems / pageSize);
+        
+        let paginationContainer = document.getElementById('pagination-container');
+        if (!paginationContainer) {
+            paginationContainer = document.createElement('div');
+            paginationContainer.id = 'pagination-container';
+            paginationContainer.className = 'pagination-controls';
+            listingsContainer.after(paginationContainer);
+        }
+
+        if (totalPages <= 1) {
+            paginationContainer.innerHTML = '';
+            paginationContainer.style.display = 'none';
+            return;
+        }
+        
+        paginationContainer.style.display = 'block';
+
+        const page = Core.state.currentPage;
+        
+        // Rule #24.2: Dynamic Sliding Window (±5 Pages)
+        let start = Math.max(1, page - 5);
+        let end = Math.min(totalPages, page + 5);
+
+        // Build page numbers
+        let pagesHtml = '';
+        
+        // Always show page 1 + dots if start > 1
+        if (start > 1) {
+            pagesHtml += `<button class="page-num" data-page="1">1</button>`;
+            if (start > 2) pagesHtml += `<span class="page-dots">...</span>`;
+        }
+
+        for (let i = start; i <= end; i++) {
+            pagesHtml += `<button class="page-num ${i === page ? 'is-active' : ''}" data-page="${i}">${i}</button>`;
+        }
+
+        // Always show last page + dots if end < totalPages
+        if (end < totalPages) {
+            if (end < totalPages - 1) pagesHtml += `<span class="page-dots">...</span>`;
+            pagesHtml += `<button class="page-num" data-page="${totalPages}">${totalPages}</button>`;
+        }
+
+        paginationContainer.innerHTML = `
+            <div class="pagination-inner">
+                <button class="btn btn--secondary btn--sm" id="btn-prev" ${page === 1 ? 'disabled' : ''}>Atgal</button>
+                <div class="page-numbers">${pagesHtml}</div>
+                <button class="btn btn--secondary btn--sm" id="btn-next" ${page === totalPages ? 'disabled' : ''}>Pirmyn</button>
+            </div>
+        `;
+
+        // Event Listeners
+        paginationContainer.querySelectorAll('.page-num').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const newPage = parseInt(btn.dataset.page);
+                if (newPage !== Core.state.currentPage) {
+                    Core.state.currentPage = newPage;
+                    refreshListings();
+                    window.scrollTo({ top: listingsContainer.offsetTop - 100, behavior: 'smooth' });
+                }
+            });
+        });
+
+        document.getElementById('btn-prev')?.addEventListener('click', () => {
+            if (Core.state.currentPage > 1) {
+                Core.state.currentPage--;
+                refreshListings();
+                window.scrollTo({ top: listingsContainer.offsetTop - 100, behavior: 'smooth' });
+            }
+        });
+
+        document.getElementById('btn-next')?.addEventListener('click', () => {
+            if (Core.state.currentPage < totalPages) {
+                Core.state.currentPage++;
+                refreshListings();
+                window.scrollTo({ top: listingsContainer.offsetTop - 100, behavior: 'smooth' });
+            }
+        });
+    }
+
     function renderStats(data) {
-        avgPriceEl.textContent = data.AvgPrice ? `${Math.round(data.AvgPrice).toLocaleString()} €` : '—';
-        avgPriceSqmEl.textContent = data.AvgPriceSqm ? `${Math.round(data.AvgPriceSqm).toLocaleString()} €` : '—';
-        stabilityScoreEl.textContent = data.StabilityScore !== undefined ? `${data.StabilityScore}/100` : '—';
+        avgPriceEl.textContent = Cleaner.formatPrice(data.avgPrice);
+        avgPriceSqmEl.textContent = Cleaner.formatPrice(data.avgPricePerM2);
+        stabilityScoreEl.textContent = Cleaner.formatMarketStability(data.initialAvg, data.latestAvg);
+        // Note: totalCountEl is updated via Phase 2 server response in updateAnalytics
     }
 
     function renderChart(trendData) {
+        // Rule #23: Robust Data Normalization (direct array or wrapped object)
+        const dataArray = Array.isArray(trendData) ? trendData : (trendData?.trend || trendData?.Trend || []);
+        
         const ctx = document.getElementById('marketTrendChart').getContext('2d');
         if (chart) chart.destroy();
+
+        if (dataArray.length === 0) {
+            console.warn('[Cleaner] No trend data available for chart');
+            return;
+        }
 
         chart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: trendData.map(d => d.Label),
+                labels: dataArray.map(d => d.Label || d.label),
                 datasets: [{
                     label: 'Kaina',
-                    data: trendData.map(d => d.Value),
+                    data: dataArray.map(d => d.Value || d.value),
                     borderColor: '#176be0',
                     tension: 0.4,
                     fill: true,
@@ -219,19 +397,110 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function renderListings(listings) {
-        listingsContainer.innerHTML = listings.map(l => `
-            <div class="listing-card animate-fade-in">
-                <div class="listing-card__content">
-                    <h3 class="listing-card__title">${l.Title}</h3>
-                    <div style="font-size: 24px; font-weight: 700; color: var(--color-primary); margin: 12px 0;">
-                        ${Math.round(l.Price).toLocaleString()} €
-                    </div>
-                    <div style="font-size: 14px; color: var(--color-text-light);">
-                        ${l.District} | ${l.Area} m²
+        if (!listingsContainer) return;
+
+        if (!listings || listings.length === 0) {
+            listingsContainer.innerHTML = `
+                <div class="empty-state" style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--color-text-light);">
+                    <p>Skelbimų pagal jūsų kriterijus nerasta.</p>
+                </div>
+            `;
+            return;
+        }
+
+        listingsContainer.innerHTML = listings.map(l => {
+            if (!l) return '';
+
+            // Mapping with Fallbacks (PascalCase from Metadata)
+            const rawType = l.Object || l.object || l.Title || l.title || 'Skelbimas';
+            const title = Cleaner.getLabel(rawType, 'objects');
+            
+            const initialPrice = Math.round(parseFloat(l.InitialPrice || l.initialPrice || 0));
+            let latestPrice = Math.round(parseFloat(l.LatestPrice || l.latestPrice || l.Price || l.price || 0));
+            
+            // Safeguard: If latest price is 0 (100% drop), treat as no change and show initial price
+            if (latestPrice === 0) {
+                latestPrice = initialPrice;
+            }
+
+            const priceDiff = latestPrice - initialPrice;
+            const priceChangePct = initialPrice > 0 ? ((priceDiff / initialPrice) * 100).toFixed(1) : 0;
+            
+            const district = l.District || l.district || '';
+            const street = l.Street || l.street || '';
+            const rooms = l.Rooms || l.rooms || 0;
+            const area = l.Area || l.area || 0;
+            const year = l.BuildYear || l.buildYear || '';
+            
+            const heating = l.Heating || l.heating || '';
+            const equipped = l.Equipped || l.equipped || '';
+            const energy = l.EnergyClass || l.energyClass || '';
+            const initialDate = l.InitialDate || l.initialDate || '';
+            const latestDate = l.LatestDate || l.latestDate || '';
+            const url = l.Url || l.url || '#';
+
+            // Rule #26: Expiration Guard (Probability of invalidity)
+            const thresholdDays = Core.state.metadata?.ListingExpirationDays || 1;
+            let isExpired = false;
+            if (latestDate) {
+                const latest = new Date(latestDate);
+                const today = new Date();
+                const diffTime = Math.abs(today - latest);
+                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                if (diffDays > thresholdDays) {
+                    isExpired = true;
+                }
+            }
+
+            return `
+                <div class="listing-card animate-fade-in">
+                    ${isExpired ? `
+                        <div class="listing-card__expired-tag">
+                            Tikėtina, kad negalioja
+                        </div>
+                    ` : ''}
+                    <div class="listing-card__content">
+                        <h3 class="listing-card__title">${title}</h3>
+                        <div class="listing-card__price-wrapper">
+                            <div class="listing-card__prices">
+                                ${priceDiff !== 0 ? `
+                                    <div class="price-item price-item--initial">
+                                        <span class="price-value">${initialPrice.toLocaleString('lt-LT')} €</span>
+                                    </div>
+                                ` : ''}
+                                <div class="price-item price-item--latest">
+                                    <span class="price-value">${latestPrice.toLocaleString('lt-LT')} €</span>
+                                </div>
+                            </div>
+                            ${priceDiff !== 0 ? `
+                                <div class="price-change ${priceDiff < 0 ? 'price-change--down' : 'price-change--up'}">
+                                    ${priceDiff < 0 ? '↓' : '↑'} ${Math.abs(priceChangePct)}%
+                                </div>
+                            ` : ''}
+                        </div>
+                        <div class="listing-card__location">${district}${street ? `, ${street}` : ''}</div>
+                        <div class="listing-card__details">
+                            <span><strong>${rooms}</strong> kamb.</span> | <span><strong>${area}</strong> m²</span> | <span><strong>${year}</strong> m.</span>
+                        </div>
+                        <div class="listing-card__dates">
+                            <div class="date-item">Pirma reg.: <span>${Cleaner.formatDate(initialDate)}</span></div>
+                            <div class="date-item">Paskutinė reg.: <span>${Cleaner.formatDate(latestDate)}</span></div>
+                        </div>
+                        <div class="listing-card__footer">
+                            <div class="listing-card__badges">
+                                ${heating ? `<span class="badge">${heating}</span>` : ''}
+                                ${equipped ? `<span class="badge">${equipped}</span>` : ''}
+                                ${energy ? `<span class="badge badge--energy">${energy}</span>` : ''}
+                            </div>
+                            <a href="${url}" target="_blank" class="btn-view-listing" title="Peržiūrėti originalų skelbimą">
+                                Peržiūrėti
+                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
     }
 
     // 3. Modal & SelectionBox Management
@@ -269,10 +538,35 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function renderFilterOptions(config) {
         const current = getActiveFilters();
-        const available = Logic.FilterEngine.getAvailableOptions(Core.state.metadata, current);
-        const options = available[config.key] || [];
+        
+        // Rule: Clear current category filter to show all globally available options for the selected context
+        const forEngine = { ...current, [config.key]: [] };
+        const available = Logic.FilterEngine.getAvailableOptions(Core.state.metadata, forEngine);
+        
+        let optionsSet = new Set((available[config.key] || []).map(o => o.toString()));
+        
+        // Rule #23: Selection Preservation Logic
+        // Ensure currently selected items stay in the list even if hidden by other cross-filters
+        const selected = (current[config.key] || []).map(s => s.toString());
+        selected.forEach(s => optionsSet.add(s));
 
-        UI.SelectionBox.renderOptions(config, options, current[config.key] || []);
+        // Convert back to array and sort (numerically if possible, otherwise alphabetically)
+        let options = Array.from(optionsSet).sort((a, b) => {
+            const numA = parseFloat(a);
+            const numB = parseFloat(b);
+            if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
+            return a.localeCompare(b, 'lt');
+        });
+
+        // Rule #25: Map labels for Objects category before rendering
+        if (config.key === 'Objects') {
+            options = options.map(opt => ({
+                value: opt,
+                label: Cleaner.getLabel(opt, 'objects')
+            }));
+        }
+
+        UI.SelectionBox.renderOptions(config, options, selected);
     }
 
     function setLoading(isLoading) {
@@ -282,12 +576,29 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Event Listeners
     citySelect.addEventListener('change', () => {
-        // Clear all filters when city changes (Rule #20: top-down reset)
+        // Rule #20: Top-down reset of all secondary filters
         document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+        
+        // Strict State & UI Reset (Rule #23)
+        Object.values(filterConfigs).forEach(config => {
+            const container = document.getElementById(config.containerId);
+            if (container) container.innerHTML = ''; // Clear modal options
+            UI.SelectionBox.updateChips(config); // Physical removal of ghost chips/tags
+        });
+
+        // Trigger fresh calculation for the new city (with zero other filters)
         syncFilters();
     });
 
-    updateBtn.addEventListener('click', updateAnalytics);
+    // Price Change Filter Tab Handlers
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            currentPriceFilter = tab.dataset.type;
+            syncFilters();
+        });
+    });
 
     // Initial Sync
     syncFilters();

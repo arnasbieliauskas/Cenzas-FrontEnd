@@ -200,4 +200,37 @@ Analysis fetches (standard metrics) MUST use a 300ms debounce.
 * **Capacity:**
      The generator is verified to handle and export at least 28,000+ unique combinations within sub-second execution time.  
 
+## Rule #23:
+* **Real-Time Client-Side Analytics OrchestrationObjective:**
+     To achieve near-instant UI responsiveness and minimize network overhead by calculating core market KPIs directly from the metadata stored in browser memory. 
+* **23.1 Removal of Manual Refresh:**
+     The manual "ATNAUJINTI ANALIZĘ" button MUST be removed from the UI. All statistical recalculations MUST be triggered automatically upon any filter state change (Trigger-on-Change). 
+* **23.2 Local Calculation Engine:**
+     Primary KPIs (Average Price, Price per Sqm, and Market Stability) MUST be calculated on the client side using the Logic.calculateStats function, iterating over the filtered Core.state.metadata.combinations array.  
+* **23.3 Price Lifecycle Utilization:**
+     Market Stability calculation MUST utilize the InitialPrice (baseline) and LatestPrice (current) fields provided in the metadata. Formula: Stability = 100 - (abs(LatestAvg - InitialAvg) / InitialAvg * 100).  
+* **23.4 API Request Suppression:**
+     The /api/statistics/analyze endpoint is officially deprecated and MUST NOT be called during filtering. Only /api/statistics/market-trend and /api/statistics/listings remain active as background fetches.  
+* **23.5 Zero-Value Data Guard:**
+     The calculation loop MUST exclude any record where LatestPrice or InitialPrice is 0 or null to prevent skewed statistical averages and division-by-zero errors.  
+
+## Rule #24:
+* **Instant Metadata-Driven Pagination**
+      * **Data Source Authority**The property listing list must be generated exclusively from the combinations array returned by Logic.FilterEngine.getAvailableOptions.Phase 2 (Background Fetch) via /api/statistics/listings is deprecated for the primary list rendering to avoid server overhead and latency.  
+* **Pagination Logic** 
+      (The "25-Rule")Page Size: Exactly 25 items per view.Slicing Mechanism: Use JavaScript .slice() on the local filtered array: const pageData = filteredArray.slice((page-1) * 25, page * 25).  
+* **State Management**
+     currentPage must be tracked in the CenzasAnalytics.Core.state and reset to 1 every time the City or any secondary filter changes.  
+* **UI Synchronization**
+     Header Count: The "Skelbimų Sąrašas (X)" count must always equal filteredArray.length.  
+* **Navigation Controls:** 
+     Render "Previous", "Next", and "Page X of Y" controls below the listing container.  
+* **Lazy Rendering:** 
+     Only the 25 active property cards should exist in the DOM at any given time to prevent browser memory exhaustion.  
+* **Execution Order**
+     Filter Change: User interacts with UI.  
+     Logic Update: FilterEngine computes the valid subset from metadata.  
+     KPI Render: Instant update of Average Price, Sqm Price, and Stability.  
+     List Slice: Take the first 25 records from the computed subset.  
+     DOM Render: renderListings clears the container and draws the 25 cards.  
      

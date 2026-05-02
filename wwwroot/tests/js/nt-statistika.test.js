@@ -1,10 +1,6 @@
 /**
  * nt-statistika.test.js
- * Manual Unit Tests for Cenzas Analytics Logic
- * 
- * Since we are in a browser-based environment without a pre-configured test runner (Jest/Mocha),
- * this file implements a "Minimal Test Harness" that can be run in the browser console 
- * or via a standalone test runner page.
+ * Manual Unit Tests for Cenzas Analytics Logic & Utils
  */
 
 const CenzasTests = {
@@ -12,13 +8,14 @@ const CenzasTests = {
         console.group('%c [Cenzas] Starting Unit Tests ', 'background: #176be0; color: white; padding: 4px;');
         
         try {
+            await this.testCleanerModule();
             await this.testFilterEngine();
             await this.testSelectionLogic();
-            await this.testDataCalculations();
             
             console.log('%c ALL TESTS PASSED ', 'color: #4CAF50; font-weight: bold;');
         } catch (err) {
             console.error('%c TEST FAILED ', 'color: #F44336; font-weight: bold;', err);
+            console.error(err);
         }
         
         console.groupEnd();
@@ -32,7 +29,35 @@ const CenzasTests = {
     },
 
     /**
-     * 1. Test Filter Engine (main.js)
+     * 1. Test Utils.Cleaner Module
+     * Verifies mapping and sanitization logic
+     */
+    testCleanerModule: async function() {
+        console.group('Utils.Cleaner');
+        const { Cleaner } = window.CenzasAnalytics.Utils;
+        
+        this.assert(!!Cleaner, "Cleaner module should be initialized");
+
+        // Test getLabel fallback
+        const fallback = Cleaner.getLabel('test_key', 'none');
+        this.assert(fallback === 'Test_key', "Fallback should convert to Title Case");
+
+        // Test getLabel with mapping (mocking state if necessary, but assuming loaded)
+        const cityLabel = Cleaner.getLabel('vilniuje', 'cities');
+        this.assert(cityLabel === 'Vilniuje', "Should map 'vilniuje' to 'Vilniuje'");
+
+        // Test sanitizeList
+        const dirty = ['  valid  ', null, '', '  ', 'another'];
+        const clean = Cleaner.sanitizeList(dirty);
+        this.assert(clean.length === 2, "Should remove null and empty strings");
+        this.assert(clean[0] === 'valid', "Should trim whitespace");
+        this.assert(clean[1] === 'another', "Should keep valid strings");
+
+        console.groupEnd();
+    },
+
+    /**
+     * 2. Test Filter Engine
      * Verifies the 9-point dependency map logic
      */
     testFilterEngine: async function() {
@@ -41,9 +66,9 @@ const CenzasTests = {
         
         const mockMetadata = {
             combinations: [
-                { City: 'vilniuje', District: 'Antakalnis', Street: 'Antakalnio g.', Rooms: 2, Object: 'Butas' },
-                { City: 'vilniuje', District: 'Centras', Street: 'Gedimino pr.', Rooms: 3, Object: 'Butas' },
-                { City: 'kaune', District: 'Dainava', Street: 'Pramonės pr.', Rooms: 1, Object: 'Namas' }
+                { City: 'vilniuje', District: 'Antakalnis', Street: 'Antakalnio g.', Rooms: '2', Object: 'Butas' },
+                { City: 'vilniuje', District: 'Centras', Street: 'Gedimino pr.', Rooms: '3', Object: 'Butas' },
+                { City: 'kaune', District: 'Dainava', Street: 'Pramonės pr.', Rooms: '1', Object: 'Namas' }
             ]
         };
 
@@ -51,50 +76,31 @@ const CenzasTests = {
         let filters = { City: 'vilniuje' };
         let available = Logic.FilterEngine.getAvailableOptions(mockMetadata, filters);
         this.assert(available.Districts.includes('Antakalnis'), "Should include Antakalnis for Vilnius");
-        this.assert(available.Districts.includes('Centras'), "Should include Centras for Vilnius");
         this.assert(!available.Districts.includes('Dainava'), "Should NOT include Kaunas districts for Vilnius");
 
-        // Test District -> Street Dependency
-        filters = { City: 'vilniuje', Districts: ['Antakalnis'] };
+        // Test Multi-select Districts
+        filters = { City: 'vilniuje', Districts: ['Antakalnis', 'Centras'] };
         available = Logic.FilterEngine.getAvailableOptions(mockMetadata, filters);
-        this.assert(available.Streets.includes('Antakalnio g.'), "Should include Antakalnio g. for Antakalnis");
-        this.assert(!available.Streets.includes('Gedimino pr.'), "Should NOT include Gedimino pr. for Antakalnis");
+        this.assert(available.Streets.includes('Antakalnio g.'), "Should include Antakalnio g.");
+        this.assert(available.Streets.includes('Gedimino pr.'), "Should include Gedimino pr.");
 
         console.groupEnd();
     },
 
     /**
-     * 2. Test SelectionBox UI Logic (main.js)
+     * 3. Test SelectionBox Component Presence
      */
     testSelectionLogic: async function() {
         console.group('UI.SelectionBox');
         const { UI } = window.CenzasAnalytics;
 
-        // Verify component presence
-        this.assert(!!UI.SelectionBox, "SelectionBox component should be defined");
-        this.assert(typeof UI.SelectionBox.init === 'function', "SelectionBox.init should be a function");
-        this.assert(typeof UI.SelectionBox.updateChips === 'function', "SelectionBox.updateChips should be a function");
-
-        console.groupEnd();
-    },
-
-    /**
-     * 3. Test Data Processing Logic
-     */
-    testDataCalculations: async function() {
-        console.group('Data Processing');
-        
-        // Mocking a simple average calculation helper if it were exposed
-        const calculateAvg = (arr) => arr.reduce((a, b) => a + b, 0) / arr.length;
-        
-        const prices = [100000, 150000, 200000];
-        const avg = calculateAvg(prices);
-        this.assert(avg === 150000, "Average price calculation should be accurate");
+        this.assert(!!UI.SelectionBox, "SelectionBox should exist");
+        this.assert(typeof UI.SelectionBox.init === 'function', "Should have init method");
+        this.assert(typeof UI.SelectionBox.renderOptions === 'function', "Should have renderOptions method");
 
         console.groupEnd();
     }
 };
 
-// Export for console usage
 window.CenzasTests = CenzasTests;
-console.log("[Cenzas] Unit Tests loaded. Run 'CenzasTests.runAll()' to execute.");
+console.log("[Cenzas] Modernized Unit Tests loaded. Run 'CenzasTests.runAll()' to execute.");

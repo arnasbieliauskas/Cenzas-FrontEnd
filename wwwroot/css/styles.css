@@ -1272,7 +1272,15 @@ h1, h2, h3, h4 {
     padding: 32px;
     position: relative;
     resize: both;
-    overflow: auto;
+    overflow: hidden; /* Prevent content from breaking rounded corners */
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 8px; /* Space for scrollbar */
 }
 
 .modal-header h3 {
@@ -1383,4 +1391,290 @@ h1, h2, h3, h4 {
     .modal-options {
         grid-template-columns: 1fr 1fr;
     }
+}
+
+/* Pagination Styles */
+.pagination-controls {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+    border-top: 1px solid var(--color-border);
+}
+
+.pagination-inner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.page-numbers {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.page-num {
+    min-width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-main);
+}
+
+.page-num:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background: var(--color-primary-light);
+}
+
+.page-num.is-active {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-color: var(--color-primary);
+}
+
+.page-dots {
+    color: var(--color-text-light);
+    font-weight: 600;
+    padding: 0 4px;
+}
+
+.btn--sm {
+    padding: 8px 16px;
+    font-size: 14px;
+    height: 40px;
+}
+
+/* Listing Card Enhancements */
+/* Listing Card Price Enhancements */
+.listing-card__price-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 12px 0 8px;
+    gap: 12px;
+}
+
+.listing-card__prices {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.price-item {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.price-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-text);
+    font-family: var(--font-accent);
+}
+
+.price-item--initial .price-value {
+    color: var(--color-text-light);
+    font-weight: 400;
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+.price-item--latest .price-value {
+    font-size: 22px;
+    color: var(--color-primary);
+}
+
+.price-change {
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.price-change--down {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+.price-change--up {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.listing-card__location {
+    font-size: 14px;
+    color: var(--color-text-light);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.listing-card__details {
+    font-size: 15px;
+    color: var(--color-text);
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.listing-card__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.badge {
+    background: #f3f4f6;
+    color: var(--color-text-light);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.badge--energy {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+/* Registration Date Styles */
+.listing-card__dates {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.date-item {
+    font-size: 13px;
+    color: var(--color-text-light);
+}
+
+.date-item span {
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+/* Listing Card Footer & Action Button */
+.listing-card__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: auto;
+    gap: 12px;
+}
+
+.listing-card__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    flex: 1;
+}
+
+.btn-view-listing {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--color-primary);
+    color: var(--color-white);
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(23, 107, 224, 0.2);
+}
+
+.btn-view-listing:hover {
+    background: var(--color-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(23, 107, 224, 0.3);
+    color: var(--color-white);
+}
+
+.btn-view-listing:active {
+    transform: translateY(0);
+}
+
+.btn-view-listing svg {
+    transition: transform 0.2s;
+}
+
+.btn-view-listing:hover svg {
+    transform: translate(2px, -2px);
+}
+/* Price Change Filter Tabs */
+.price-filter-tabs {
+    display: flex;
+    background: #f1f5f9;
+    padding: 4px;
+    border-radius: 10px;
+    gap: 4px;
+}
+
+.filter-tab {
+    padding: 8px 16px;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-light);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.filter-tab:hover {
+    color: var(--color-text);
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.filter-tab.active {
+    background: white;
+    color: var(--color-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Listing Card Expired Watermark - Full Card Overlay */
+.listing-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.listing-card__expired-tag {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-25deg);
+    color: #dc2626; /* Warning red */
+    font-size: 32px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    opacity: 0.08; /* Subtle but clear over the whole card */
+    z-index: 5;
+    pointer-events: none; /* User can click through it */
+    white-space: nowrap;
+    text-align: center;
+    width: 150%; /* Ensure it spans the diagonal */
+    user-select: none;
 }

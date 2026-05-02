@@ -17,6 +17,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 // 2. Statistics Cache Configuration
 builder.Services.Configure<StatisticsCacheSettings>(builder.Configuration.GetSection("StatisticsCacheSettings"));
 builder.Services.Configure<DataSanitizationSettings>(builder.Configuration.GetSection("DataSanitizationSettings"));
+builder.Services.Configure<BusinessLogicSettings>(builder.Configuration.GetSection("BusinessLogicSettings"));
 builder.Services.AddHostedService<StatisticsCacheWorker>();
 builder.Services.AddHostedService<RpaJobWatcher>();
 

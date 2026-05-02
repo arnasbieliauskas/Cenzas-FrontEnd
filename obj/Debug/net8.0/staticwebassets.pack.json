@@ -161,6 +161,14 @@
       "PackagePath": "staticwebassets\\pildyti-paraiska.html"
     },
     {
+      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\program_map.md",
+      "PackagePath": "staticwebassets\\program_map.md"
+    },
+    {
+      "Id": "C:\\Users\\arnas\\Desktop\\Cenzas FrontEnd\\CenzasBackend\\wwwroot\\tests\\js\\nt-statistika.test.js",
+      "PackagePath": "staticwebassets\\tests\\js\\nt-statistika.test.js"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.CenzasBackend.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },
