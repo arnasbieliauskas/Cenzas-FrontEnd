@@ -453,7 +453,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             return `
-                <div class="listing-card animate-fade-in">
+                <div class="listing-card animate-fade-in ${isExpired ? 'listing-card--expired' : ''}">
                     ${isExpired ? `
                         <div class="listing-card__expired-tag">
                             Tikėtina, kad negalioja

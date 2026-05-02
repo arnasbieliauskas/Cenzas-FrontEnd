@@ -1654,7 +1654,7 @@ h1, h2, h3, h4 {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-/* Listing Card Expired Watermark - Full Card Overlay */
+/* Listing Card Expired Watermark - Contained Overlay */
 .listing-card {
     position: relative;
     overflow: hidden;
@@ -1666,15 +1666,36 @@ h1, h2, h3, h4 {
     left: 50%;
     transform: translate(-50%, -50%) rotate(-25deg);
     color: #dc2626; /* Warning red */
-    font-size: 32px;
+    font-size: 20px; /* Reduced to fit within frames */
     font-weight: 900;
     text-transform: uppercase;
-    letter-spacing: 4px;
-    opacity: 0.08; /* Subtle but clear over the whole card */
+    letter-spacing: 2px;
+    opacity: 0.8; 
     z-index: 5;
-    pointer-events: none; /* User can click through it */
+    pointer-events: none;
     white-space: nowrap;
     text-align: center;
-    width: 150%; /* Ensure it spans the diagonal */
+    width: 100%; /* Contained within parent width */
     user-select: none;
+}
+
+/* Expired Listing Text Gray-out */
+.listing-card--expired .listing-card__title,
+.listing-card--expired .listing-card__price,
+.listing-card--expired .price-original,
+.listing-card--expired .listing-card__address,
+.listing-card--expired .info-item,
+.listing-card--expired .date-item,
+.listing-card--expired .date-item span,
+.listing-card--expired .price-value,
+.listing-card--expired .badge {
+    color: #94a3b8 !important;
+    border-color: #e2e8f0 !important;
+}
+
+.listing-card--expired .btn-view-listing {
+    background: #e2e8f0 !important;
+    color: #94a3b8 !important;
+    box-shadow: none !important;
+    border: none !important;
 }
