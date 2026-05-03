@@ -105,10 +105,12 @@ namespace CenzasBackend.Services
                 command.CommandText = $@"
                     SELECT 
                         {groupingSql} as DatePoint,
-                        AVG(s.Price) as AveragePrice
-                    FROM addlist a
-                    JOIN secaddcollection s ON a.ExternalId = s.ExternalId
+                        AVG(s.Price) as AveragePrice,
+                        COUNT(DISTINCT a.ExternalId) as OfferCount
+                    FROM analytics_snapshot a
+                    JOIN secaddcollection s ON TRIM(a.ExternalId) = TRIM(s.ExternalId)
                     {whereClause}
+                    AND s.Price > 0
                     GROUP BY DatePoint
                     HAVING AveragePrice > 0
                     ORDER BY DatePoint ASC
@@ -125,10 +127,15 @@ namespace CenzasBackend.Services
                     {
                         var datePoint = reader.GetValue(0).ToString();
                         var avgPrice = reader.IsDBNull(1) ? 0 : reader.GetDecimal(1);
+                        var offerCount = reader.IsDBNull(2) ? 0 : reader.GetInt64(2);
 
                         if (avgPrice <= 0) continue; // Rule #11 / #12
 
-                        trendData.Add(new { t = datePoint, v = Math.Round(avgPrice, 2) });
+                        trendData.Add(new { 
+                            t = datePoint, 
+                            v = Math.Round(avgPrice, 2),
+                            c = offerCount
+                        });
                         priceList.Add(avgPrice);
                     }
                 }
@@ -149,21 +156,20 @@ namespace CenzasBackend.Services
             using (var connection = await _connectionFactory.OpenConnectionAsync(ct))
             using (var command = connection.CreateCommand())
             {
-                var (whereClause, parameters) = BuildWhereClause(request, command, "a");
+                var (whereClause, _) = BuildWhereClause(request, command, "a");
 
-                // Count total for pagination - Rule #15 Spacing & Rule #21.4 CancellationToken
-                command.CommandText = $"SELECT COUNT(*) FROM addlist a {whereClause}";
+                // Count total for pagination
+                command.CommandText = $"SELECT COUNT(*) FROM analytics_snapshot a {whereClause}";
                 var totalCount = (long)await command.ExecuteScalarAsync(ct);
 
-                // Fetch page 1 (as requested in JS: { ...filters, Page: 1 })
-                // Rule #16: Use Address instead of non-existent Street
+                // Fetch page 1 (Rule #24: High-speed snapshot retrieval)
                 command.CommandText = $@"
                     SELECT 
-                        a.Title, a.Price, a.Address, a.Area, a.Rooms
-                    FROM addlist a
+                        a.Object, a.Price, a.Address, a.Area, a.Rooms, a.LatestPrice, a.LastCollectedDate, a.Url, a.ExternalId
+                    FROM analytics_snapshot a
                     {whereClause}
                     ORDER BY a.LastCollectedDate DESC
-                    LIMIT 20";
+                    LIMIT 25";
 
                 var listings = new List<object>();
                 using (var reader = await command.ExecuteReaderAsync(ct))
@@ -172,11 +178,15 @@ namespace CenzasBackend.Services
                     {
                         listings.Add(new
                         {
-                            Title = reader.IsDBNull(0) ? "" : reader.GetString(0),
-                            Price = reader.IsDBNull(1) ? 0m : reader.GetDecimal(1), // Rule #16 Decimal precision
-                            Street = reader.IsDBNull(2) ? "" : reader.GetString(2), // Maps from Address
-                            Area = reader.IsDBNull(3) ? 0.0 : reader.GetDouble(3),  // Rule #16 Double precision
-                            Rooms = reader.IsDBNull(4) ? 0 : reader.GetInt32(4)
+                            Object = reader.IsDBNull(0) ? "" : reader.GetString(0),
+                            InitialPrice = reader.IsDBNull(1) ? 0m : reader.GetDecimal(1), 
+                            Address = reader.IsDBNull(2) ? "" : reader.GetString(2), 
+                            Area = reader.IsDBNull(3) ? 0.0 : reader.GetDouble(3),  
+                            Rooms = reader.IsDBNull(4) ? 0 : reader.GetInt32(4),
+                            LatestPrice = reader.IsDBNull(5) ? 0m : reader.GetDecimal(5),
+                            LatestDate = reader.IsDBNull(6) ? null : reader.GetDateTime(6).ToString("yyyy-MM-dd"),
+                            Url = reader.IsDBNull(7) ? "" : reader.GetString(7),
+                            ExternalId = reader.IsDBNull(8) ? "" : reader.GetString(8)
                         });
                     }
                 }
@@ -227,7 +237,7 @@ namespace CenzasBackend.Services
                 sb.Append($" AND {tableAlias}.Rooms IN ({string.Join(",", request.Rooms)})");
             }
 
-            // Objects
+            // Objects (Rule #22: snapshot always uses 'Object')
             if (request.Objects != null && request.Objects.Any())
             {
                 var objectParams = new List<string>();
@@ -274,6 +284,22 @@ namespace CenzasBackend.Services
             {
                 sb.Append($" AND {tableAlias}.Area <= @AreaTo");
                 AddParameter(command, "@AreaTo", (double)request.AreaTo.Value);
+            }
+
+            // Price Status (Rule #5: Only Price Drops / Price Hikes)
+            if (!string.IsNullOrEmpty(request.PriceStatus) && request.PriceStatus != "all")
+            {
+                if (request.PriceStatus == "down") sb.Append($" AND {tableAlias}.LatestPrice < {tableAlias}.Price");
+                else if (request.PriceStatus == "up") sb.Append($" AND {tableAlias}.LatestPrice > {tableAlias}.Price");
+            }
+
+            // Validity Status (Rule #5: Valid / Probable Expired)
+            if (!string.IsNullOrEmpty(request.ValidityStatus) && request.ValidityStatus != "all")
+            {
+                var threshold = request.ExpiredThresholdDays ?? 1;
+                var op = request.ValidityStatus == "valid" ? ">=" : "<";
+                sb.Append($" AND {tableAlias}.LastCollectedDate {op} DATE_SUB(NOW(), INTERVAL @Threshold DAY)");
+                AddParameter(command, "@Threshold", threshold);
             }
 
             return (sb.ToString(), parameters);

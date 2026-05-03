@@ -162,9 +162,14 @@
                     </div>
                 </div>
 
-                <div id="chart-container" class="stat-card"
-                    style="margin-bottom: 40px; height: 400px; display: flex; align-items: center; justify-content: center; position: relative;">
-                    <canvas id="marketTrendChart"></canvas>
+                <div id="chart-container" class="stat-card" style="margin-bottom: 40px; min-height: 450px; padding: 30px; display: flex; flex-direction: column; position: relative;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                        <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--color-black);">Rinkos Tendencijos</h3>
+                        <div style="font-size: 12px; color: var(--color-text-light); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Kaina vs. Kiekis</div>
+                    </div>
+                    <div style="flex: 1; position: relative;">
+                        <canvas id="marketTrendChart"></canvas>
+                    </div>
                 </div>
 
                 <div id="listings-wrapper">

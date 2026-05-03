@@ -231,7 +231,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             BuildYearFrom: document.getElementById('year-min').value || null,
             BuildYearTo: document.getElementById('year-max').value || null,
             DateFrom: document.getElementById('date-from').value || null,
-            DateTo: document.getElementById('date-to').value || null
+            DateTo: document.getElementById('date-to').value || null,
+            
+            // New Filter Axes (Rule #5)
+            PriceStatus: currentPriceFilter,
+            ValidityStatus: currentStatusFilter,
+            ExpiredThresholdDays: parseInt(Core.state.metadata?.ListingExpirationDays) || 1
         };
     }
 
@@ -388,9 +393,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function renderChart(trendData) {
         // Rule #23: Robust Data Normalization (direct array or wrapped object)
-        const dataArray = Array.isArray(trendData) ? trendData : (trendData?.trend || trendData?.Trend || []);
+        const dataArray = Array.isArray(trendData) ? trendData : (trendData?.trends || trendData?.Trends || []);
         
-        const ctx = document.getElementById('marketTrendChart').getContext('2d');
+        const canvas = document.getElementById('marketTrendChart');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
         if (chart) chart.destroy();
 
         if (dataArray.length === 0) {
@@ -398,23 +405,129 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
+        // Create Gradients
+        const priceGradient = ctx.createLinearGradient(0, 0, 0, 400);
+        priceGradient.addColorStop(0, 'rgba(23, 107, 224, 0.1)');
+        priceGradient.addColorStop(1, 'rgba(23, 107, 224, 0)');
+
+        const countGradient = ctx.createLinearGradient(0, 0, 0, 400);
+        countGradient.addColorStop(0, 'rgba(100, 116, 139, 0.1)');
+        countGradient.addColorStop(1, 'rgba(100, 116, 139, 0)');
+
         chart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: dataArray.map(d => d.Label || d.label),
-                datasets: [{
-                    label: 'Kaina',
-                    data: dataArray.map(d => d.Value || d.value),
-                    borderColor: '#176be0',
-                    tension: 0.4,
-                    fill: true,
-                    backgroundColor: 'rgba(23, 107, 224, 0.05)'
-                }]
+                labels: dataArray.map(d => d.t),
+                datasets: [
+                    {
+                        label: 'Vidutinė kaina (€)',
+                        data: dataArray.map(d => d.v),
+                        borderColor: '#176be0',
+                        backgroundColor: priceGradient,
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        yAxisID: 'y',
+                        pointRadius: 0,
+                        pointHoverRadius: 6,
+                        pointHoverBackgroundColor: '#176be0',
+                        pointHoverBorderColor: '#fff',
+                        pointHoverBorderWidth: 2
+                    },
+                    {
+                        label: 'Skelbimų kiekis',
+                        data: dataArray.map(d => d.c),
+                        borderColor: '#64748b',
+                        backgroundColor: countGradient,
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        tension: 0.4,
+                        fill: true,
+                        yAxisID: 'y1',
+                        pointRadius: 0,
+                        pointHoverRadius: 4,
+                        pointHoverBackgroundColor: '#64748b',
+                        pointHoverBorderColor: '#fff',
+                        pointHoverBorderWidth: 2
+                    }
+                ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { display: false } }
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        align: 'end',
+                        labels: {
+                            usePointStyle: true,
+                            boxWidth: 6,
+                            font: { size: 12, weight: '600' },
+                            padding: 20
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#fff',
+                        titleColor: '#1e293b',
+                        bodyColor: '#475569',
+                        borderColor: '#e2e8f0',
+                        borderWidth: 1,
+                        padding: 12,
+                        boxPadding: 6,
+                        usePointStyle: true,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) label += ': ';
+                                if (context.datasetIndex === 0) {
+                                    label += new Intl.NumberFormat('lt-LT').format(context.parsed.y) + ' €';
+                                } else {
+                                    label += context.parsed.y;
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            font: { size: 11 },
+                            color: '#94a3b8',
+                            maxRotation: 0,
+                            autoSkip: true,
+                            maxTicksLimit: 10
+                        }
+                    },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        grid: { color: '#f1f5f9' },
+                        ticks: {
+                            font: { size: 11 },
+                            color: '#94a3b8',
+                            callback: value => value.toLocaleString('lt-LT') + ' €'
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        grid: { drawOnChartArea: false },
+                        ticks: {
+                            font: { size: 11 },
+                            color: '#94a3b8',
+                            callback: value => value
+                        }
+                    }
+                }
             }
         });
     }

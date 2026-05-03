@@ -108,37 +108,51 @@ namespace CenzasBackend.Services
             string createSql = @"
                 CREATE TABLE IF NOT EXISTS analytics_snapshot (
                     id INT PRIMARY KEY AUTO_INCREMENT,
+                    ExternalId VARCHAR(255),
                     City VARCHAR(100),
                     District VARCHAR(100),
                     Address VARCHAR(255),
                     Rooms INT,
                     Object VARCHAR(255),
                     Price DECIMAL(15,2),
+                    LatestPrice DECIMAL(15,2),
                     Area DECIMAL(10,2),
                     BuildYear INT,
                     Renovation INT,
                     Heating VARCHAR(255),
                     Equipped VARCHAR(255),
                     EnergyClass VARCHAR(50),
-                    INDEX idx_snapshot_lookup (City, District, Rooms, Object)
+                    Url VARCHAR(500),
+                    LastCollectedDate DATETIME,
+                    INDEX idx_snapshot_lookup (City, District, Rooms, Object),
+                    INDEX idx_snapshot_external (ExternalId),
+                    INDEX idx_snapshot_status (LatestPrice, Price, LastCollectedDate)
                 ) ENGINE=InnoDB;";
             
             await ExecuteAsync(connection, createSql);
 
             _logger.LogInformation("Database Maintenance Guard: Refreshing analytics_snapshot data...");
-            await ExecuteAsync(connection, "TRUNCATE TABLE analytics_snapshot;");
             
             // Population logic (Rule #2 & Rule #22)
-            // Note: Safely handling the varchar-to-int conversion during the snapshot insert
+            // Note: Joining history to pre-calculate price trends for instant dashboard response
             string populateSql = @"
-                INSERT INTO analytics_snapshot (City, District, Address, Rooms, Object, Price, Area, BuildYear, Renovation, Heating, Equipped, EnergyClass)
+                INSERT INTO analytics_snapshot (ExternalId, City, District, Address, Rooms, Object, Price, LatestPrice, Area, BuildYear, Renovation, Heating, Equipped, EnergyClass, Url, LastCollectedDate)
                 SELECT 
-                    City, District, Address, Rooms, Title, Price, Area, 
-                    CASE WHEN BuildYear REGEXP '^[0-9]+$' THEN CAST(BuildYear AS UNSIGNED) ELSE 0 END,
-                    CASE WHEN Renovation REGEXP '^[0-9]+$' THEN CAST(Renovation AS UNSIGNED) ELSE 0 END,
-                    Heating, Equipped, EnergyClass
-                FROM addlist
-                WHERE Price > 0 AND Area > 0;";
+                    TRIM(a.ExternalId), a.City, a.District, a.Address, a.Rooms, a.Title, a.Price, 
+                    COALESCE(latest.Price, a.Price) as LatestPrice,
+                    a.Area, 
+                    CASE WHEN a.BuildYear REGEXP '^[0-9]+$' THEN CAST(a.BuildYear AS UNSIGNED) ELSE 0 END,
+                    CASE WHEN a.Renovation REGEXP '^[0-9]+$' THEN CAST(a.Renovation AS UNSIGNED) ELSE 0 END,
+                    a.Heating, a.Equipped, a.EnergyClass,
+                    a.Url,
+                    a.LastCollectedDate
+                FROM addlist a
+                LEFT JOIN (
+                    SELECT s1.ExternalId, s1.Price
+                    FROM secaddcollection s1
+                    WHERE s1.secdata = (SELECT MAX(s2.secdata) FROM secaddcollection s2 WHERE TRIM(s2.ExternalId) = TRIM(s1.ExternalId))
+                ) AS latest ON TRIM(a.ExternalId) = TRIM(latest.ExternalId)
+                WHERE a.Price > 0 AND a.Area > 0;";
             
             await ExecuteAsync(connection, populateSql);
         }
