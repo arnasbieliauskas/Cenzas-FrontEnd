@@ -113,19 +113,16 @@ namespace CenzasBackend.Services
             {
                 try
                 {
-                    // Step A: Update LastCollectedDate
-                    await UpdateLastCollectedDatesAsync(ct);
-                    _logger.LogInformation("Step A: LastCollectedDate synchronization completed.");
-
-                    // Step B: Trigger Database Maintenance
+                    // Step 1: Trigger Database Maintenance (Schema validation + Sync + Optimization)
+                    // This ensures LastCollectedDate column exists and is synchronized.
                     var maintenanceService = scope.ServiceProvider.GetRequiredService<DatabaseMaintenanceService>();
                     await maintenanceService.PerformMaintenanceAsync();
-                    _logger.LogInformation("Step B: Database maintenance completed.");
+                    _logger.LogInformation("Step 1: Database maintenance and synchronization completed.");
 
-                    // Step C: Trigger Metadata Refresh
+                    // Step 2: Trigger Metadata Refresh for Frontend stabilization
                     var metadataService = scope.ServiceProvider.GetRequiredService<IMetadataGeneratorService>();
                     await metadataService.RefreshMetadataAsync(ct);
-                    _logger.LogInformation("Step C: Metadata refresh completed.");
+                    _logger.LogInformation("Step 2: Metadata refresh completed.");
                 }
                 catch (Exception ex)
                 {
@@ -134,24 +131,6 @@ namespace CenzasBackend.Services
             }
         }
 
-        private async Task UpdateLastCollectedDatesAsync(CancellationToken ct)
-        {
-            using (var connection = await OpenWithRetryAsync(ct))
-            using (var command = connection.CreateCommand())
-            {
-                command.CommandText = @"
-                    UPDATE addlist a
-                    JOIN (
-                        SELECT ExternalId, MAX(secdata) as LatestDate
-                        FROM secaddcollection
-                        GROUP BY ExternalId
-                    ) s ON a.ExternalId = s.ExternalId
-                    SET a.LastCollectedDate = s.LatestDate;";
-                
-                command.CommandTimeout = 300; // 5 minutes
-                await command.ExecuteNonQueryAsync(ct);
-            }
-        }
 
         private async Task<IDbConnectionWrapper> OpenWithRetryAsync(CancellationToken ct)
         {
