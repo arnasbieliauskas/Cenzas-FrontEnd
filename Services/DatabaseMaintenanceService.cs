@@ -206,17 +206,18 @@ namespace CenzasBackend.Services
             _logger.LogInformation("Database Maintenance: Sanitizing ExternalId and City columns...");
             
             // Rule #25: Perform heavy lifting once during maintenance, not during API calls
+            
+            // 1. Sanitize ExternalId on all tables
             string[] tables = { "addlist", "secaddcollection" };
             foreach (var table in tables)
             {
-                _logger.LogInformation("Database Maintenance: Sanitizing table {Table}...", table);
-                
-                // Trim and Lowercase ExternalId
+                _logger.LogInformation("Database Maintenance: Sanitizing ExternalId on table {Table}...", table);
                 await ExecuteAsync(connection, $"UPDATE {table} SET ExternalId = LOWER(TRIM(ExternalId)) WHERE ExternalId IS NOT NULL AND (ExternalId LIKE ' %' OR ExternalId LIKE '% ' OR ExternalId != LOWER(ExternalId));", 300);
-                
-                // Trim and Lowercase City
-                await ExecuteAsync(connection, $"UPDATE {table} SET City = LOWER(TRIM(City)) WHERE City IS NOT NULL AND (City LIKE ' %' OR City LIKE '% ' OR City != LOWER(City));", 300);
             }
+
+            // 2. Sanitize City on addlist only (Rule #25)
+            _logger.LogInformation("Database Maintenance: Sanitizing City on table addlist...");
+            await ExecuteAsync(connection, $"UPDATE addlist SET City = LOWER(TRIM(City)) WHERE City IS NOT NULL AND (City LIKE ' %' OR City LIKE '% ' OR City != LOWER(City));", 300);
         }
 
         private async Task EnsureColumnExistsAsync(IDbConnectionWrapper connection, string tableName, string columnName, string typeDefinition)

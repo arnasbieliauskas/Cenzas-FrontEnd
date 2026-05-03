@@ -115,6 +115,8 @@ namespace CenzasBackend.Services
                     HAVING AveragePrice > 0
                     ORDER BY DatePoint ASC
                     LIMIT 500";
+                
+                _logger.LogInformation("Trend Query SQL: {Sql}", command.CommandText);
 
                 command.CommandTimeout = 120;
 
@@ -165,7 +167,7 @@ namespace CenzasBackend.Services
                 // Fetch page 1 (Rule #24: High-speed snapshot retrieval)
                 command.CommandText = $@"
                     SELECT 
-                        a.Object, a.Price, a.Address, a.Area, a.Rooms, a.LatestPrice, a.LastCollectedDate, a.Url, a.ExternalId
+                        a.Object, a.Price, a.Address, a.Area, a.Rooms, a.LatestPrice, a.LastCollectedDate, a.Url, a.ExternalId, a.InitialDate
                     FROM analytics_snapshot a
                     {whereClause}
                     ORDER BY a.LastCollectedDate DESC
@@ -186,7 +188,8 @@ namespace CenzasBackend.Services
                             LatestPrice = reader.IsDBNull(5) ? 0m : reader.GetDecimal(5),
                             LatestDate = reader.IsDBNull(6) ? null : reader.GetDateTime(6).ToString("yyyy-MM-dd"),
                             Url = reader.IsDBNull(7) ? "" : reader.GetString(7),
-                            ExternalId = reader.IsDBNull(8) ? "" : reader.GetString(8)
+                            ExternalId = reader.IsDBNull(8) ? "" : reader.GetString(8),
+                            InitialDate = reader.IsDBNull(9) ? null : reader.GetDateTime(9).ToString("yyyy-MM-dd")
                         });
                     }
                 }
@@ -210,6 +213,8 @@ namespace CenzasBackend.Services
             // Rule #15: Mandatory leading space to prevent aWHERE syntax errors
             var sb = new StringBuilder(" WHERE 1=1");
             var parameters = new List<DbParameter>();
+
+            _logger.LogInformation("Building WHERE clause for request. DateFrom: {DateFrom}, DateTo: {DateTo}", request.DateFrom, request.DateTo);
 
             // City (Priority handling)
             if (!string.IsNullOrEmpty(request.City))
@@ -300,6 +305,18 @@ namespace CenzasBackend.Services
                 var op = request.ValidityStatus == "valid" ? ">=" : "<";
                 sb.Append($" AND {tableAlias}.LastCollectedDate {op} DATE_SUB(NOW(), INTERVAL @Threshold DAY)");
                 AddParameter(command, "@Threshold", threshold);
+            }
+
+            // Date Ranges (Rule: Filter by Initial Registration Date)
+            if (!string.IsNullOrEmpty(request.DateFrom) && DateTime.TryParse(request.DateFrom, out var dFrom))
+            {
+                sb.Append($" AND {tableAlias}.InitialDate >= @DateFrom");
+                AddParameter(command, "@DateFrom", dFrom);
+            }
+            if (!string.IsNullOrEmpty(request.DateTo) && DateTime.TryParse(request.DateTo, out var dTo))
+            {
+                sb.Append($" AND {tableAlias}.InitialDate <= @DateTo");
+                AddParameter(command, "@DateTo", dTo);
             }
 
             return (sb.ToString(), parameters);

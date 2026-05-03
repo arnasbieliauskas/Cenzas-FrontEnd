@@ -823,6 +823,61 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
+    // Metric Range Filter Handlers (Rule: Strict Numeric, Non-Negative, Range Check for Price, Area, Year)
+    const rangePairs = [
+        { minId: 'price-min', maxId: 'price-max' },
+        { minId: 'area-min', maxId: 'area-max' },
+        { minId: 'year-min', maxId: 'year-max' }
+    ];
+
+    rangePairs.forEach(pair => {
+        const minEl = document.getElementById(pair.minId);
+        const maxEl = document.getElementById(pair.maxId);
+        if (!minEl || !maxEl) return;
+
+        [minEl, maxEl].forEach(input => {
+            input.addEventListener('input', (e) => {
+                const val = e.target.value.replace(/\D/g, '');
+                if (e.target.value !== val) {
+                    e.target.value = val;
+                }
+            });
+
+            input.addEventListener('change', () => {
+                const min = parseInt(minEl.value) || 0;
+                const max = parseInt(maxEl.value) || Infinity;
+
+                if (minEl.value && maxEl.value && min > max) {
+                    maxEl.value = min;
+                }
+                syncFilters();
+            });
+        });
+    });
+
+    // Date Range Filter Handlers (Rule: From <= To)
+    const dateFromInput = document.getElementById('date-from');
+    const dateToInput = document.getElementById('date-to');
+
+    if (dateFromInput && dateToInput) {
+        [dateFromInput, dateToInput].forEach(input => {
+            input.addEventListener('change', () => {
+                const fromVal = dateFromInput.value;
+                const toVal = dateToInput.value;
+
+                if (fromVal && toVal) {
+                    const fromDate = new Date(fromVal);
+                    const toDate = new Date(toVal);
+
+                    if (fromDate > toDate) {
+                        dateToInput.value = fromVal;
+                    }
+                }
+                syncFilters();
+            });
+        });
+    }
+
     // Chart Type Handlers
     document.querySelectorAll('.chart-type-btn').forEach(btn => {
         btn.addEventListener('click', () => {

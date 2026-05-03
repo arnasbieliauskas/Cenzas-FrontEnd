@@ -126,10 +126,12 @@ window.CenzasAnalytics.Logic = {
                                   (!currentFilters.AreaTo || area <= parseFloat(currentFilters.AreaTo));
                 const matchYear = (!currentFilters.BuildYearFrom || year >= parseInt(currentFilters.BuildYearFrom)) && 
                                   (!currentFilters.BuildYearTo || year <= parseInt(currentFilters.BuildYearTo));
+                const matchDate = (!currentFilters.DateFrom || (c.InitialDate && c.InitialDate >= currentFilters.DateFrom)) && 
+                                  (!currentFilters.DateTo || (c.InitialDate && c.InitialDate <= currentFilters.DateTo));
 
                 // Rule #23.5: Type-Safe Comparison Logic (String Normalization)
                 const m = {
-                    Ranges: matchPrice && matchArea && matchYear,
+                    Ranges: matchPrice && matchArea && matchYear && matchDate,
                     Districts: !currentFilters.Districts?.length || currentFilters.Districts.map(String).includes(c.District?.toString()),
                     Streets: !currentFilters.Streets?.length || currentFilters.Streets.map(String).includes(c.Street?.toString()),
                     Rooms: !currentFilters.Rooms?.length || currentFilters.Rooms.map(String).includes(c.Rooms?.toString()),
@@ -165,6 +167,10 @@ window.CenzasAnalytics.Logic = {
                 if (currentFilters.AreaTo && area > parseFloat(currentFilters.AreaTo)) return false;
                 if (currentFilters.BuildYearFrom && year < parseInt(currentFilters.BuildYearFrom)) return false;
                 if (currentFilters.BuildYearTo && year > parseInt(currentFilters.BuildYearTo)) return false;
+
+                // Rule: First Registration Date Filtering
+                if (currentFilters.DateFrom && (!c.InitialDate || c.InitialDate < currentFilters.DateFrom)) return false;
+                if (currentFilters.DateTo && (!c.InitialDate || c.InitialDate > currentFilters.DateTo)) return false;
 
                 // Rule #23.5: Type-Safe Comparison for Final Combination Set
                 if (currentFilters.Districts?.length && !currentFilters.Districts.map(String).includes(c.District?.toString())) return false;
