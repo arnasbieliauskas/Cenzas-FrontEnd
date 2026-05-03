@@ -32,8 +32,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     await Core.init();
 
     const { Cleaner } = window.CenzasAnalytics.Utils;
-    let currentFilteredData = []; // Local cache for pagination
-    let currentPriceFilter = 'all'; // State for Up/Down/All filter
+    let currentFilteredData = []; 
+    let currentPriceFilter = 'all'; 
+    let currentStatusFilter = 'all'; 
 
     // Dynamically populate city selection from metadata
     if (Core.state.metadata?.combinations) {
@@ -128,8 +129,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // Rule #24: Metadata-Driven Authority
             let combinations = available.combinations || [];
-
-            // Apply Price Change Filter
+            
+            // 1. Apply Price Trend Filter
             if (currentPriceFilter === 'up') {
                 combinations = combinations.filter(c => {
                     const initial = parseFloat(c.InitialPrice || c.initialPrice || 0);
@@ -144,6 +145,28 @@ document.addEventListener('DOMContentLoaded', async () => {
                 });
             }
 
+            // 2. Apply Expiration/Status Filter
+            if (currentStatusFilter === 'valid' || currentStatusFilter === 'expired') {
+                const thresholdDays = parseInt(Core.state.metadata?.ListingExpirationDays) || 1;
+                const today = new Date();
+                today.setHours(0, 0, 0, 0); 
+                
+                combinations = combinations.filter(c => {
+                    if (!c) return false;
+                    const latestDateStr = c.LatestDate || c.latestDate;
+                    if (!latestDateStr) return currentStatusFilter === 'expired'; 
+                    
+                    const latest = new Date(latestDateStr);
+                    latest.setHours(0, 0, 0, 0);
+                    
+                    const diffTime = Math.abs(today - latest);
+                    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                    const isExpired = diffDays > thresholdDays;
+                    
+                    return currentStatusFilter === 'expired' ? isExpired : !isExpired;
+                });
+            }
+            
             currentFilteredData = combinations;
             Core.state.currentPage = 1;
 
@@ -440,11 +463,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             const url = l.Url || l.url || '#';
 
             // Rule #26: Expiration Guard (Probability of invalidity)
-            const thresholdDays = Core.state.metadata?.ListingExpirationDays || 1;
+            const thresholdDays = parseInt(Core.state.metadata?.ListingExpirationDays) || 1;
             let isExpired = false;
             if (latestDate) {
                 const latest = new Date(latestDate);
+                latest.setHours(0, 0, 0, 0);
                 const today = new Date();
+                today.setHours(0, 0, 0, 0);
                 const diffTime = Math.abs(today - latest);
                 const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
                 if (diffDays > thresholdDays) {
@@ -590,13 +615,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         syncFilters();
     });
 
-    // Price Change Filter Tab Handlers
-    document.querySelectorAll('.filter-tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            currentPriceFilter = tab.dataset.type;
-            syncFilters();
+    // Filter Tab Handlers
+    document.querySelectorAll('.filter-tabs').forEach(group => {
+        const groupType = group.dataset.group;
+        const tabs = group.querySelectorAll('.filter-tab');
+        
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                if (groupType === 'price') {
+                    currentPriceFilter = tab.dataset.type;
+                } else if (groupType === 'status') {
+                    currentStatusFilter = tab.dataset.type;
+                }
+                
+                syncFilters();
+            });
         });
     });
 

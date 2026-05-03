@@ -1622,13 +1622,38 @@ h1, h2, h3, h4 {
 .btn-view-listing:hover svg {
     transform: translate(2px, -2px);
 }
-/* Price Change Filter Tabs */
-.price-filter-tabs {
+/* Dashboard Quick Filters Layout */
+.quick-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #f8fafc;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.filter-group__label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    min-width: 100px;
+}
+
+.filter-tabs {
     display: flex;
     background: #f1f5f9;
-    padding: 4px;
+    padding: 3px;
     border-radius: 10px;
-    gap: 4px;
+    gap: 2px;
 }
 
 .filter-tab {
@@ -1662,34 +1687,37 @@ h1, h2, h3, h4 {
 
 .listing-card__expired-tag {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-25deg);
-    color: #dc2626; /* Warning red */
-    font-size: 20px; /* Reduced to fit within frames */
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    opacity: 0.8; 
-    z-index: 5;
-    pointer-events: none;
+    top: 15px;
+    right: 15px;
+    background-color: #f87171; /* Softer red */
+    color: white;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(248, 113, 113, 0.2);
+    z-index: 10;
     white-space: nowrap;
     text-align: center;
-    width: 100%; /* Contained within parent width */
+    pointer-events: none;
     user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Expired Listing Text Gray-out */
 .listing-card--expired .listing-card__title,
-.listing-card--expired .listing-card__price,
-.listing-card--expired .price-original,
-.listing-card--expired .listing-card__address,
-.listing-card--expired .info-item,
+.listing-card--expired .listing-card__location,
+.listing-card--expired .listing-card__details,
+.listing-card--expired .listing-card__dates,
 .listing-card--expired .date-item,
 .listing-card--expired .date-item span,
 .listing-card--expired .price-value,
 .listing-card--expired .badge {
     color: #94a3b8 !important;
+    filter: none !important;
+    user-select: auto !important;
     border-color: #e2e8f0 !important;
 }
 

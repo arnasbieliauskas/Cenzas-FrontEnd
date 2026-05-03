@@ -168,15 +168,30 @@
                 </div>
 
                 <div id="listings-wrapper">
-                    <div
-                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                        <h2 style="font-size: 20px;">Skelbimų Sąrašas (<span id="total-count">0</span>)</h2>
-                        <div class="price-filter-tabs">
-                            <button class="filter-tab active" data-type="all">Visi</button>
-                            <button class="filter-tab" data-type="down">Tik atpigę</button>
-                            <button class="filter-tab" data-type="up">Tik pabrangę</button>
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; gap: 20px;">
+                            <h2 style="font-size: 20px; margin: 0; white-space: nowrap;">Skelbimų Sąrašas (<span id="total-count">0</span>)</h2>
+                            <div class="quick-filters">
+                                <!-- Group 1: Price Change -->
+                                <div class="filter-group">
+                                    <span class="filter-group__label">Kainos pokytis:</span>
+                                    <div class="filter-tabs" data-group="price">
+                                        <button class="filter-tab active" data-type="all">Visi</button>
+                                        <button class="filter-tab" data-type="down">Tik atpigę</button>
+                                        <button class="filter-tab" data-type="up">Tik pabrangę</button>
+                                    </div>
+                                </div>
+                                <!-- Group 2: Expiration Status -->
+                                <div class="filter-group">
+                                    <span class="filter-group__label">Skelbimo būsena:</span>
+                                    <div class="filter-tabs" data-group="status">
+                                        <button class="filter-tab active" data-type="all">Visi</button>
+                                        <button class="filter-tab" data-type="valid">Galiojantys</button>
+                                        <button class="filter-tab" data-type="expired">Tikėtina, kad negaliojantys</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
                     <div id="listings-container" class="listings-grid"></div>
                 </div>
             </section>
@@ -307,7 +322,7 @@
 
     <script src="js/main.js" defer></script>
     <script src="js/nt-duomenu-valymas.js" defer></script>
-    <script src="js/nt-statistika.js" defer></script>
+    <script src="js/nt-statistika.js?v=1.1"></script>
 </body>
 
 </html>
