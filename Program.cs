@@ -70,26 +70,29 @@ if (!string.IsNullOrEmpty(connectionString))
 {
     logger.LogInformation("Database connection configured for user: cenzas_user");
 
-    // Startup: Execute Database Maintenance (Rule #16)
-    using (var scope = app.Services.CreateScope())
+    // Startup: Execute Database Maintenance (Rule #16) in background
+    _ = Task.Run(async () =>
     {
-        var maintenance = scope.ServiceProvider.GetRequiredService<DatabaseMaintenanceService>();
-        var metadataService = scope.ServiceProvider.GetRequiredService<IMetadataGeneratorService>();
-        var startupLogger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-        try
+        using (var scope = app.Services.CreateScope())
         {
-            startupLogger.LogInformation("Startup: Verifying DB Schema and Strategic Indexes...");
-            await maintenance.EnsureDatabaseSchemaAsync();
-            startupLogger.LogInformation("Startup: DB Maintenance completed.");
+            var maintenance = scope.ServiceProvider.GetRequiredService<DatabaseMaintenanceService>();
+            var metadataService = scope.ServiceProvider.GetRequiredService<IMetadataGeneratorService>();
+            var startupLogger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+            try
+            {
+                startupLogger.LogInformation("Startup: Verifying DB Schema and Strategic Indexes in background...");
+                await maintenance.EnsureDatabaseSchemaAsync();
+                startupLogger.LogInformation("Startup: DB Maintenance completed.");
 
-            startupLogger.LogInformation("Startup: Force-refreshing metadata for frontend stabilization...");
-            await metadataService.RefreshMetadataAsync();
+                startupLogger.LogInformation("Startup: Force-refreshing metadata for frontend stabilization...");
+                await metadataService.RefreshMetadataAsync();
+            }
+            catch (Exception ex)
+            {
+                startupLogger.LogCritical(ex, "Startup: DB Maintenance failed.");
+            }
         }
-        catch (Exception ex)
-        {
-            startupLogger.LogCritical(ex, "Startup: DB Maintenance failed.");
-        }
-    }
+    });
 }
 else
 {

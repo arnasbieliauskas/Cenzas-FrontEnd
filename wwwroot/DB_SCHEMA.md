@@ -233,4 +233,25 @@ Analysis fetches (standard metrics) MUST use a 300ms debounce.
      KPI Render: Instant update of Average Price, Sqm Price, and Stability.  
      List Slice: Take the first 25 records from the computed subset.  
      DOM Render: renderListings clears the container and draws the 25 cards.  
+
+#    Rule #25:
+* **High-Volume Data Orchestration & Indexing Strategy**
+     * **1. Data Loading Pipeline (The "Snapshot" Protocol)Atomic Refreshes:**
+           The analytics_snapshot table MUST be fully rebuilt using a DROP/CREATE cycle to eliminate data fragmentation and ensure peak query performance.
+     * **Temporary Compute:**
+           Prior to populating the snapshot, all current market prices from secaddcollection MUST be pre-calculated using a TEMPORARY TABLE. The use of nested sub-queries within the primary INSERT statement is strictly forbidden to prevent SQL timeouts.  
+     * **Sanitization at Rest:** 
+           SQL functions such as TRIM() or LOWER() MUST NOT be used on indexed columns (ExternalId, City) during query execution. Data must be sanitized and normalized during the RPA import phase.  
+     * **2. Mandatory Indexing StandardsCovering Indexes:** 
+           The secaddcollection table MUST maintain a composite index on (ExternalId, secdata, Price) to allow trend extraction directly from the index tree without accessing raw data pages.  
+     * **Search Optimization:**
+           The addlist table MUST utilize the idx_addlist_lookup_v2 index, covering the 5 primary filter dimensions (City, District, Street, Rooms, Object) to ensure sub-second filtering.  
+     * **RPA Synchronicity:**
+           Every record in the addlist table MUST be indexed by LastCollectedDate to allow the RpaJobWatcher to instantly identify stale or missing listings.  
+     * **3. Execution & Timeout SafetyDifferentiated Timeouts:**
+           Standard schema validations carry a 600s limit, while high-volume data operations (Snapshot population) are granted a priority limit of 1200s (20 minutes).  
+     * **Post-Maintenance Clean-up:**
+           Every mass data load MUST be followed by an OPTIMIZE TABLE command for both core tables to defragment storage and rebuild index statistics.  
+     * **4. Watcher DependencyVerification Guard:**
+           The RpaJobWatcher MUST NOT initiate the MetadataGeneratorService (Step 2) until the DatabaseMaintenanceService (Step 1) explicitly confirms the successful completion of the Snapshot generation.  
      

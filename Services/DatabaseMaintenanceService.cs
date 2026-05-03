@@ -54,17 +54,20 @@ namespace CenzasBackend.Services
         public virtual async Task EnsureDatabaseSchemaAsync()
         {
             _logger.LogInformation("Database Maintenance Guard: Starting schema validation...");
+            var totalSw = System.Diagnostics.Stopwatch.StartNew();
 
             try
             {
                 using (var connection = await _connectionFactory.OpenConnectionAsync())
                 {
+                    var sectionSw = System.Diagnostics.Stopwatch.StartNew();
 
                     // 1. Column Maintenance (addlist)
                     await EnsureColumnExistsAsync(connection, "addlist", "LastCollectedDate", "DATETIME DEFAULT CURRENT_TIMESTAMP");
+                    _logger.LogInformation("Database Maintenance: Column validation took {Elapsed}ms.", sectionSw.ElapsedMilliseconds);
+                    sectionSw.Restart();
 
                     // 2. Strategic Indexes
-                    // Table: addlist
                     await EnsureIndexExistsAsync(connection, "addlist", "idx_addlist_external", "(ExternalId)");
                     await EnsureIndexExistsAsync(connection, "addlist", "idx_last_collected", "(LastCollectedDate)");
                     await EnsureIndexExistsAsync(connection, "addlist", "idx_city_district", "(City, District)");
@@ -76,24 +79,31 @@ namespace CenzasBackend.Services
                     await EnsureIndexExistsAsync(connection, "addlist", "idx_addlist_equipped", "(equipped)");
                     await EnsureIndexExistsAsync(connection, "addlist", "idx_addlist_lookup_v2", "(City(50), District(50), Address(100), Rooms, Title(50))");
 
-                    // Table: secaddcollection
                     await EnsureIndexExistsAsync(connection, "secaddcollection", "idx_secadd_external_date", "(ExternalId, secdata DESC)");
                     await EnsureIndexExistsAsync(connection, "secaddcollection", "idx_secadd_price", "(Price)");
                     await EnsureIndexExistsAsync(connection, "secaddcollection", "idx_secadd_date_only", "(secdata)");
                     await EnsureIndexExistsAsync(connection, "secaddcollection", "idx_secadd_date_price", "(secdata, Price)");
+                    
+                    _logger.LogInformation("Database Maintenance: Index validation took {Elapsed}ms.", sectionSw.ElapsedMilliseconds);
+                    sectionSw.Restart();
 
                     // 3. Table Optimization
                     _logger.LogInformation("Database Maintenance Guard: Optimizing tables...");
                     await ExecuteAsync(connection, "OPTIMIZE TABLE addlist;");
                     await ExecuteAsync(connection, "OPTIMIZE TABLE secaddcollection;");
+                    _logger.LogInformation("Database Maintenance: Table optimization took {Elapsed}ms.", sectionSw.ElapsedMilliseconds);
+                    sectionSw.Restart();
 
                     // 4. Data Synchronization
                     await SynchronizeLastCollectedDatesAsync(connection);
+                    _logger.LogInformation("Database Maintenance: Date synchronization took {Elapsed}ms.", sectionSw.ElapsedMilliseconds);
+                    sectionSw.Restart();
 
-                    // 5. Analytics Snapshot (Rule #2)
+                    // 5. Analytics Snapshot
                     await EnsureAnalyticsSnapshotAsync(connection);
+                    _logger.LogInformation("Database Maintenance: Snapshot generation took {Elapsed}ms.", sectionSw.ElapsedMilliseconds);
                 }
-                _logger.LogInformation("Database Maintenance Guard: Maintenance sequence completed successfully.");
+                _logger.LogInformation("Database Maintenance Guard: Maintenance sequence completed successfully in {TotalElapsed}ms.", totalSw.ElapsedMilliseconds);
             }
             catch (Exception ex)
             {
@@ -104,7 +114,10 @@ namespace CenzasBackend.Services
         private async Task EnsureAnalyticsSnapshotAsync(IDbConnectionWrapper connection)
         {
             _logger.LogInformation("Database Maintenance Guard: Ensuring analytics_snapshot table...");
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+
             await ExecuteAsync(connection, "DROP TABLE IF EXISTS analytics_snapshot;");
+            
             string createSql = @"
                 CREATE TABLE IF NOT EXISTS analytics_snapshot (
                     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -130,15 +143,36 @@ namespace CenzasBackend.Services
                 ) ENGINE=InnoDB;";
             
             await ExecuteAsync(connection, createSql);
+            _logger.LogInformation("Database Maintenance: Snapshot table structure ensured in {Elapsed}ms.", sw.ElapsedMilliseconds);
+            sw.Restart();
 
-            _logger.LogInformation("Database Maintenance Guard: Refreshing analytics_snapshot data...");
+            // Optimization: Use a temporary table to pre-calculate latest prices (Rule #22)
+            _logger.LogInformation("Database Maintenance Guard: Pre-calculating latest prices...");
+            await ExecuteAsync(connection, "DROP TEMPORARY TABLE IF EXISTS temp_latest_prices;");
+            await ExecuteAsync(connection, @"
+                CREATE TEMPORARY TABLE temp_latest_prices (
+                    ExternalId VARCHAR(255) PRIMARY KEY,
+                    Price DECIMAL(15,2),
+                    INDEX idx_temp_ext (ExternalId)
+                ) AS
+                SELECT s1.ExternalId, s1.Price
+                FROM secaddcollection s1
+                INNER JOIN (
+                    SELECT ExternalId, MAX(secdata) as max_date
+                    FROM secaddcollection
+                    GROUP BY ExternalId
+                ) s2 ON s1.ExternalId = s2.ExternalId AND s1.secdata = s2.max_date;", 600);
             
-            // Population logic (Rule #2 & Rule #22)
-            // Note: Joining history to pre-calculate price trends for instant dashboard response
+            _logger.LogInformation("Database Maintenance: Latest prices pre-calculated in {Elapsed}ms.", sw.ElapsedMilliseconds);
+            sw.Restart();
+
+            _logger.LogInformation("Database Maintenance Guard: Populating analytics_snapshot...");
+            
+            // Refactored Join (Rule #22: Removed TRIM, using pre-calculated prices)
             string populateSql = @"
                 INSERT INTO analytics_snapshot (ExternalId, City, District, Address, Rooms, Object, Price, LatestPrice, Area, BuildYear, Renovation, Heating, Equipped, EnergyClass, Url, LastCollectedDate)
                 SELECT 
-                    TRIM(a.ExternalId), a.City, a.District, a.Address, a.Rooms, a.Title, a.Price, 
+                    a.ExternalId, a.City, a.District, a.Address, a.Rooms, a.Title, a.Price, 
                     COALESCE(latest.Price, a.Price) as LatestPrice,
                     a.Area, 
                     CASE WHEN a.BuildYear REGEXP '^[0-9]+$' THEN CAST(a.BuildYear AS UNSIGNED) ELSE 0 END,
@@ -147,14 +181,13 @@ namespace CenzasBackend.Services
                     a.Url,
                     a.LastCollectedDate
                 FROM addlist a
-                LEFT JOIN (
-                    SELECT s1.ExternalId, s1.Price
-                    FROM secaddcollection s1
-                    WHERE s1.secdata = (SELECT MAX(s2.secdata) FROM secaddcollection s2 WHERE TRIM(s2.ExternalId) = TRIM(s1.ExternalId))
-                ) AS latest ON TRIM(a.ExternalId) = TRIM(latest.ExternalId)
+                LEFT JOIN temp_latest_prices latest ON a.ExternalId = latest.ExternalId
                 WHERE a.Price > 0 AND a.Area > 0;";
             
-            await ExecuteAsync(connection, populateSql);
+            await ExecuteAsync(connection, populateSql, 1200); // 20 minutes timeout for the main population
+            
+            await ExecuteAsync(connection, "DROP TEMPORARY TABLE IF EXISTS temp_latest_prices;");
+            _logger.LogInformation("Database Maintenance: Snapshot population completed in {Elapsed}ms.", sw.ElapsedMilliseconds);
         }
 
         private async Task EnsureColumnExistsAsync(IDbConnectionWrapper connection, string tableName, string columnName, string typeDefinition)
@@ -226,12 +259,12 @@ namespace CenzasBackend.Services
             }
         }
 
-        private async Task ExecuteAsync(IDbConnectionWrapper connection, string sql)
+        private async Task ExecuteAsync(IDbConnectionWrapper connection, string sql, int timeoutSeconds = 600)
         {
             using (var command = connection.CreateCommand())
             {
                 command.CommandText = sql;
-                command.CommandTimeout = 600; // 10 minutes for slow optimizations/indexes
+                command.CommandTimeout = timeoutSeconds; 
                 await command.ExecuteNonQueryAsync();
             }
         }
