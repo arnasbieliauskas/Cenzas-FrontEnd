@@ -99,7 +99,12 @@ namespace CenzasBackend.Services
                     _logger.LogInformation("Database Maintenance: Date synchronization took {Elapsed}ms.", sectionSw.ElapsedMilliseconds);
                     sectionSw.Restart();
 
-                    // 5. Analytics Snapshot
+                    // 5. Data Sanitization (Rule #25 optimization)
+                    await SanitizeDataAsync(connection);
+                    _logger.LogInformation("Database Maintenance: Data sanitization took {Elapsed}ms.", sectionSw.ElapsedMilliseconds);
+                    sectionSw.Restart();
+
+                    // 6. Analytics Snapshot
                     await EnsureAnalyticsSnapshotAsync(connection);
                     _logger.LogInformation("Database Maintenance: Snapshot generation took {Elapsed}ms.", sectionSw.ElapsedMilliseconds);
                 }
@@ -193,6 +198,24 @@ namespace CenzasBackend.Services
             {
                 // Step D: Cleanup (Rule #25)
                 try { await ExecuteAsync(connection, "DROP TEMPORARY TABLE IF EXISTS temp_latest_prices;"); } catch { }
+            }
+        }
+
+        private async Task SanitizeDataAsync(IDbConnectionWrapper connection)
+        {
+            _logger.LogInformation("Database Maintenance: Sanitizing ExternalId and City columns...");
+            
+            // Rule #25: Perform heavy lifting once during maintenance, not during API calls
+            string[] tables = { "addlist", "secaddcollection" };
+            foreach (var table in tables)
+            {
+                _logger.LogInformation("Database Maintenance: Sanitizing table {Table}...", table);
+                
+                // Trim and Lowercase ExternalId
+                await ExecuteAsync(connection, $"UPDATE {table} SET ExternalId = LOWER(TRIM(ExternalId)) WHERE ExternalId IS NOT NULL AND (ExternalId LIKE ' %' OR ExternalId LIKE '% ' OR ExternalId != LOWER(ExternalId));", 300);
+                
+                // Trim and Lowercase City
+                await ExecuteAsync(connection, $"UPDATE {table} SET City = LOWER(TRIM(City)) WHERE City IS NOT NULL AND (City LIKE ' %' OR City LIKE '% ' OR City != LOWER(City));", 300);
             }
         }
 

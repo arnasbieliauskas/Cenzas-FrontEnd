@@ -163,12 +163,49 @@
                 </div>
 
                 <div id="chart-container" class="stat-card" style="margin-bottom: 40px; min-height: 450px; padding: 30px; display: flex; flex-direction: column; position: relative;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
                         <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--color-black);">Rinkos Tendencijos</h3>
                         <div style="font-size: 12px; color: var(--color-text-light); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Kaina vs. Kiekis</div>
                     </div>
-                    <div style="flex: 1; position: relative;">
+
+                    <!-- Rule: Chart Visualization Controls -->
+                    <div class="chart-controls-wrapper">
+                        <div class="chart-type-selector">
+                            <button class="chart-type-btn active" data-type="line" title="Linijinis">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                                Linijinis
+                            </button>
+                            <button class="chart-type-btn" data-type="bar" title="Stulpinis">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="10" width="3" height="7"/><rect x="12" y="5" width="3" height="12"/><rect x="17" y="13" width="3" height="4"/></svg>
+                                Stulpinis
+                            </button>
+                            <button class="chart-type-btn" data-type="area" title="Ploto">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M21 9l-7 8-4-4-7 7V9l7-7 4 4 7-7v9z" fill="currentColor" fill-opacity="0.2"/></svg>
+                                Ploto
+                            </button>
+                            <button class="chart-type-btn" data-type="stepped" title="Laiptuotas">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 17h4v-4h4v-4h4"/></svg>
+                                Laiptuotas
+                            </button>
+                            <button class="chart-type-btn" data-type="scatter" title="Taškinis">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><circle cx="8" cy="14" r="1" fill="currentColor"/><circle cx="12" cy="10" r="1" fill="currentColor"/><circle cx="16" cy="15" r="1" fill="currentColor"/><circle cx="19" cy="8" r="1" fill="currentColor"/></svg>
+                                Taškinis
+                            </button>
+                            <button class="chart-type-btn" data-type="bar-stacked" title="Sluoksniuotas Stulpinis">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="14" width="4" height="3" fill="currentColor" fill-opacity="0.4"/><rect x="7" y="10" width="4" height="4"/><rect x="14" y="12" width="4" height="5" fill="currentColor" fill-opacity="0.4"/><rect x="14" y="7" width="4" height="5"/></svg>
+                                Sluoks. Stulp.
+                            </button>
+                            <button class="chart-type-btn" data-type="area-stacked" title="Sluoksniuotas Plotas">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M21 9l-7 8-4-4-7 7v-4l7-7 4 4 7-7z" fill="currentColor" fill-opacity="0.4"/><path d="M21 5l-7 8-4-4-7 7v-4l7-7 4 4 7-7z"/></svg>
+                                Sluoks. Plotas
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper" id="chart-wrapper">
                         <canvas id="marketTrendChart"></canvas>
+                        <div class="chart-loading-overlay" id="chart-loader">
+                            <div class="loader-progress-bar"></div>
+                        </div>
                     </div>
                 </div>
 

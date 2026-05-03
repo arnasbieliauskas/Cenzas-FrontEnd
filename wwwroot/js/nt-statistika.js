@@ -32,17 +32,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     await Core.init();
 
     const { Cleaner } = window.CenzasAnalytics.Utils;
-    let currentFilteredData = []; 
-    let currentPriceFilter = 'all'; 
-    let currentStatusFilter = 'all'; 
+    let currentFilteredData = [];
+    let currentPriceFilter = 'all';
+    let currentStatusFilter = 'all';
+    let currentChartType = 'line';
 
     // Dynamically populate city selection from metadata
     if (Core.state.metadata?.combinations) {
         const PRIORITY_CITIES = ['vilniuje', 'kaune', 'klaipedoje', 'siauliuose', 'panevezyje', 'alytuje', 'palangoje'];
-        
+
         const rawCities = [...new Set(Core.state.metadata.combinations.map(c => c.City))];
         const cleanedCities = Cleaner.sanitizeList(rawCities);
-        
+
         // Group cities
         const priority = cleanedCities.filter(c => PRIORITY_CITIES.includes(c));
         const others = cleanedCities.filter(c => !PRIORITY_CITIES.includes(c));
@@ -63,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         priority.forEach(city => {
             const option = document.createElement('option');
             option.value = city;
-            option.textContent = Cleaner.getLabel(city, 'cities'); 
+            option.textContent = Cleaner.getLabel(city, 'cities');
             citySelect.appendChild(option);
         });
 
@@ -79,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         others.forEach(city => {
             const option = document.createElement('option');
             option.value = city;
-            option.textContent = Cleaner.getLabel(city, 'cities'); 
+            option.textContent = Cleaner.getLabel(city, 'cities');
             citySelect.appendChild(option);
         });
     }
@@ -108,7 +109,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Rule #23: Calculate visibility based on City context ONLY to prevent vanishing sections
             const cityOnlyContext = { City: current.City };
             const visibility = Logic.FilterEngine.getAvailableOptions(Core.state.metadata, cityOnlyContext);
-            
+
             // Calculate available options and stats based on FULL filter set
             const available = Logic.FilterEngine.getAvailableOptions(Core.state.metadata, current);
 
@@ -129,7 +130,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // Rule #24: Metadata-Driven Authority
             let combinations = available.combinations || [];
-            
+
             // 1. Apply Price Trend Filter
             if (currentPriceFilter === 'up') {
                 combinations = combinations.filter(c => {
@@ -149,34 +150,38 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (currentStatusFilter === 'valid' || currentStatusFilter === 'expired') {
                 const thresholdDays = parseInt(Core.state.metadata?.ListingExpirationDays) || 1;
                 const today = new Date();
-                today.setHours(0, 0, 0, 0); 
-                
+                today.setHours(0, 0, 0, 0);
+
                 combinations = combinations.filter(c => {
                     if (!c) return false;
                     const latestDateStr = c.LatestDate || c.latestDate;
-                    if (!latestDateStr) return currentStatusFilter === 'expired'; 
-                    
+                    if (!latestDateStr) return currentStatusFilter === 'expired';
+
                     const latest = new Date(latestDateStr);
                     latest.setHours(0, 0, 0, 0);
-                    
+
                     const diffTime = Math.abs(today - latest);
                     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
                     const isExpired = diffDays > thresholdDays;
-                    
+
                     return currentStatusFilter === 'expired' ? isExpired : !isExpired;
                 });
             }
-            
+
             currentFilteredData = combinations;
             Core.state.currentPage = 1;
 
             // Rule #23.2: Local Calculation Engine (Instant KPIs)
             const stats = Logic.calculateStats(currentFilteredData);
             renderStats(stats);
-            
+
+            // Start Loading for background data
+            setLoading(true);
+            setChartLoading(true);
+
             // Rule #23.4: Background Fetches (Debounced Trend Only)
             debouncedUpdateAnalytics();
-            
+
             // Rule #24: Instant List Rendering
             refreshListings();
         } catch (err) {
@@ -232,7 +237,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             BuildYearTo: document.getElementById('year-max').value || null,
             DateFrom: document.getElementById('date-from').value || null,
             DateTo: document.getElementById('date-to').value || null,
-            
+
             // New Filter Axes (Rule #5)
             PriceStatus: currentPriceFilter,
             ValidityStatus: currentStatusFilter,
@@ -248,6 +253,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function updateAnalytics() {
         const filters = getActiveFilters();
         if (!filters.City) {
+            setChartLoading(false);
+            setLoading(false);
             return;
         }
 
@@ -266,7 +273,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             renderChart(trend);
         } catch (err) {
-            if (err.name !== 'AbortError') console.error('Background update failed:', err);
+            if (err.name !== 'AbortError') {
+                console.error('Background update failed:', err);
+                renderChart([]); // Clear chart on failure
+            }
+        } finally {
+            setChartLoading(false);
+            setLoading(false);
         }
     }
 
@@ -302,10 +315,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function renderPagination(totalItems) {
         if (!listingsContainer) return;
-        
+
         const pageSize = 25;
         const totalPages = Math.ceil(totalItems / pageSize);
-        
+
         let paginationContainer = document.getElementById('pagination-container');
         if (!paginationContainer) {
             paginationContainer = document.createElement('div');
@@ -319,18 +332,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             paginationContainer.style.display = 'none';
             return;
         }
-        
+
         paginationContainer.style.display = 'block';
 
         const page = Core.state.currentPage;
-        
+
         // Rule #24.2: Dynamic Sliding Window (±5 Pages)
         let start = Math.max(1, page - 5);
         let end = Math.min(totalPages, page + 5);
 
         // Build page numbers
         let pagesHtml = '';
-        
+
         // Always show page 1 + dots if start > 1
         if (start > 1) {
             pagesHtml += `<button class="page-num" data-page="1">1</button>`;
@@ -394,7 +407,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     function renderChart(trendData) {
         // Rule #23: Robust Data Normalization (direct array or wrapped object)
         const dataArray = Array.isArray(trendData) ? trendData : (trendData?.trends || trendData?.Trends || []);
-        
+
         const canvas = document.getElementById('marketTrendChart');
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
@@ -402,6 +415,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (dataArray.length === 0) {
             console.warn('[Cleaner] No trend data available for chart');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#94a3b8';
+            ctx.textAlign = 'center';
+            ctx.font = '14px Inter, sans-serif';
+            ctx.fillText('Nėra duomenų pasirinktu laikotarpiu', canvas.width / 2, canvas.height / 2);
             return;
         }
 
@@ -414,21 +432,58 @@ document.addEventListener('DOMContentLoaded', async () => {
         countGradient.addColorStop(0, 'rgba(100, 116, 139, 0.1)');
         countGradient.addColorStop(1, 'rgba(100, 116, 139, 0)');
 
+        // Visualization Mode Mapping
+        const typeMap = {
+            'line': { type: 'line', fill: false, stepped: false, stacked: false, showLine: true },
+            'bar': { type: 'bar', fill: false, stepped: false, stacked: false, showLine: true },
+            'area': { type: 'line', fill: true, stepped: false, stacked: false, showLine: true },
+            'stepped': { type: 'line', fill: 'origin', stepped: true, stacked: false, showLine: true },
+            'scatter': { type: 'line', fill: false, stepped: false, stacked: false, showLine: false },
+            'bar-stacked': { type: 'bar', fill: true, stepped: false, stacked: true, showLine: true },
+            'area-stacked': { type: 'line', fill: 'origin', stepped: false, stacked: true, showLine: true }
+        };
+        const settings = typeMap[currentChartType] || typeMap['line'];
+
+        // Lithuanian Date Localization (Rule: No Time, Specific Granularity)
+        const LT_MONTHS_SHORT = ['saus.', 'vas.', 'kov.', 'bal.', 'geg.', 'birž.', 'liep.', 'rugp.', 'rugs.', 'spal.', 'lapkr.', 'gruod.'];
+        const LT_MONTHS_LONG = ['sausio', 'vasario', 'kovo', 'balandžio', 'gegužės', 'birželio', 'liepos', 'rugpjūčio', 'rugsėjo', 'spalio', 'lapkričio', 'gruodžio'];
+
+        // Rule: Dynamic Granularity for Time Axis
+        const firstDate = new Date(dataArray[0].t);
+        const lastDate = new Date(dataArray[dataArray.length - 1].t);
+        const rangeDays = (lastDate - firstDate) / (1000 * 3600 * 24);
+
+        const chartLabels = dataArray.map(d => {
+            const dt = new Date(d.t);
+            const m = dt.getMonth();
+            const day = dt.getDate();
+            const year = dt.getFullYear();
+
+            if (rangeDays > 365) {
+                return `${year} ${LT_MONTHS_SHORT[m]}`;
+            } else {
+                // If months or weeks period -> show months and days
+                return `${LT_MONTHS_SHORT[m]} ${day} d.`;
+            }
+        });
+
         chart = new Chart(ctx, {
-            type: 'line',
+            type: settings.type,
             data: {
-                labels: dataArray.map(d => d.t),
+                labels: chartLabels,
                 datasets: [
                     {
-                        label: 'Vidutinė kaina (€)',
+                        label: 'Kaina (€)',
                         data: dataArray.map(d => d.v),
                         borderColor: '#176be0',
                         backgroundColor: priceGradient,
                         borderWidth: 3,
                         tension: 0.4,
-                        fill: true,
+                        showLine: settings.showLine,
+                        fill: settings.fill,
+                        stepped: settings.stepped,
                         yAxisID: 'y',
-                        pointRadius: 0,
+                        pointRadius: currentChartType === 'scatter' ? 5 : 0,
                         pointHoverRadius: 6,
                         pointHoverBackgroundColor: '#176be0',
                         pointHoverBorderColor: '#fff',
@@ -440,11 +495,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                         borderColor: '#64748b',
                         backgroundColor: countGradient,
                         borderWidth: 2,
-                        borderDash: [5, 5],
+                        borderDash: settings.type === 'bar' ? [] : [5, 5],
                         tension: 0.4,
-                        fill: true,
+                        showLine: settings.showLine,
+                        fill: settings.fill,
+                        stepped: settings.stepped,
                         yAxisID: 'y1',
-                        pointRadius: 0,
+                        pointRadius: currentChartType === 'scatter' ? 4 : 0,
                         pointHoverRadius: 4,
                         pointHoverBackgroundColor: '#64748b',
                         pointHoverBorderColor: '#fff',
@@ -481,7 +538,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                         boxPadding: 6,
                         usePointStyle: true,
                         callbacks: {
-                            label: function(context) {
+                            title: function (items) {
+                                if (!items.length) return '';
+                                const dt = new Date(dataArray[items[0].dataIndex].t);
+                                return `${dt.getFullYear()} m. ${LT_MONTHS_LONG[dt.getMonth()]} ${dt.getDate()} d.`;
+                            },
+                            label: function (context) {
                                 let label = context.dataset.label || '';
                                 if (label) label += ': ';
                                 if (context.datasetIndex === 0) {
@@ -496,6 +558,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 },
                 scales: {
                     x: {
+                        stacked: settings.stacked,
                         grid: { display: false },
                         ticks: {
                             font: { size: 11 },
@@ -507,6 +570,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     },
                     y: {
                         type: 'linear',
+                        stacked: settings.stacked,
                         display: true,
                         position: 'left',
                         grid: { color: '#f1f5f9' },
@@ -518,6 +582,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     },
                     y1: {
                         type: 'linear',
+                        stacked: settings.stacked,
                         display: true,
                         position: 'right',
                         grid: { drawOnChartArea: false },
@@ -550,10 +615,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Mapping with Fallbacks (PascalCase from Metadata)
             const rawType = l.Object || l.object || l.Title || l.title || 'Skelbimas';
             const title = Cleaner.getLabel(rawType, 'objects');
-            
+
             const initialPrice = Math.round(parseFloat(l.InitialPrice || l.initialPrice || 0));
             let latestPrice = Math.round(parseFloat(l.LatestPrice || l.latestPrice || l.Price || l.price || 0));
-            
+
             // Safeguard: If latest price is 0 (100% drop), treat as no change and show initial price
             if (latestPrice === 0) {
                 latestPrice = initialPrice;
@@ -561,13 +626,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const priceDiff = latestPrice - initialPrice;
             const priceChangePct = initialPrice > 0 ? ((priceDiff / initialPrice) * 100).toFixed(1) : 0;
-            
+
             const district = l.District || l.district || '';
             const street = l.Street || l.street || '';
             const rooms = l.Rooms || l.rooms || 0;
             const area = l.Area || l.area || 0;
             const year = l.BuildYear || l.buildYear || '';
-            
+
             const heating = l.Heating || l.heating || '';
             const equipped = l.Equipped || l.equipped || '';
             const energy = l.EnergyClass || l.energyClass || '';
@@ -676,13 +741,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function renderFilterOptions(config) {
         const current = getActiveFilters();
-        
+
         // Rule: Clear current category filter to show all globally available options for the selected context
         const forEngine = { ...current, [config.key]: [] };
         const available = Logic.FilterEngine.getAvailableOptions(Core.state.metadata, forEngine);
-        
+
         let optionsSet = new Set((available[config.key] || []).map(o => o.toString()));
-        
+
         // Rule #23: Selection Preservation Logic
         // Ensure currently selected items stay in the list even if hidden by other cross-filters
         const selected = (current[config.key] || []).map(s => s.toString());
@@ -709,14 +774,23 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function setLoading(isLoading) {
         const els = [avgPriceEl, avgPriceSqmEl, stabilityScoreEl];
-        els.forEach(el => el.classList.toggle('skeleton-text', isLoading));
+        els.forEach(el => {
+            if (el) el.classList.toggle('skeleton-text', isLoading);
+        });
+    }
+
+    function setChartLoading(isLoading) {
+        const loader = document.getElementById('chart-loader');
+        const wrapper = document.getElementById('chart-wrapper');
+        if (loader) loader.classList.toggle('active', isLoading);
+        if (wrapper) wrapper.classList.toggle('chart-updating', isLoading);
     }
 
     // Event Listeners
     citySelect.addEventListener('change', () => {
         // Rule #20: Top-down reset of all secondary filters
         document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-        
+
         // Strict State & UI Reset (Rule #23)
         Object.values(filterConfigs).forEach(config => {
             const container = document.getElementById(config.containerId);
@@ -732,20 +806,32 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelectorAll('.filter-tabs').forEach(group => {
         const groupType = group.dataset.group;
         const tabs = group.querySelectorAll('.filter-tab');
-        
+
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 tabs.forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
-                
+
                 if (groupType === 'price') {
                     currentPriceFilter = tab.dataset.type;
                 } else if (groupType === 'status') {
                     currentStatusFilter = tab.dataset.type;
                 }
-                
+
                 syncFilters();
             });
+        });
+    });
+
+    // Chart Type Handlers
+    document.querySelectorAll('.chart-type-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.chart-type-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentChartType = btn.dataset.type;
+
+            // Rule #24: Re-render chart with current data
+            debouncedUpdateAnalytics();
         });
     });
 

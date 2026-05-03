@@ -112,7 +112,8 @@ window.CenzasAnalytics.Logic = {
 
             for (const c of metadata.combinations) {
                 // Global Hierarchical Guard (Top-down)
-                if (currentFilters.City && c.City !== currentFilters.City) continue;
+                // Rule #25: Robust case-insensitive matching for top-level context
+                if (currentFilters.City && c.City?.toLowerCase() !== currentFilters.City.toLowerCase()) continue;
 
                 // Rule #23.5: Robust Range Matching for Facet Logic
                 const latest = parseFloat(c.LatestPrice) || 0;
@@ -132,7 +133,7 @@ window.CenzasAnalytics.Logic = {
                     Districts: !currentFilters.Districts?.length || currentFilters.Districts.map(String).includes(c.District?.toString()),
                     Streets: !currentFilters.Streets?.length || currentFilters.Streets.map(String).includes(c.Street?.toString()),
                     Rooms: !currentFilters.Rooms?.length || currentFilters.Rooms.map(String).includes(c.Rooms?.toString()),
-                    Objects: !currentFilters.Objects?.length || currentFilters.Objects.map(String).includes(c.Object?.toString()),
+                    Objects: !currentFilters.Objects?.length || currentFilters.Objects.map(s => s?.toString().toLowerCase()).includes(c.Object?.toString().toLowerCase()),
                     Heating: !currentFilters.Heating?.length || currentFilters.Heating.map(String).includes(c.Heating?.toString()),
                     Equipped: !currentFilters.Equipped?.length || currentFilters.Equipped.map(String).includes(c.Equipped?.toString()),
                     Energy: !currentFilters.EnergyClass?.length || currentFilters.EnergyClass.map(String).includes(c.EnergyClass?.toString())
@@ -152,7 +153,7 @@ window.CenzasAnalytics.Logic = {
             }
 
             const combinations = Array.from(metadata.combinations).filter(c => {
-                if (currentFilters.City && c.City !== currentFilters.City) return false;
+                if (currentFilters.City && c.City?.toLowerCase() !== currentFilters.City.toLowerCase()) return false;
                 
                 const latest = parseFloat(c.LatestPrice) || 0;
                 const area = parseFloat(c.Area) || 0;
@@ -169,7 +170,7 @@ window.CenzasAnalytics.Logic = {
                 if (currentFilters.Districts?.length && !currentFilters.Districts.map(String).includes(c.District?.toString())) return false;
                 if (currentFilters.Streets?.length && !currentFilters.Streets.map(String).includes(c.Street?.toString())) return false;
                 if (currentFilters.Rooms?.length && !currentFilters.Rooms.map(String).includes(c.Rooms?.toString())) return false;
-                if (currentFilters.Objects?.length && !currentFilters.Objects.map(String).includes(c.Object?.toString())) return false;
+                if (currentFilters.Objects?.length && !currentFilters.Objects.map(s => s?.toString().toLowerCase()).includes(c.Object?.toString().toLowerCase())) return false;
                 if (currentFilters.Heating?.length && !currentFilters.Heating.map(String).includes(c.Heating?.toString())) return false;
                 if (currentFilters.Equipped?.length && !currentFilters.Equipped.map(String).includes(c.Equipped?.toString())) return false;
                 if (currentFilters.EnergyClass?.length && !currentFilters.EnergyClass.map(String).includes(c.EnergyClass?.toString())) return false;

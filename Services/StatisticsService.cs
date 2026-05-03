@@ -108,7 +108,7 @@ namespace CenzasBackend.Services
                         AVG(s.Price) as AveragePrice,
                         COUNT(DISTINCT a.ExternalId) as OfferCount
                     FROM analytics_snapshot a
-                    JOIN secaddcollection s ON TRIM(a.ExternalId) = TRIM(s.ExternalId)
+                    JOIN secaddcollection s ON a.ExternalId = s.ExternalId
                     {whereClause}
                     AND s.Price > 0
                     GROUP BY DatePoint
@@ -215,7 +215,7 @@ namespace CenzasBackend.Services
             if (!string.IsNullOrEmpty(request.City))
             {
                 sb.Append($" AND {tableAlias}.City = @City");
-                AddParameter(command, "@City", request.City);
+                AddParameter(command, "@City", request.City.Trim().ToLower());
             }
 
             // Districts (Multi-select IN clause - Rule #15)
@@ -245,7 +245,7 @@ namespace CenzasBackend.Services
                 {
                     var paramName = $"@Obj{i}";
                     objectParams.Add(paramName);
-                    AddParameter(command, paramName, request.Objects[i]);
+                    AddParameter(command, paramName, request.Objects[i].Trim().ToLower());
                 }
                 sb.Append($" AND {tableAlias}.Object IN ({string.Join(",", objectParams)})");
             }
