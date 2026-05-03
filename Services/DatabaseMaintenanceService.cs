@@ -113,81 +113,87 @@ namespace CenzasBackend.Services
 
         private async Task EnsureAnalyticsSnapshotAsync(IDbConnectionWrapper connection)
         {
-            _logger.LogInformation("Database Maintenance Guard: Ensuring analytics_snapshot table...");
+            _logger.LogInformation("Database Maintenance Guard: Ensuring analytics_snapshot table (Rule #25)...");
             var sw = System.Diagnostics.Stopwatch.StartNew();
 
-            await ExecuteAsync(connection, "DROP TABLE IF EXISTS analytics_snapshot;");
-            
-            string createSql = @"
-                CREATE TABLE IF NOT EXISTS analytics_snapshot (
-                    id INT PRIMARY KEY AUTO_INCREMENT,
-                    ExternalId VARCHAR(255),
-                    City VARCHAR(100),
-                    District VARCHAR(100),
-                    Address VARCHAR(255),
-                    Rooms INT,
-                    Object VARCHAR(255),
-                    Price DECIMAL(15,2),
-                    LatestPrice DECIMAL(15,2),
-                    Area DECIMAL(10,2),
-                    BuildYear INT,
-                    Renovation INT,
-                    Heating VARCHAR(255),
-                    Equipped VARCHAR(255),
-                    EnergyClass VARCHAR(50),
-                    Url VARCHAR(500),
-                    LastCollectedDate DATETIME,
-                    INDEX idx_snapshot_lookup (City, District, Rooms, Object),
-                    INDEX idx_snapshot_external (ExternalId),
-                    INDEX idx_snapshot_status (LatestPrice, Price, LastCollectedDate)
-                ) ENGINE=InnoDB;";
-            
-            await ExecuteAsync(connection, createSql);
-            _logger.LogInformation("Database Maintenance: Snapshot table structure ensured in {Elapsed}ms.", sw.ElapsedMilliseconds);
-            sw.Restart();
+            try
+            {
+                // Step A: Create optimized temporary table with Primary Key (Rule #25)
+                _logger.LogInformation("Database Maintenance Guard: Pre-calculating price metadata via Temporary Table...");
+                await ExecuteAsync(connection, "DROP TEMPORARY TABLE IF EXISTS temp_latest_prices;");
+                await ExecuteAsync(connection, @"
+                    CREATE TEMPORARY TABLE temp_latest_prices (
+                        ExternalId VARCHAR(255) PRIMARY KEY,
+                        LatestPrice DECIMAL(15,2),
+                        LatestDate DATE,
+                        InitialDate DATE,
+                        INDEX idx_temp_ext (ExternalId)
+                    ) AS
+                    SELECT 
+                        s1.ExternalId, 
+                        s1.Price as LatestPrice, 
+                        s1.secdata as LatestDate,
+                        s_min.min_date as InitialDate
+                    FROM secaddcollection s1
+                    INNER JOIN (
+                        SELECT ExternalId, MAX(secdata) as max_date
+                        FROM secaddcollection
+                        GROUP BY ExternalId
+                    ) s2 ON s1.ExternalId = s2.ExternalId AND s1.secdata = s2.max_date
+                    LEFT JOIN (
+                        SELECT ExternalId, MIN(secdata) as min_date
+                        FROM secaddcollection
+                        GROUP BY ExternalId
+                    ) s_min ON s1.ExternalId = s_min.ExternalId;", 600);
+                
+                _logger.LogInformation("Database Maintenance: Price metadata pre-calculated in {Elapsed}ms.", sw.ElapsedMilliseconds);
+                sw.Restart();
 
-            // Optimization: Use a temporary table to pre-calculate latest prices (Rule #22)
-            _logger.LogInformation("Database Maintenance Guard: Pre-calculating latest prices...");
-            await ExecuteAsync(connection, "DROP TEMPORARY TABLE IF EXISTS temp_latest_prices;");
-            await ExecuteAsync(connection, @"
-                CREATE TEMPORARY TABLE temp_latest_prices (
-                    ExternalId VARCHAR(255) PRIMARY KEY,
-                    Price DECIMAL(15,2),
-                    INDEX idx_temp_ext (ExternalId)
-                ) AS
-                SELECT s1.ExternalId, s1.Price
-                FROM secaddcollection s1
-                INNER JOIN (
-                    SELECT ExternalId, MAX(secdata) as max_date
-                    FROM secaddcollection
-                    GROUP BY ExternalId
-                ) s2 ON s1.ExternalId = s2.ExternalId AND s1.secdata = s2.max_date;", 600);
-            
-            _logger.LogInformation("Database Maintenance: Latest prices pre-calculated in {Elapsed}ms.", sw.ElapsedMilliseconds);
-            sw.Restart();
+                // Step B: Rebuild the analytics_snapshot table structure (Rule #25)
+                _logger.LogInformation("Database Maintenance Guard: Rebuilding analytics_snapshot structure...");
+                await ExecuteAsync(connection, "DROP TABLE IF EXISTS analytics_snapshot;");
+                string createSql = @"
+                    CREATE TABLE analytics_snapshot (
+                        id INT PRIMARY KEY AUTO_INCREMENT,
+                        ExternalId VARCHAR(255),
+                        City VARCHAR(100), District VARCHAR(100), Address VARCHAR(255),
+                        Rooms INT, Object VARCHAR(255), Price DECIMAL(15,2),
+                        LatestPrice DECIMAL(15,2), InitialDate DATETIME, LatestDate DATETIME,
+                        Area DECIMAL(10,2), BuildYear INT, Renovation INT, Heating VARCHAR(255),
+                        Equipped VARCHAR(255), EnergyClass VARCHAR(50),
+                        Url VARCHAR(500), LastCollectedDate DATETIME,
+                        INDEX idx_snapshot_external (ExternalId),
+                        INDEX idx_snapshot_lookup (City, District, Rooms, Object)
+                    ) ENGINE=InnoDB;";
+                await ExecuteAsync(connection, createSql);
+                _logger.LogInformation("Database Maintenance: Snapshot structure rebuilt in {Elapsed}ms.", sw.ElapsedMilliseconds);
+                sw.Restart();
 
-            _logger.LogInformation("Database Maintenance Guard: Populating analytics_snapshot...");
-            
-            // Refactored Join (Rule #22: Removed TRIM, using pre-calculated prices)
-            string populateSql = @"
-                INSERT INTO analytics_snapshot (ExternalId, City, District, Address, Rooms, Object, Price, LatestPrice, Area, BuildYear, Renovation, Heating, Equipped, EnergyClass, Url, LastCollectedDate)
-                SELECT 
-                    a.ExternalId, a.City, a.District, a.Address, a.Rooms, a.Title, a.Price, 
-                    COALESCE(latest.Price, a.Price) as LatestPrice,
-                    a.Area, 
-                    CASE WHEN a.BuildYear REGEXP '^[0-9]+$' THEN CAST(a.BuildYear AS UNSIGNED) ELSE 0 END,
-                    CASE WHEN a.Renovation REGEXP '^[0-9]+$' THEN CAST(a.Renovation AS UNSIGNED) ELSE 0 END,
-                    a.Heating, a.Equipped, a.EnergyClass,
-                    a.Url,
-                    a.LastCollectedDate
-                FROM addlist a
-                LEFT JOIN temp_latest_prices latest ON a.ExternalId = latest.ExternalId
-                WHERE a.Price > 0 AND a.Area > 0;";
-            
-            await ExecuteAsync(connection, populateSql, 1200); // 20 minutes timeout for the main population
-            
-            await ExecuteAsync(connection, "DROP TEMPORARY TABLE IF EXISTS temp_latest_prices;");
-            _logger.LogInformation("Database Maintenance: Snapshot population completed in {Elapsed}ms.", sw.ElapsedMilliseconds);
+                // Step C: Fast Insert using Indexed Join (Rule #25)
+                _logger.LogInformation("Database Maintenance Guard: Performing Fast Insert into snapshot...");
+                string populateSql = @"
+                    INSERT INTO analytics_snapshot (ExternalId, City, District, Address, Rooms, Object, Price, LatestPrice, InitialDate, LatestDate, Area, BuildYear, Renovation, Heating, Equipped, EnergyClass, Url, LastCollectedDate)
+                    SELECT 
+                        a.ExternalId, a.City, a.District, a.Address, a.Rooms, a.Title, 
+                        a.Price, COALESCE(t.LatestPrice, a.Price), 
+                        COALESCE(t.InitialDate, a.LastCollectedDate),
+                        COALESCE(t.LatestDate, a.LastCollectedDate),
+                        a.Area,
+                        CAST(CASE WHEN a.BuildYear REGEXP '^[0-9]+$' THEN a.BuildYear ELSE 0 END AS UNSIGNED),
+                        CAST(CASE WHEN a.Renovation REGEXP '^[0-9]+$' THEN a.Renovation ELSE 0 END AS UNSIGNED),
+                        a.Heating, a.Equipped, a.EnergyClass, a.Url, a.LastCollectedDate
+                    FROM addlist a
+                    LEFT JOIN temp_latest_prices t ON a.ExternalId = t.ExternalId
+                    WHERE a.Price > 0 AND a.Area > 0;";
+                
+                await ExecuteAsync(connection, populateSql, 1200); // 20 minutes timeout as requested
+                _logger.LogInformation("Database Maintenance: Snapshot population completed in {Elapsed}ms.", sw.ElapsedMilliseconds);
+            }
+            finally
+            {
+                // Step D: Cleanup (Rule #25)
+                try { await ExecuteAsync(connection, "DROP TEMPORARY TABLE IF EXISTS temp_latest_prices;"); } catch { }
+            }
         }
 
         private async Task EnsureColumnExistsAsync(IDbConnectionWrapper connection, string tableName, string columnName, string typeDefinition)

@@ -45,31 +45,20 @@ namespace CenzasBackend.Services
                 using (var connection = await _connectionFactory.OpenConnectionAsync(ct))
                 using (var command = connection.CreateCommand())
                 {
-                    // Integruota patikrinta SQL logika: Initial vs Latest kainos/datos + Rule #24 saugikliai
+                    // Rule #25: Using pre-calculated analytics_snapshot for instant metadata extraction
                     command.CommandText = @"
                         SELECT 
-                            a.City, a.District, a.Address AS Street, a.Rooms, a.Title AS Object, 
-                            a.Heating, a.Equipped, a.EnergyClass, a.BuildYear, a.Renovation,
-                            a.Price AS InitialPrice,
-                            (SELECT MIN(s_min.secdata) FROM ntd_db_remote.secaddcollection s_min WHERE s_min.ExternalId = a.ExternalId) AS InitialDate,
-                            latest.Price AS LatestPrice,
-                            latest.secdata AS LatestDate,
-                            a.Area,
-                            a.Url
-                        FROM ntd_db_remote.addlist a
-                        LEFT JOIN (
-                            SELECT s1.ExternalId, s1.Price, s1.secdata
-                            FROM ntd_db_remote.secaddcollection s1
-                            WHERE s1.secdata = (
-                                SELECT MAX(s2.secdata) 
-                                FROM ntd_db_remote.secaddcollection s2 
-                                WHERE s2.ExternalId = s1.ExternalId
-                            )
-                        ) AS latest ON a.ExternalId = latest.ExternalId
-                        WHERE a.City IS NOT NULL 
-                          AND a.Title IS NOT NULL
-                          AND a.Address NOT LIKE '%€%' 
-                          AND a.Address NOT REGEXP '^[0-9[[:space:]]]+$';";
+                            City, District, Address AS Street, Rooms, Object, 
+                            Heating, Equipped, EnergyClass, BuildYear, Renovation,
+                            Price AS InitialPrice, InitialDate,
+                            LatestPrice, LatestDate,
+                            Area,
+                            Url
+                        FROM analytics_snapshot
+                        WHERE City IS NOT NULL 
+                          AND Object IS NOT NULL
+                          AND Address NOT LIKE '%€%' 
+                          AND Address NOT REGEXP '^[0-9[[:space:]]]+$';";
                     
                     command.CommandTimeout = 300; // 5 minučių limitas dideliems duomenų kiekiams
 
@@ -77,12 +66,9 @@ namespace CenzasBackend.Services
                     {
                         while (await reader.ReadAsync(ct))
                         {
-                            // Saugių metų reikšmių apdorojimas
-                            string rawBuildYear = reader.IsDBNull(8) ? "0" : reader.GetString(8).ToString();
-                            int.TryParse(rawBuildYear, out int buildYear);
-
-                            string rawRenovation = reader.IsDBNull(9) ? "0" : reader.GetString(9).ToString();
-                            int.TryParse(rawRenovation, out int renovation);
+                            // Rule #25: Columns are now INT in analytics_snapshot
+                            int buildYear = reader.IsDBNull(8) ? 0 : reader.GetInt32(8);
+                            int renovation = reader.IsDBNull(9) ? 0 : reader.GetInt32(9);
 
                             combinations.Add(new
                             {
