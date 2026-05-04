@@ -26,10 +26,13 @@ namespace CenzasBackend.Services
 
             try
             {
-                // 1. Connection Status
+                // 1. Connection Status & Time Check
                 using (var connection = await _connectionFactory.OpenConnectionAsync())
+                using (var command = connection.CreateCommand())
                 {
-                    _logger.LogInformation("[OK] Connection Status: Handshake successful with {Host}", connection.DataSource);
+                    command.CommandText = "SELECT NOW();";
+                    var now = await command.ExecuteScalarAsync();
+                    _logger.LogInformation("[OK] Connection Status: Handshake successful. DB Time: {Time}", now);
                 }
 
                 // 2. Database Schema Audit (MySQL version)

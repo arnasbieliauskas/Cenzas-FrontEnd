@@ -102,6 +102,19 @@ namespace CenzasBackend.Services
                     DateTime.TryParse(request.DateFrom, out var start) ? start : null, 
                     DateTime.TryParse(request.DateTo, out var end) ? end : null);
 
+                // Rule: Ensure trend points match the requested date range if provided
+                var trendFilter = new StringBuilder();
+                if (!string.IsNullOrEmpty(request.DateFrom) && DateTime.TryParse(request.DateFrom, out var dF))
+                {
+                    trendFilter.Append(" AND s.secdata >= @TrendFrom");
+                    AddParameter(command, "@TrendFrom", dF);
+                }
+                if (!string.IsNullOrEmpty(request.DateTo) && DateTime.TryParse(request.DateTo, out var dT))
+                {
+                    trendFilter.Append(" AND s.secdata <= @TrendTo");
+                    AddParameter(command, "@TrendTo", dT);
+                }
+
                 command.CommandText = $@"
                     SELECT 
                         {groupingSql} as DatePoint,
@@ -110,6 +123,7 @@ namespace CenzasBackend.Services
                     FROM analytics_snapshot a
                     JOIN secaddcollection s ON a.ExternalId = s.ExternalId
                     {whereClause}
+                    {trendFilter}
                     AND s.Price > 0
                     GROUP BY DatePoint
                     HAVING AveragePrice > 0
@@ -131,7 +145,7 @@ namespace CenzasBackend.Services
                         var avgPrice = reader.IsDBNull(1) ? 0 : reader.GetDecimal(1);
                         var offerCount = reader.IsDBNull(2) ? 0 : reader.GetInt64(2);
 
-                        if (avgPrice <= 0) continue; // Rule #11 / #12
+                        if (avgPrice <= 0) continue;
 
                         trendData.Add(new { 
                             t = datePoint, 
@@ -141,6 +155,8 @@ namespace CenzasBackend.Services
                         priceList.Add(avgPrice);
                     }
                 }
+
+                _logger.LogInformation("Trend Query returned {Count} points for {City}", trendData.Count, request.City);
 
                 return new
                 {
@@ -328,6 +344,7 @@ namespace CenzasBackend.Services
             param.ParameterName = name;
             param.Value = value ?? DBNull.Value;
             command.Parameters.Add(param);
+            _logger.LogDebug("SQL Param: {Name} = {Value}", name, value);
         }
     }
 }

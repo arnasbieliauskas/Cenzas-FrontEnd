@@ -70,16 +70,20 @@ if (!string.IsNullOrEmpty(connectionString))
 {
     logger.LogInformation("Database connection configured for user: cenzas_user");
 
-    // Startup: Execute Database Maintenance (Rule #16) in background
     _ = Task.Run(async () =>
     {
         using (var scope = app.Services.CreateScope())
         {
             var maintenance = scope.ServiceProvider.GetRequiredService<DatabaseMaintenanceService>();
             var metadataService = scope.ServiceProvider.GetRequiredService<IMetadataGeneratorService>();
+            var diagnosticService = scope.ServiceProvider.GetRequiredService<DiagnosticService>();
             var startupLogger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+
             try
             {
+                startupLogger.LogInformation("Startup: Running Database Diagnostics...");
+                await diagnosticService.RunDiagnosticsAsync();
+
                 startupLogger.LogInformation("Startup: Verifying DB Schema and Strategic Indexes in background...");
                 await maintenance.EnsureDatabaseSchemaAsync();
                 startupLogger.LogInformation("Startup: DB Maintenance completed.");
